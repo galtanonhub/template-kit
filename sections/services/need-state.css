@@ -1,0 +1,129 @@
+/* ===== services--need-state: clickable card grid + per-service modal ===== */
+
+/* card grid */
+.services--need-state .section-head { max-width: 640px; margin-bottom: 40px; }
+
+.need-state__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.need-state__card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 18px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .15s, box-shadow .15s, transform .12s;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--c-ink);
+  width: 100%;
+}
+.need-state__card:hover {
+  border-color: var(--c-brand);
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  transform: translateY(-2px);
+}
+.need-state__card-icon  { font-size: 1.5rem; flex: none; }
+.need-state__card-name  { flex: 1; font-weight: var(--fw-semibold); }
+.need-state__card-arrow { color: var(--c-ink-soft); font-size: 1.2rem; flex: none; }
+
+/* modal overlay (class-toggled so CSS display:flex isn't stomped by [hidden]) */
+.need-state__modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.need-state__modal.is-open { display: flex; }
+
+.need-state__modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+}
+
+.need-state__modal-box {
+  position: relative;
+  background: var(--c-surface);
+  border-radius: 20px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,.3);
+  animation: ns-modal-in .18s ease;
+}
+@keyframes ns-modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.need-state__modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(4px);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-ink);
+  line-height: 1;
+}
+.need-state__modal-close:hover { background: #fff; }
+
+.need-state__modal-header {
+  height: 200px;
+  background: var(--c-brand) center/cover no-repeat;
+  border-radius: 20px 20px 0 0;
+  position: relative;
+}
+.need-state__modal-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.45));
+}
+
+.need-state__modal-body { padding: 28px 32px 36px; }
+.need-state__modal-body > h3 { margin-bottom: 10px; }
+.need-state__modal-body > p  { color: var(--c-ink-soft); margin-bottom: 24px; line-height: 1.65; }
+
+.need-state__features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 28px;
+  margin-bottom: 28px;
+}
+.need-state__feature { display: flex; gap: 12px; align-items: flex-start; }
+.need-state__feature-icon { font-size: 1.3rem; flex: none; margin-top: 2px; }
+.need-state__feature strong { display: block; font-weight: var(--fw-semibold); margin-bottom: 4px; font-size: .95rem; }
+.need-state__feature p { font-size: .875rem; color: var(--c-ink-soft); margin: 0; line-height: 1.5; }
+
+body.modal-open { overflow: hidden; }
+
+@media (max-width: 680px) {
+  .need-state__grid { grid-template-columns: 1fr; }
+  .need-state__features { grid-template-columns: 1fr; }
+  .need-state__modal-body { padding: 20px 20px 28px; }
+  .need-state__modal-header { height: 160px; }
+}

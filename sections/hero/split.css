@@ -1,0 +1,13 @@
+/* HERO VARIANT — Split
+   Copy + lead-capture form side by side on a soft band.
+   Reads as: lead-driven service business that wants the quote NOW. */
+.hero--split { background: var(--c-bg-alt); padding-block: clamp(48px, 5vw, 88px); }
+.hero--split__grid { display: grid; grid-template-columns: 1fr 420px; gap: clamp(32px, 5vw, 64px); align-items: center; }
+.hero--split__copy h1 { margin: 16px 0 18px; }
+.hero--split__copy .lead { max-width: 46ch; }
+.hero--split__list { margin-top: 22px; display: flex; flex-direction: column; gap: 11px; }
+.hero--split__list li { padding-left: 28px; position: relative; color: var(--c-ink-soft); }
+.hero--split__list li::before { content: "✓"; position: absolute; left: 0; color: var(--c-brand); font-weight: var(--fw-heavy); }
+.hero--split__form { padding: 28px; }
+.hero--split__form h3 { margin-bottom: 18px; }
+@media (max-width: 860px) { .hero--split__grid { grid-template-columns: 1fr; } }

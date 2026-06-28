@@ -1,0 +1,11 @@
+{
+  "name": "template-kit-scaffold",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Generators for the template kit (palette-from-photo skins, etc.)",
+  "dependencies": {
+    "chroma-js": "^2.4.2",
+    "node-vibrant": "3.1.6",
+    "sharp": "^0.35.2"
+  }
+}

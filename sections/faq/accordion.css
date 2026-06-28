@@ -1,0 +1,15 @@
+/* FAQ VARIANT — Accordion
+   Click-to-expand question cards. JS toggles .faq__item.open (delegated in builder). */
+.faq--accordion .faq__list { max-width: 820px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.faq--accordion .faq__item { background: var(--c-surface); border: var(--card-border); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; }
+.faq--accordion .faq__q { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 20px 24px; font-family: var(--font-accent); font-size: 1.04rem; font-weight: var(--fw-bold); color: var(--c-ink); text-align: left; }
+.faq--accordion .faq__q:hover { color: var(--c-brand); }
+.faq--accordion .faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; }
+.faq--accordion .faq__icon::before, .faq--accordion .faq__icon::after { content: ""; position: absolute; background: var(--c-brand); transition: transform var(--transition); }
+.faq--accordion .faq__icon::before { top: 8px; left: 0; width: 18px; height: 2px; }
+.faq--accordion .faq__icon::after { left: 8px; top: 0; width: 2px; height: 18px; }
+.faq--accordion .faq__item.open .faq__icon::after { transform: scaleY(0); }
+.faq--accordion .faq__a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.28s ease; }
+.faq--accordion .faq__item.open .faq__a { grid-template-rows: 1fr; }
+.faq--accordion .faq__a-inner { overflow: hidden; }
+.faq--accordion .faq__a-inner p { padding: 0 24px 22px; }

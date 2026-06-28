@@ -1,0 +1,4 @@
+/* SERVICES VARIANT — Cards 3
+   Classic three-up photo cards. Reuses .card + .grid-3 from base. */
+.services--cards-3 .card__body { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.services--cards-3 .card__body p { margin-bottom: 6px; }

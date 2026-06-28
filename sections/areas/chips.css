@@ -1,0 +1,5 @@
+/* AREAS VARIANT — Chips
+   City-name pills on a dark band + a CTA. Light SEO footprint, low effort. */
+.areas--chips .areas__chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 820px; margin: 0 auto; }
+.areas--chips .areas__chips li { font-size: var(--fs-small); font-weight: var(--fw-medium); padding: 8px 16px; border: var(--border-weight) solid rgba(255,255,255,0.22); border-radius: var(--radius-pill); color: var(--c-ink-invert); background: rgba(255,255,255,0.06); }
+.areas--chips .areas__cta { text-align: center; margin-top: 32px; }

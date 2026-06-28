@@ -1,0 +1,68 @@
+/* ============================================================
+   PERSONALITY — Industrial Bold
+   For: contractors, roofing, demolition, welding, auto, concrete,
+        fencing, excavation — trades that sell strength & grit.
+
+   Tells: charcoal + hi-vis, ZERO radius, heavy condensed display,
+   thick rules, hard offset-block shadows, uppercase everything.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;700&display=swap');
+
+:root {
+  /* Color — concrete grey base, hi-vis yellow brand, safety orange accent */
+  --c-bg:          #f3f3f0;
+  --c-bg-alt:      #e4e4df;
+  --c-bg-deep:     #15171b;
+  --c-surface:     #ffffff;
+  --c-ink:         #15171b;
+  --c-ink-soft:    #474b54;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #ffcb00;   /* hi-vis yellow */
+  --c-brand-deep:  #e3af00;
+  --c-brand-ink:   #15171b;   /* black text on yellow */
+  --c-accent:      #f15a22;   /* safety orange */
+  --c-line:        #cfcfc8;
+  --c-line-strong: #15171b;
+
+  /* Type — heavy condensed display, neutral sans body */
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --fw-bold:   700;
+  --fw-heavy:  900;
+  --tracking-display: -0.02em;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 0.96;
+
+  /* Shape — razor sharp, heavy borders */
+  --radius:    0px;
+  --radius-lg: 0px;
+  --radius-pill: 0px;
+  --border-weight: 2px;
+  --rule-weight:   4px;
+
+  /* Buttons — slab, uppercase, hard */
+  --btn-radius:    0px;
+  --btn-transform: uppercase;
+  --btn-weight:    800;
+  --btn-tracking:  0.04em;
+
+  /* Elevation — no soft shadow; hard offset block instead */
+  --shadow: none;
+  --shadow-lg: 7px 7px 0 var(--c-ink);
+  --card-border: var(--border-weight) solid var(--c-ink);
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes */
+h1, h2 { text-transform: uppercase; }
+.eyebrow {
+  background: var(--c-ink);
+  color: var(--c-brand);
+  padding: 5px 12px;
+}
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+.section-head { border-left: var(--rule-weight) solid var(--c-brand); padding-left: 20px; }
+.section-head.center { border-left: 0; padding-left: 0; }

@@ -1,0 +1,68 @@
+/* FAQ VARIANT — Selector
+   Tabs at bottom; active tab's Q+A fills the panel above.
+   Inspired by Holocene: content-first panel, navigation below. */
+
+/* ===== shared selector chrome (duplicated across selector variants) ===== */
+[data-selector] .selector__panels {
+  padding-block: 48px 40px;
+  min-height: 240px;
+}
+[data-selector] .selector__panel { display: none; }
+[data-selector] .selector__panel.is-active { display: block; }
+
+[data-selector] .selector__tabs {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border-top: 2px solid var(--c-line);
+}
+[data-selector] .selector__tab {
+  min-height: 110px;
+  padding: 18px 22px;
+  background: var(--c-surface);
+  border: none; border-right: 1px solid var(--c-line);
+  cursor: pointer; text-align: left; font-family: inherit; font-size: 1rem;
+  display: flex; flex-direction: column; align-items: flex-start;
+  transition: background .15s, color .15s;
+}
+[data-selector] .selector__tab:last-child { border-right: none; }
+[data-selector] .selector__tab:hover:not(.is-active) { background: var(--c-bg-alt); }
+[data-selector] .selector__tab.is-active {
+  background: var(--c-brand); color: var(--c-brand-ink);
+}
+[data-selector] .selector__tab-label {
+  font-size: .85rem; font-weight: var(--fw-medium); line-height: 1.4;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+}
+
+@media (max-width: 600px) {
+  [data-selector] .selector__tabs {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-columns: initial;
+  }
+  [data-selector] .selector__tab {
+    border-bottom: 1px solid var(--c-line);
+    min-height: 80px;
+  }
+}
+/* ===== end shared chrome ===== */
+
+/* faq--selector: eyebrow above panels */
+.faq--selector .faq-sel__eyebrow { margin-bottom: 12px; }
+
+/* faq--selector: panel content */
+.faq-sel__q {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: var(--fw-heavy);
+  line-height: 1.25;
+  max-width: 720px;
+  margin-bottom: 22px;
+}
+.faq-sel__a {
+  max-width: 620px;
+  color: var(--c-ink-soft);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}

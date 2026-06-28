@@ -1,0 +1,40 @@
+/* SERVICES VARIANT — Framed2
+   Closer to the Notion/Stripe reference: white header (label + LARGE headline +
+   circular arrow) over a colored stage holding a tall inset panel that is
+   CLIPPED at the bottom — the "screenshot peek" effect. Defaults 2 across,
+   expands to more by card count. Frame color cycles the palette automatically. */
+.services--framed2__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; }
+
+.services--framed2__card {
+  --frame: var(--c-brand);
+  display: flex; flex-direction: column;
+  background: var(--c-surface);
+  border: var(--border-weight) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.services--framed2__card:nth-child(3n+2) { --frame: var(--c-accent); }
+.services--framed2__card:nth-child(3n+3) { --frame: color-mix(in srgb, var(--c-brand) 55%, var(--c-ink)); }
+
+.services--framed2__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 30px 30px 24px; }
+.services--framed2__head h3 { margin-top: 10px; font-size: clamp(1.5rem, 1.1rem + 1.1vw, 2rem); line-height: 1.1; max-width: 13ch; }
+
+.services--framed2__arrow {
+  flex-shrink: 0; width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--c-ink); color: var(--c-ink-invert);
+  font-size: 1.3rem; line-height: 1;
+  transition: transform var(--transition), background var(--transition);
+}
+.services--framed2__arrow:hover { background: var(--c-brand); transform: translate(2px, -2px); text-decoration: none; }
+
+/* Colored stage — inset panel is flush to the bottom (no bottom padding) so it clips */
+.services--framed2__stage { background: var(--frame); padding: 28px 28px 0; }
+.services--framed2__panel {
+  background: var(--c-surface);
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: 0 -1px 0 rgba(0,0,0,0.04), var(--shadow-lg);
+  overflow: hidden;
+}
+.services--framed2__panel img { width: 100%; height: 300px; object-fit: cover; object-position: top center; display: block; }

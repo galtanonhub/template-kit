@@ -1,0 +1,11 @@
+/* FOOTER VARIANT — Contact Focus
+   Contact-forward: prominent phone/email/hours/area block, minimal links.
+   Reads as trades / service business — "here's how to reach us." */
+.footer--contact-focus__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(32px, 5vw, 72px); }
+.footer--contact-focus__links { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 4px; }
+.footer--contact-focus__links a { font-weight: var(--fw-medium); font-size: 0.93rem; }
+.footer--contact-focus__contact h4 { color: var(--c-ink-invert); font-size: 0.95rem; margin-bottom: 16px; }
+.footer__contact-list { display: flex; flex-direction: column; gap: 12px; }
+.footer__contact-list li { display: grid; grid-template-columns: 70px 1fr; gap: 12px; align-items: baseline; color: var(--c-ink-invert-soft); font-size: 0.94rem; }
+.footer__contact-list li span { font-size: var(--fs-small); text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-ink-invert-soft); opacity: 0.7; }
+@media (max-width: 640px) { .footer--contact-focus__grid { grid-template-columns: 1fr; } }

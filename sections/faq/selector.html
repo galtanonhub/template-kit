@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — Selector</title>
+<link rel="stylesheet" href="../../base/base.css">
+<link rel="stylesheet" href="../../personalities/warm-residential.css">
+<link rel="stylesheet" href="selector.css">
+</head>
+<body>
+<section class="section faq faq--selector" data-selector>
+  <div class="container">
+
+    <span class="eyebrow faq-sel__eyebrow">Common Questions</span>
+
+    <div class="selector__panels">
+
+      <div class="selector__panel is-active" role="tabpanel">
+        <h2 class="faq-sel__q">How fast can you get here?</h2>
+        <p class="faq-sel__a">Most calls are scheduled same day. We keep slots open for urgent repairs, so call early and we'll do our best to be there today.</p>
+      </div>
+
+      <div class="selector__panel" role="tabpanel">
+        <h2 class="faq-sel__q">Do you offer free estimates?</h2>
+        <p class="faq-sel__a">Yes — every estimate is free and comes in writing, with no obligation and no pressure.</p>
+      </div>
+
+      <div class="selector__panel" role="tabpanel">
+        <h2 class="faq-sel__q">Are you licensed and insured?</h2>
+        <p class="faq-sel__a">Fully licensed and insured in Florida. We're happy to provide documentation before any work begins.</p>
+      </div>
+
+      <div class="selector__panel" role="tabpanel">
+        <h2 class="faq-sel__q">What if the repair costs more than quoted?</h2>
+        <p class="faq-sel__a">We call you first — always. Nothing beyond the quoted scope gets done without your approval.</p>
+      </div>
+
+    </div>
+
+    <div class="selector__tabs" role="tablist">
+      <button class="selector__tab is-active" role="tab" aria-selected="true">
+        <span class="selector__tab-label">How fast can you get here?</span>
+      </button>
+      <button class="selector__tab" role="tab" aria-selected="false">
+        <span class="selector__tab-label">Do you offer free estimates?</span>
+      </button>
+      <button class="selector__tab" role="tab" aria-selected="false">
+        <span class="selector__tab-label">Are you licensed and insured?</span>
+      </button>
+      <button class="selector__tab" role="tab" aria-selected="false">
+        <span class="selector__tab-label">What if the repair costs more?</span>
+      </button>
+    </div>
+
+  </div>
+</section>
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var tab = e.target.closest('.selector__tab');
+    if (!tab) return;
+    var sec    = tab.closest('[data-selector]');
+    var tabs   = Array.prototype.slice.call(sec.querySelectorAll('.selector__tab'));
+    var panels = Array.prototype.slice.call(sec.querySelectorAll('.selector__panel'));
+    var idx    = tabs.indexOf(tab);
+    tabs.forEach(function (t, i) {
+      t.classList.toggle('is-active', i === idx);
+      t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    panels.forEach(function (p, i) { p.classList.toggle('is-active', i === idx); });
+  });
+})();
+</script>
+</body>
+</html>

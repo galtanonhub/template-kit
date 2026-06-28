@@ -1,0 +1,12 @@
+/* PROOF VARIANT — Stat Bar
+   A row of big number + label stats on a dark band. Credibility at a glance. */
+.proof--stat-bar { background: var(--c-ink); color: var(--c-ink-invert); padding-block: clamp(30px, 3vw, 46px); }
+.proof--stat-bar__row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.proof--stat-bar li { text-align: center; display: flex; flex-direction: column; gap: 5px; border-right: var(--border-weight) solid rgba(255,255,255,0.16); }
+.proof--stat-bar li:last-child { border-right: 0; }
+.proof__num { font-family: var(--font-display); font-size: clamp(1.8rem, 1.2rem + 1.6vw, 2.6rem); font-weight: var(--fw-heavy); color: var(--c-brand); line-height: 1; }
+.proof__label { font-size: var(--fs-small); color: var(--c-ink-invert-soft); }
+@media (max-width: 760px) {
+  .proof--stat-bar__row { grid-template-columns: repeat(2, 1fr); gap: 28px 20px; }
+  .proof--stat-bar li:nth-child(2) { border-right: 0; }
+}

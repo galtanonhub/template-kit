@@ -1,0 +1,3 @@
+/* NAV VARIANT — Classic
+   Logo left, links pushed right, CTA at the far end. The universal default. */
+.nav--classic .nav__links { margin-left: auto; }

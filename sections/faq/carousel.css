@@ -1,0 +1,45 @@
+/* ===== faq--carousel ===== */
+
+/* shared kit-carousel chrome (duplicated so each CSS file is self-contained) */
+.kit-carousel { display: flex; align-items: center; gap: 12px; }
+.kit-carousel__track {
+  flex: 1; display: flex; gap: 16px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.kit-carousel__track::-webkit-scrollbar { display: none; }
+.kit-carousel__card { scroll-snap-align: start; flex: none; }
+.kit-carousel__arrow {
+  flex: none; width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--c-line); background: var(--c-surface); color: var(--c-ink);
+  font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s, color .15s;
+}
+.kit-carousel__arrow:hover { border-color: var(--c-brand); color: var(--c-brand); }
+
+/* faq--carousel variant */
+.faq--carousel .section-head { margin-bottom: 40px; }
+
+.faq--carousel .kit-carousel__card {
+  width: 300px;
+  padding: 24px 22px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-lg);
+}
+.faq--carousel .kit-carousel__card h3 {
+  font-size: .95rem;
+  font-weight: var(--fw-semibold);
+  color: var(--c-ink);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.faq--carousel .kit-carousel__card p {
+  font-size: .875rem;
+  color: var(--c-ink-soft);
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .faq--carousel .kit-carousel__card { width: calc(100vw - 100px); }
+}

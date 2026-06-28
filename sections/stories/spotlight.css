@@ -1,0 +1,17 @@
+/* STORIES VARIANT — Spotlight
+   Featured project image + story text, with a picture-switcher row below
+   (Stripe customer-stories pattern). Case-study framing, not star reviews.
+   Switching handled by a delegated click handler in the builder/app. */
+.stories--spotlight__stage { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(28px, 4vw, 56px); align-items: center; }
+.stories--spotlight__media { margin: 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
+.stories--spotlight__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+.stories--spotlight__quote { font-size: var(--fs-lead); line-height: 1.6; color: var(--c-ink); }
+.stories--spotlight__meta { margin-top: 20px; display: flex; flex-direction: column; gap: 3px; }
+.stories--spotlight__meta strong { font-family: var(--font-display); font-size: 1.15rem; color: var(--c-ink); }
+.stories--spotlight__meta span { font-size: var(--fs-small); color: var(--c-ink-soft); }
+.stories--spotlight__picker { display: flex; gap: 14px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+.stories--spotlight__thumb { width: 84px; height: 84px; border-radius: var(--radius); overflow: hidden; border: 3px solid transparent; opacity: 0.55; transition: opacity var(--transition), border-color var(--transition); padding: 0; }
+.stories--spotlight__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.stories--spotlight__thumb:hover { opacity: 0.85; }
+.stories--spotlight__thumb.is-active { opacity: 1; border-color: var(--c-brand); }
+@media (max-width: 760px) { .stories--spotlight__stage { grid-template-columns: 1fr; } }

@@ -1,0 +1,35 @@
+/* SERVICES VARIANT — Framed
+   Color-blocked feature cards: a white header (label + headline + circular
+   arrow) over a colored body that frames an inset rounded panel. Frame color
+   cycles through the palette automatically. The inset panel can hold a photo,
+   a mini-mockup, a stat, or a short list. Flows 2–4 across by card count.
+   (Pattern inspired by Notion/Stripe feature cards.) */
+.services--framed__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+
+.services--framed__card {
+  --frame: var(--c-brand);
+  display: flex; flex-direction: column;
+  background: var(--c-surface);
+  border: var(--border-weight) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.services--framed__card:nth-child(3n+2) { --frame: var(--c-accent); }
+.services--framed__card:nth-child(3n+3) { --frame: color-mix(in srgb, var(--c-brand) 55%, var(--c-ink)); }
+
+.services--framed__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 26px 26px 20px; }
+.services--framed__head h3 { margin-top: 6px; font-size: 1.3rem; max-width: 14ch; }
+
+.services--framed__arrow {
+  flex-shrink: 0; width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--c-ink); color: var(--c-ink-invert);
+  font-size: 1.2rem; line-height: 1;
+  transition: transform var(--transition), background var(--transition);
+}
+.services--framed__arrow:hover { background: var(--c-brand); transform: translate(2px, -2px); text-decoration: none; }
+
+.services--framed__body { flex: 1; background: var(--frame); padding: 20px; }
+.services--framed__panel { background: var(--c-surface); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg); }
+.services--framed__panel img { width: 100%; aspect-ratio: 16 / 11; object-fit: cover; display: block; }

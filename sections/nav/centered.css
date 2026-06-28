@@ -1,0 +1,10 @@
+/* NAV VARIANT — Centered
+   Logo in the middle, links split either side. Symmetrical, editorial, boutique. */
+.nav--centered .nav__bar { gap: 36px; }
+.nav--centered .nav__links { flex: 1; }
+.nav--centered .nav__links--left { justify-content: flex-end; }
+.nav--centered .nav__links--right { justify-content: flex-start; }
+.nav--centered .nav__logo { white-space: nowrap; font-size: 1.5rem; }
+@media (max-width: 860px) {
+  .nav--centered .nav__bar { justify-content: space-between; }
+}

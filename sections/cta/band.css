@@ -1,0 +1,10 @@
+/* CTA VARIANT — Band
+   Full-width brand-colored closing band: message left, actions right. */
+.cta--band { background: var(--c-brand); color: var(--c-brand-ink); }
+.cta--band__inner { display: flex; align-items: center; justify-content: space-between; gap: clamp(24px, 4vw, 56px); flex-wrap: wrap; }
+.cta--band h2 { color: var(--c-brand-ink); }
+.cta--band p { color: var(--c-brand-ink); opacity: 0.82; margin-top: 8px; max-width: 48ch; }
+.cta--band__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.cta--band .btn--outline { color: var(--c-brand-ink); border-color: color-mix(in srgb, var(--c-brand-ink) 45%, transparent); }
+.cta--band .btn--outline:hover { border-color: var(--c-brand-ink); background: color-mix(in srgb, var(--c-brand-ink) 10%, transparent); }
+@media (max-width: 640px) { .cta--band__inner { flex-direction: column; align-items: flex-start; } }

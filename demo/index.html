@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Template Kit — Builder</title>
+<link rel="stylesheet" href="../base/base.css">
+<!-- nav variants -->
+<link rel="stylesheet" href="../sections/nav/classic.css">
+<link rel="stylesheet" href="../sections/nav/phone-bar.css">
+<link rel="stylesheet" href="../sections/nav/centered.css">
+<link rel="stylesheet" href="../sections/nav/minimal.css">
+<!-- hero variants -->
+<link rel="stylesheet" href="../sections/hero/overlay.css">
+<link rel="stylesheet" href="../sections/hero/split.css">
+<link rel="stylesheet" href="../sections/hero/editorial.css">
+<link rel="stylesheet" href="../sections/hero/collage.css">
+<!-- other sections -->
+<link rel="stylesheet" href="../sections/proof/stat-bar.css">
+<link rel="stylesheet" href="../sections/services/cards-3.css">
+<link rel="stylesheet" href="../sections/services/carousel.css">
+<link rel="stylesheet" href="../sections/services/framed.css">
+<link rel="stylesheet" href="../sections/services/framed2.css">
+<link rel="stylesheet" href="../sections/process/numbered.css">
+<link rel="stylesheet" href="../sections/about/split-photo.css">
+<link rel="stylesheet" href="../sections/areas/chips.css">
+<link rel="stylesheet" href="../sections/areas/marquee.css">
+<link rel="stylesheet" href="../sections/faq/accordion.css">
+<link rel="stylesheet" href="../sections/stories/spotlight.css">
+<link rel="stylesheet" href="../sections/cta/band.css">
+<!-- footer variants -->
+<link rel="stylesheet" href="../sections/footer/columns.css">
+<link rel="stylesheet" href="../sections/footer/simple.css">
+<link rel="stylesheet" href="../sections/footer/cta-combo.css">
+<link rel="stylesheet" href="../sections/footer/contact-focus.css">
+<!-- skin -->
+<link rel="stylesheet" id="theme" href="../personalities/industrial-bold.css">
+<style>
+  /* ===== builder chrome — not part of the kit ===== */
+  :root { --dock-h: 56px; }
+  body { padding-bottom: var(--dock-h); }
+  body.dock-collapsed { padding-bottom: 30px; }
+
+  /* focused-section affordance in the preview */
+  #page > .is-focused { outline: 2px dashed #ffcb00; outline-offset: -2px; }
+  #page > div { scroll-margin-top: 16px; }
+
+  /* the dock */
+  .dock {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 200;
+    background: #11151c; color: #fff; font-family: system-ui, sans-serif;
+    border-top: 1px solid #232a35; box-shadow: 0 -8px 24px rgba(0,0,0,.35);
+  }
+  .dock__bar {
+    display: flex; align-items: center; gap: 14px;
+    height: var(--dock-h); padding: 0 14px; overflow-x: auto;
+  }
+  body.dock-collapsed .dock__bar { display: none; }
+
+  /* collapse handle */
+  .dock__handle {
+    position: absolute; top: -22px; right: 14px;
+    height: 22px; padding: 0 12px; border: 1px solid #232a35; border-bottom: none;
+    border-radius: 7px 7px 0 0; background: #11151c; color: #9aa6b6;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dock__handle:hover { color: #fff; }
+
+  .dock__brand { font-size: 12px; font-weight: 800; letter-spacing: .04em; color: #fff; white-space: nowrap; }
+  .dock__sep { width: 1px; align-self: stretch; background: #232a35; margin: 10px 0; flex: none; }
+  .dock__group { display: flex; align-items: center; gap: 8px; flex: none; }
+  .dock__label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #7e8a9c; font-weight: 700; }
+
+  .dock select {
+    background: #1a212c; color: #e7ecf3; border: 1px solid #2a313d; border-radius: 6px;
+    font-size: 12px; font-weight: 600; padding: 6px 8px; cursor: pointer; font-family: inherit;
+  }
+
+  /* variant row for the focused section */
+  .dock__variants { display: flex; align-items: center; gap: 5px; flex: none; }
+  .dock__variants button {
+    padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 600;
+    border: 1px solid #2a313d; background: #1a212c; color: #c3cad6; cursor: pointer; white-space: nowrap;
+  }
+  .dock__variants button:hover { border-color: #495568; }
+  .dock__variants button.active { background: #fff; color: #11151c; border-color: #fff; }
+  .dock__cycle {
+    width: 26px; height: 26px; border-radius: 6px; border: 1px solid #2a313d; background: #1a212c;
+    color: #c3cad6; cursor: pointer; font-size: 13px; line-height: 1; flex: none;
+  }
+  .dock__cycle:hover { border-color: #495568; color: #fff; }
+
+  .dock__spacer { flex: 1 1 auto; }
+
+  .dock__btn {
+    padding: 7px 13px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    border: 1px solid #2a313d; background: #1a212c; color: #c3cad6; cursor: pointer; white-space: nowrap;
+  }
+  .dock__btn:hover { border-color: #495568; color: #fff; }
+  .dock__btn--accent { background: #ffcb00; color: #11151c; border-color: #ffcb00; }
+  .dock__btn--accent:hover { background: #ffd633; border-color: #ffd633; color: #11151c; }
+
+  /* export modal */
+  .modal { position: fixed; inset: 0; z-index: 300; background: rgba(8,11,16,.7);
+    display: none; align-items: center; justify-content: center; padding: 24px; }
+  .modal.open { display: flex; }
+  .modal__card { width: min(560px, 100%); background: #11151c; border: 1px solid #232a35;
+    border-radius: 12px; padding: 20px; color: #fff; font-family: system-ui, sans-serif; }
+  .modal__card h2 { font-size: 15px; margin-bottom: 4px; }
+  .modal__card p { font-size: 12px; color: #7e8a9c; margin-bottom: 12px; }
+  .modal textarea { width: 100%; height: 280px; resize: vertical; background: #0c1016; color: #c8f0d8;
+    border: 1px solid #2a313d; border-radius: 8px; padding: 12px; font-family: ui-monospace, monospace;
+    font-size: 12px; line-height: 1.5; }
+  .modal__row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+  .toast { position: fixed; bottom: calc(var(--dock-h) + 14px); left: 50%; transform: translateX(-50%);
+    background: #1f8f4e; color: #fff; font: 700 12px system-ui; padding: 8px 16px; border-radius: 8px;
+    z-index: 400; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<main id="page"></main>
+
+<!-- ===== bottom dock ===== -->
+<div class="dock" id="dock">
+  <button class="dock__handle" id="dock-handle">▾ Hide</button>
+  <div class="dock__bar">
+    <span class="dock__brand">Template&nbsp;Kit</span>
+    <span class="dock__sep"></span>
+
+    <div class="dock__group">
+      <span class="dock__label">Section</span>
+      <select id="section-select"></select>
+    </div>
+
+    <div class="dock__group">
+      <button class="dock__cycle" id="prev-variant" title="Previous variant (←)">‹</button>
+      <div class="dock__variants" id="variant-row"></div>
+      <button class="dock__cycle" id="next-variant" title="Next variant (→)">›</button>
+    </div>
+
+    <span class="dock__sep"></span>
+
+    <div class="dock__group">
+      <span class="dock__label">Skin</span>
+      <select id="skin-select"></select>
+    </div>
+
+    <div class="dock__spacer"></div>
+
+    <button class="dock__btn" id="shuffle-btn" title="Randomize the whole recipe">⤨ Shuffle</button>
+    <button class="dock__btn dock__btn--accent" id="export-btn">⬇ Export</button>
+  </div>
+</div>
+
+<!-- ===== export modal ===== -->
+<div class="modal" id="modal">
+  <div class="modal__card">
+    <h2>Recipe</h2>
+    <p>This is the recipe <code>new-template.js</code> will stamp into a deployable site.</p>
+    <textarea id="recipe-json" readonly></textarea>
+    <div class="modal__row">
+      <button class="dock__btn" id="modal-close">Close</button>
+      <button class="dock__btn dock__btn--accent" id="copy-json">Copy JSON</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ---- the recipe space ---- */
+  const SECTIONS = [
+    { key: 'nav',      label: 'Nav',      variants: ['classic', 'phone-bar', 'centered', 'minimal'] },
+    { key: 'hero',     label: 'Hero',     variants: ['overlay', 'split', 'editorial', 'collage'] },
+    { key: 'proof',    label: 'Proof',    variants: ['stat-bar'] },
+    { key: 'services', label: 'Services', variants: ['cards-3', 'carousel', 'framed', 'framed2'] },
+    { key: 'process',  label: 'Process',  variants: ['numbered'] },
+    { key: 'about',    label: 'About',    variants: ['split-photo'] },
+    { key: 'areas',    label: 'Areas',    variants: ['chips', 'marquee'] },
+    { key: 'faq',      label: 'FAQ',      variants: ['accordion'] },
+    { key: 'stories',  label: 'Stories',  variants: ['spotlight'] },
+    { key: 'cta',      label: 'CTA',      variants: ['band'] },
+    { key: 'footer',   label: 'Footer',   variants: ['columns', 'simple', 'cta-combo', 'contact-focus'] },
+  ];
+  const SKINS = [
+    { id: 'industrial-bold',  label: 'Industrial Bold' },
+    { id: 'warm-residential', label: 'Warm Residential' },
+    { id: 'painting-photo',   label: 'Painting (from photo)' },
+  ];
+
+  /* ---- state ---- */
+  const recipe = {};                     // slot key -> chosen variant
+  SECTIONS.forEach(s => recipe[s.key] = s.variants[0]);
+  let skin = SKINS[0].id;
+  let focus = SECTIONS[0].key;           // section currently being edited
+
+  const page = document.getElementById('page');
+  const titleCase = s => s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const sectionByKey = k => SECTIONS.find(s => s.key === k);
+
+  /* build page slots in order */
+  SECTIONS.forEach(s => {
+    const slot = document.createElement('div');
+    slot.id = 'slot-' + s.key;
+    slot.dataset.key = s.key;
+    page.appendChild(slot);
+  });
+
+  async function loadSection(key, variant) {
+    recipe[key] = variant;
+    const res = await fetch(`../sections/${key}/${variant}.html`);
+    document.getElementById('slot-' + key).innerHTML = await res.text();
+  }
+
+  /* ---- dock: section selector ---- */
+  const sectionSelect = document.getElementById('section-select');
+  SECTIONS.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s.key;
+    o.textContent = `${s.label}${s.variants.length > 1 ? '  ('+s.variants.length+')' : ''}`;
+    sectionSelect.appendChild(o);
+  });
+  sectionSelect.addEventListener('change', () => setFocus(sectionSelect.value));
+
+  /* ---- dock: variant row for focused section ---- */
+  const variantRow = document.getElementById('variant-row');
+  function renderVariantRow() {
+    const s = sectionByKey(focus);
+    variantRow.innerHTML = '';
+    s.variants.forEach(v => {
+      const b = document.createElement('button');
+      b.textContent = titleCase(v);
+      if (recipe[focus] === v) b.classList.add('active');
+      b.addEventListener('click', () => chooseVariant(v));
+      variantRow.appendChild(b);
+    });
+  }
+
+  function chooseVariant(v) {
+    loadSection(focus, v).then(() => highlightFocus());
+    renderVariantRow();
+  }
+
+  function cycleVariant(dir) {
+    const s = sectionByKey(focus);
+    const i = s.variants.indexOf(recipe[focus]);
+    const next = s.variants[(i + dir + s.variants.length) % s.variants.length];
+    chooseVariant(next);
+  }
+  document.getElementById('prev-variant').addEventListener('click', () => cycleVariant(-1));
+  document.getElementById('next-variant').addEventListener('click', () => cycleVariant(1));
+
+  /* ---- focus management ---- */
+  function setFocus(key, scroll = true) {
+    focus = key;
+    sectionSelect.value = key;
+    renderVariantRow();
+    highlightFocus();
+    if (scroll) document.getElementById('slot-' + key)
+      .scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function highlightFocus() {
+    document.querySelectorAll('#page > div').forEach(d =>
+      d.classList.toggle('is-focused', d.dataset.key === focus));
+  }
+
+  /* ---- dock: skin selector ---- */
+  const skinSelect = document.getElementById('skin-select');
+  SKINS.forEach(sk => {
+    const o = document.createElement('option');
+    o.value = sk.id; o.textContent = sk.label;
+    skinSelect.appendChild(o);
+  });
+  skinSelect.addEventListener('change', () => {
+    skin = skinSelect.value;
+    document.getElementById('theme').href = `../personalities/${skin}.css`;
+  });
+
+  /* ---- shuffle ---- */
+  const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+  document.getElementById('shuffle-btn').addEventListener('click', () => {
+    SECTIONS.forEach(s => loadSection(s.key, rand(s.variants)).then(highlightFocus));
+    skin = rand(SKINS).id;
+    skinSelect.value = skin;
+    document.getElementById('theme').href = `../personalities/${skin}.css`;
+    setFocus(focus, false);
+  });
+
+  /* ---- export ---- */
+  function buildRecipe() {
+    return {
+      name: 'untitled',
+      skin,
+      sections: SECTIONS.map(s => ({ slot: s.key, variant: recipe[s.key] })),
+    };
+  }
+  const modal = document.getElementById('modal');
+  const recipeJson = document.getElementById('recipe-json');
+  document.getElementById('export-btn').addEventListener('click', () => {
+    recipeJson.value = JSON.stringify(buildRecipe(), null, 2);
+    modal.classList.add('open');
+  });
+  document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+  const toast = document.getElementById('toast');
+  function showToast(msg) {
+    toast.textContent = msg; toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1400);
+  }
+  document.getElementById('copy-json').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(recipeJson.value); showToast('Recipe copied'); }
+    catch { recipeJson.select(); document.execCommand('copy'); showToast('Recipe copied'); }
+  });
+
+  /* ---- collapse ---- */
+  const handle = document.getElementById('dock-handle');
+  handle.addEventListener('click', () => {
+    const collapsed = document.body.classList.toggle('dock-collapsed');
+    handle.textContent = collapsed ? '▴ Build' : '▾ Hide';
+  });
+
+  /* ---- click a section in the preview to focus it ---- */
+  page.addEventListener('click', e => {
+    const slot = e.target.closest('#page > div');
+    if (slot) setFocus(slot.dataset.key, false);
+  });
+
+  /* ---- keyboard: ←/→ cycle focused variant, ↑/↓ change section ---- */
+  document.addEventListener('keydown', e => {
+    if (modal.classList.contains('open')) return;
+    if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+    const idx = SECTIONS.findIndex(s => s.key === focus);
+    if (e.key === 'ArrowLeft')  { cycleVariant(-1); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { cycleVariant(1);  e.preventDefault(); }
+    if (e.key === 'ArrowUp')   { setFocus(SECTIONS[(idx - 1 + SECTIONS.length) % SECTIONS.length].key); e.preventDefault(); }
+    if (e.key === 'ArrowDown') { setFocus(SECTIONS[(idx + 1) % SECTIONS.length].key); e.preventDefault(); }
+  });
+
+  /* ---- delegated handlers — survive section swaps ---- */
+  document.addEventListener('click', e => {
+    const q = e.target.closest('.faq__q');
+    if (q) q.closest('.faq__item').classList.toggle('open');
+
+    const t = e.target.closest('.nav__toggle');
+    if (t) t.closest('.nav').classList.toggle('open');
+
+    /* stories spotlight — picture switcher */
+    const thumb = e.target.closest('.stories--spotlight__thumb');
+    if (thumb) {
+      const sec = thumb.closest('.stories');
+      sec.querySelector('.js-spotlight-img').src = thumb.dataset.img;
+      sec.querySelector('.js-spotlight-quote').textContent = thumb.dataset.quote;
+      sec.querySelector('.js-spotlight-name').textContent = thumb.dataset.name;
+      sec.querySelector('.js-spotlight-role').textContent = thumb.dataset.role;
+      sec.querySelectorAll('.stories--spotlight__thumb').forEach(x => x.classList.remove('is-active'));
+      thumb.classList.add('is-active');
+    }
+
+    /* services carousel — prev/next arrows */
+    const arrow = e.target.closest('.services--carousel__arrow');
+    if (arrow) {
+      const track = arrow.closest('.services--carousel').querySelector('.services--carousel__track');
+      const card = track.querySelector('.card');
+      const step = card.getBoundingClientRect().width + 24;
+      track.scrollBy({ left: step * Number(arrow.dataset.dir), behavior: 'smooth' });
+    }
+  });
+
+  /* ---- initial load ---- */
+  Promise.all(SECTIONS.map(s => loadSection(s.key, s.variants[0])))
+    .then(() => { renderVariantRow(); highlightFocus(); });
+</script>
+</body>
+</html>

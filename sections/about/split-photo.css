@@ -1,0 +1,6 @@
+/* ABOUT VARIANT — Split Photo
+   Image one side, story + checklist the other. Reuses base .split + .checklist. */
+.about__photo { margin: 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
+.about__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.about__copy h2 { margin: 14px 0 16px; }
+.about__copy .checklist { margin: 22px 0 24px; }

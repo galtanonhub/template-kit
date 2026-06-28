@@ -1,0 +1,11 @@
+/* HERO VARIANT — Editorial
+   Asymmetric, airy, restrained. Big headline + single framed image, no form.
+   Reads as: boutique / designer / premium — taste over urgency. */
+.hero--editorial { padding-block: clamp(56px, 7vw, 128px); }
+.hero--editorial__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(32px, 6vw, 88px); align-items: center; }
+.hero--editorial__copy h1 { margin: 20px 0 22px; }
+.hero--editorial__copy .lead { max-width: 42ch; margin-bottom: 30px; }
+.hero--editorial__figure { position: relative; margin: 0; }
+.hero--editorial__figure img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+.hero--editorial__figure figcaption { margin-top: 12px; font-size: var(--fs-small); letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--c-ink-soft); }
+@media (max-width: 760px) { .hero--editorial__grid { grid-template-columns: 1fr; } }

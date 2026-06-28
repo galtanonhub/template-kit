@@ -1,0 +1,12 @@
+/* NAV VARIANT — Phone Bar
+   Two-tier: a dark utility strip (hours + phone) above the main row.
+   Phone-forward — reads as trades / lead-gen / "call us now." */
+.nav--phone-bar .nav__utility { background: var(--c-ink); color: var(--c-ink-invert); font-size: var(--fs-small); }
+.nav--phone-bar .nav__utility-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 38px; }
+.nav--phone-bar .nav__utility a { color: var(--c-ink-invert); font-weight: var(--fw-bold); }
+.nav--phone-bar .nav__utility a:hover { color: var(--c-brand); text-decoration: none; }
+.nav--phone-bar .nav__links { margin-left: auto; }
+@media (max-width: 860px) {
+  .nav--phone-bar .nav__utility-inner { justify-content: center; }
+  .nav--phone-bar .nav__utility span { display: none; }
+}

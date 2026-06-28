@@ -1,0 +1,15 @@
+/* HERO VARIANT — Collage
+   Centered headline band over a mosaic of work photos.
+   Reads as: visual / portfolio-forward — landscapers, painters, remodelers. */
+.hero--collage { padding-block: clamp(48px, 5vw, 88px); }
+.hero--collage__head { text-align: center; max-width: 720px; margin: 0 auto clamp(28px, 4vw, 44px); }
+.hero--collage__head h1 { margin: 14px 0 22px; }
+.hero--collage__grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: clamp(150px, 18vw, 220px); gap: 14px; }
+.hero--collage__grid img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius); }
+.hero--collage__grid .g-tall { grid-row: span 2; }
+.hero--collage__grid .g-wide { grid-column: span 2; }
+@media (max-width: 760px) {
+  .hero--collage__grid { grid-template-columns: repeat(2, 1fr); }
+  .hero--collage__grid .g-wide { grid-column: span 2; }
+  .hero--collage__grid .g-tall { grid-row: span 1; }
+}
