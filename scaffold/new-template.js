@@ -101,6 +101,7 @@ const PARTIAL_MAP = {
   'faq/carousel':       'faq-carousel.php',
   'faq/selector':       'faq-selector.php',
   'cta/band':           'cta-band.php',
+  'cta/dark-left':      'cta-dark-left.php',
 };
 
 /* ---- inner-page partials (always included in multi mode) ---- */

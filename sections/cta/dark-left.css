@@ -1,0 +1,53 @@
+/* CTA VARIANT — Dark Left
+   Dark full-width band, all content left-stacked with generous vertical space.
+   Large bold heading, soft subtext, wide branded button at bottom. */
+
+.cta--dark-left {
+  background: var(--c-bg-deep);
+  padding-block: clamp(56px, 8vw, 100px);
+}
+
+.cta--dark-left__eyebrow {
+  display: block;
+  color: var(--c-ink-invert-soft);
+  margin-bottom: 28px;
+}
+
+.cta--dark-left__heading {
+  color: var(--c-ink-invert);
+  font-size: var(--fs-h1);
+  line-height: var(--leading-tight);
+  max-width: 18ch;
+  margin: 0 0 20px;
+}
+
+.cta--dark-left__sub {
+  color: var(--c-ink-invert-soft);
+  font-size: var(--fs-lead);
+  line-height: var(--leading-body);
+  max-width: 44ch;
+  margin: 0 0 56px;
+}
+
+.cta--dark-left__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  min-width: 280px;
+  background: var(--c-brand);
+  color: var(--c-brand-ink);
+  padding: 0.9em 1.4em;
+  border-radius: var(--btn-radius);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-small);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.cta--dark-left__btn:hover { background: var(--c-brand-deep); text-decoration: none; }
+
+@media (max-width: 480px) {
+  .cta--dark-left__btn { min-width: 0; width: 100%; }
+}
