@@ -4,16 +4,6 @@
 
 .proof--logos { background: var(--c-bg-alt); padding-block: clamp(28px, 3vw, 44px); }
 
-.proof--logos__eyebrow {
-  display: block;
-  margin-bottom: 20px;
-}
-.proof--logos__eyebrow::before {
-  content: '•';
-  margin-right: 0.5em;
-  color: var(--c-brand);
-}
-
 .proof--logos__row {
   display: flex;
   flex-wrap: wrap;

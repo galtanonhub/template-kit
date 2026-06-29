@@ -3,9 +3,7 @@
    Data: home.proof.logos.eyebrow + home.proof.logos.items[]{name, image} */ ?>
 <section class="section proof proof--logos">
   <div class="container">
-    <span class="eyebrow proof--logos__eyebrow"
-          data-edit="home.proof.logos.eyebrow"><?= e(c('home.proof.logos.eyebrow', 'Trusted By')) ?></span>
-    <div class="proof--logos__row">
+<div class="proof--logos__row">
       <?php foreach (c('home.proof.logos.items', []) as $i => $logo): ?>
       <div class="proof--logos__box">
         <img src="<?= e($logo['image'] ?? '') ?>"
