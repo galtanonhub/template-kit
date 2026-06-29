@@ -1,6 +1,0 @@
-/* NAV VARIANT — Minimal
-   Sparse and airy: taller bar, no bottom border, outline CTA. Modern/boutique. */
-.nav--minimal { border-bottom: 0; }
-.nav--minimal .nav__bar { min-height: 80px; }
-.nav--minimal .nav__links { margin-left: auto; gap: 34px; }
-.nav--minimal .nav__actions { margin-left: 34px; }

@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="../base/base.css">
 <!-- nav variants -->
 <link rel="stylesheet" href="../sections/nav/classic.css">
-<link rel="stylesheet" href="../sections/nav/phone-bar.css">
 <link rel="stylesheet" href="../sections/nav/centered.css">
-<link rel="stylesheet" href="../sections/nav/minimal.css">
+<link rel="stylesheet" href="../sections/nav/stacked.css">
+<link rel="stylesheet" href="../sections/nav/_mods/utility-strip.css">
 <!-- hero variants -->
 <link rel="stylesheet" href="../sections/hero/overlay.css">
 <link rel="stylesheet" href="../sections/hero/split.css">
@@ -91,6 +91,11 @@
   }
   .dock__cycle:hover { border-color: #495568; color: #fff; }
 
+  /* modifier toggles */
+  .dock__mods { display: flex; align-items: center; gap: 12px; flex: none; }
+  .dock__mod { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #c3cad6; white-space: nowrap; cursor: pointer; }
+  .dock__mod input { accent-color: #ffcb00; cursor: pointer; }
+
   .dock__spacer { flex: 1 1 auto; }
 
   .dock__btn {
@@ -155,6 +160,11 @@
       <button class="dock__cycle" id="prev-variant" title="Previous variant (←)">‹</button>
       <div class="dock__variants" id="variant-row"></div>
       <button class="dock__cycle" id="next-variant" title="Next variant (→)">›</button>
+    </div>
+
+    <div class="dock__group" id="mod-group" hidden>
+      <span class="dock__label">Options</span>
+      <div class="dock__mods" id="mod-row"></div>
     </div>
 
     <span class="dock__sep"></span>
@@ -228,7 +238,8 @@
 <script>
   /* ---- the recipe space ---- */
   const SECTIONS = [
-    { key: 'nav',      label: 'Nav',      variants: ['classic', 'phone-bar', 'centered', 'minimal'] },
+    { key: 'nav',      label: 'Nav',      variants: ['classic', 'centered', 'stacked'],
+      modifiers: [{ id: 'utility-strip', label: 'Utility strip', file: 'utility-strip', target: '.nav', position: 'afterbegin', default: false }] },
     { key: 'hero',     label: 'Hero',     variants: ['overlay', 'split', 'editorial', 'collage', 'mosaic'] },
     { key: 'proof',    label: 'Proof',    variants: ['stat-bar'] },
     { key: 'services', label: 'Services', variants: ['cards-3', 'carousel', 'framed', 'framed2', 'need-state', 'selector'] },
@@ -248,7 +259,11 @@
 
   /* ---- state ---- */
   const recipe = {};                     // slot key -> chosen variant
-  SECTIONS.forEach(s => recipe[s.key] = s.variants[0]);
+  const mods = {};                       // slot key -> { modifierId: bool }
+  SECTIONS.forEach(s => {
+    recipe[s.key] = s.variants[0];
+    if (s.modifiers) { mods[s.key] = {}; s.modifiers.forEach(m => mods[s.key][m.id] = !!m.default); }
+  });
   let skin = SKINS[0].id;
   let focus = SECTIONS[0].key;           // section currently being edited
 
@@ -268,6 +283,21 @@
     recipe[key] = variant;
     const res = await fetch(`../sections/${key}/${variant}.html`);
     document.getElementById('slot-' + key).innerHTML = await res.text();
+    await applyModifiers(key);
+  }
+
+  // inject any active modifier fragments into a freshly-loaded section
+  async function applyModifiers(key) {
+    const s = sectionByKey(key);
+    if (!s.modifiers || !mods[key]) return;
+    const slot = document.getElementById('slot-' + key);
+    for (const m of s.modifiers) {
+      if (!mods[key][m.id]) continue;
+      const target = slot.querySelector(m.target);
+      if (!target) continue;
+      const frag = await fetch(`../sections/${key}/_mods/${m.file}.html`).then(r => r.text());
+      target.insertAdjacentHTML(m.position, frag);
+    }
   }
 
   /* ---- dock: section selector ---- */
@@ -299,6 +329,30 @@
     renderVariantRow();
   }
 
+  /* ---- dock: modifier toggles for focused section ---- */
+  const modGroup = document.getElementById('mod-group');
+  const modRow = document.getElementById('mod-row');
+  function renderModRow() {
+    const s = sectionByKey(focus);
+    modRow.innerHTML = '';
+    if (!s.modifiers) { modGroup.hidden = true; return; }
+    modGroup.hidden = false;
+    s.modifiers.forEach(m => {
+      const label = document.createElement('label');
+      label.className = 'dock__mod';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !!mods[focus][m.id];
+      cb.addEventListener('change', () => {
+        mods[focus][m.id] = cb.checked;
+        loadSection(focus, recipe[focus]).then(highlightFocus);
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' ' + m.label));
+      modRow.appendChild(label);
+    });
+  }
+
   function cycleVariant(dir) {
     const s = sectionByKey(focus);
     const i = s.variants.indexOf(recipe[focus]);
@@ -313,6 +367,7 @@
     focus = key;
     sectionSelect.value = key;
     renderVariantRow();
+    renderModRow();
     highlightFocus();
     if (scroll) document.getElementById('slot-' + key)
       .scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -340,7 +395,10 @@
   /* ---- shuffle ---- */
   const rand = arr => arr[Math.floor(Math.random() * arr.length)];
   document.getElementById('shuffle-btn').addEventListener('click', () => {
-    SECTIONS.forEach(s => loadSection(s.key, rand(s.variants)).then(highlightFocus));
+    SECTIONS.forEach(s => {
+      if (s.modifiers) s.modifiers.forEach(m => mods[s.key][m.id] = Math.random() < 0.5);
+      loadSection(s.key, rand(s.variants)).then(highlightFocus);
+    });
     skin = rand(SKINS).id;
     skinSelect.value = skin;
     document.getElementById('theme').href = `../personalities/${skin}.css`;
@@ -352,7 +410,11 @@
     return {
       name: 'untitled',
       skin,
-      sections: SECTIONS.map(s => ({ slot: s.key, variant: recipe[s.key] })),
+      sections: SECTIONS.map(s => ({
+        slot: s.key,
+        variant: recipe[s.key],
+        ...(s.modifiers ? { modifiers: { ...mods[s.key] } } : {}),
+      })),
     };
   }
   const modal = document.getElementById('modal');
@@ -468,7 +530,7 @@
 
   /* ---- initial load ---- */
   Promise.all(SECTIONS.map(s => loadSection(s.key, s.variants[0])))
-    .then(() => { renderVariantRow(); highlightFocus(); });
+    .then(() => { renderVariantRow(); renderModRow(); highlightFocus(); });
 </script>
 <script src="../_slice/site.js"></script>
 </body>

@@ -1,0 +1,15 @@
+/* NAV MODIFIER — Utility Strip
+   A dark top tier (hours + click-to-call) that rides ABOVE any nav variant.
+   Toggled on/off in the builder; it is NOT a nav variant of its own.
+
+   Uses --c-bg-deep (a deep tone in every skin, light or dark) so the strip
+   stays legible everywhere. The validator guarantees --c-ink-invert on
+   --c-bg-deep clears AA, so this pairing is always readable. */
+.nav__utility { background: var(--c-bg-deep); color: var(--c-ink-invert-soft); font-size: var(--fs-small); }
+.nav__utility-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 38px; }
+.nav__utility a { color: var(--c-ink-invert); font-weight: var(--fw-bold); }
+.nav__utility a:hover { color: var(--c-brand); text-decoration: none; }
+@media (max-width: 860px) {
+  .nav__utility-inner { justify-content: center; }
+  .nav__utility span { display: none; }
+}

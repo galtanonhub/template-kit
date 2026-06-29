@@ -1,0 +1,19 @@
+/* NAV VARIANT — Stacked
+   Two-row masthead: logo centered on top, links centered on a second row
+   below a hairline rule. Editorial / boutique / brand-forward. Distinct in
+   STRUCTURE (two rows) from classic (one row, logo left) and centered
+   (one row, logo between split links). */
+.nav--stacked__bar { position: relative; justify-content: space-between; }
+.nav--stacked__edge { flex: 1; }                       /* balances .nav__actions on the right */
+.nav--stacked .nav__logo {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 1.6rem; white-space: nowrap;
+}
+.nav--stacked__row2 { border-top: var(--border-weight) solid var(--c-line); }
+.nav--stacked__row2 .nav__links { justify-content: center; gap: 38px; padding: 13px 0; }
+
+@media (max-width: 860px) {
+  .nav--stacked__row2 { display: none; }               /* drop the empty bordered strip on mobile */
+  .nav--stacked .nav__logo { position: static; transform: none; }
+  .nav--stacked__edge { display: none; }
+}
