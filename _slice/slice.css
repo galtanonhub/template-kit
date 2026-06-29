@@ -9,6 +9,17 @@
 .slice-nav .nav__links a { color: var(--c-ink-soft); text-decoration: none; font-weight: var(--fw-medium); }
 .slice-nav .nav__links a.is-current { color: var(--c-ink); }
 .slice-nav .nav__links a.btn--brand { color: var(--c-brand-ink); }
+/* mobile: collapse the inline links into the hamburger menu (base.css supplies
+   .nav__toggle / .nav__mobile mechanics; site.js toggles .nav.open). Without
+   this, .slice-nav .nav__links (0,2,0) keeps overriding base's mobile hide. */
+.slice-nav .nav__mobile a.is-current { color: var(--c-ink); }
+@media (max-width: 860px) {
+  .slice-nav .nav__links { display: none; }
+  .slice-nav .nav__toggle { display: flex; }
+}
+@media (min-width: 861px) {
+  .slice-nav .nav__toggle, .slice-nav .nav__mobile { display: none; }
+}
 
 /* --- services page: alternating detail rows (distinct from the teaser grid) --- */
 .services-page .section-head { max-width: 720px; margin-bottom: 56px; }

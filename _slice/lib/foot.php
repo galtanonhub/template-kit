@@ -65,5 +65,43 @@ $SOCIAL = [
 <script src="editor.js"></script>
 <?php endif; ?>
 
+<?php if (edit_requested() && !edit_unlocked()): ?>
+<!-- edit requested but session locked: ask for the password, then reload into edit mode -->
+<div class="edit-login" id="edit-login">
+  <form class="edit-login__card" id="edit-login-form">
+    <h2 class="edit-login__title">Edit mode</h2>
+    <p class="edit-login__hint">Enter your edit password to make changes.</p>
+    <input type="password" class="edit-login__input" id="edit-login-pass" placeholder="Password" autocomplete="current-password" autofocus>
+    <p class="edit-login__error" id="edit-login-error" hidden>Wrong password — try again.</p>
+    <div class="edit-login__actions">
+      <a class="edit-login__cancel" href="<?= e(strtok($_SERVER['REQUEST_URI'], '?')) ?>">Cancel</a>
+      <button type="submit" class="edit-login__btn">Unlock</button>
+    </div>
+  </form>
+</div>
+<script>
+(function () {
+  var form = document.getElementById('edit-login-form');
+  var pass = document.getElementById('edit-login-pass');
+  var err  = document.getElementById('edit-login-error');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.hidden = true;
+    fetch('save.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', password: pass.value })
+    })
+    .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+    .then(function (d) {
+      if (d && d.ok) { location.reload(); }
+      else { err.hidden = false; pass.value = ''; pass.focus(); }
+    })
+    .catch(function () { err.hidden = false; });
+  });
+})();
+</script>
+<?php endif; ?>
+
 </body>
 </html>

@@ -53,3 +53,34 @@ body.is-editing { padding-bottom: 64px; }
 .social-editor__input { flex: 1; padding: 8px 10px; border: 1px solid rgba(255,255,255,.2); border-radius: 6px; background: rgba(255,255,255,.06); color: inherit; font-size: 13px; font-family: inherit; }
 .social-editor__input::placeholder { color: rgba(255,255,255,.4); }
 .social-editor__input:focus { outline: none; border-color: var(--c-brand); background: rgba(255,255,255,.1); }
+
+/* edit-mode password gate (shown when ?edit=1 but session locked) */
+.edit-login {
+  position: fixed; inset: 0; z-index: 600;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(8, 11, 16, .72); backdrop-filter: blur(3px);
+  font-family: system-ui, sans-serif;
+}
+.edit-login__card {
+  width: min(360px, calc(100vw - 40px));
+  background: #161b23; color: #fff;
+  border: 1px solid #2a313d; border-radius: 14px;
+  padding: 26px 24px; box-shadow: 0 24px 64px rgba(0,0,0,.5);
+}
+.edit-login__title { margin: 0 0 4px; font-size: 18px; font-weight: 800; letter-spacing: .02em; }
+.edit-login__hint { margin: 0 0 16px; font-size: 13px; color: #8c98a8; }
+.edit-login__input {
+  width: 100%; box-sizing: border-box; padding: 11px 13px;
+  border: 1px solid #2a313d; border-radius: 8px;
+  background: #0e1219; color: #fff; font-size: 14px; font-family: inherit;
+}
+.edit-login__input:focus { outline: none; border-color: var(--c-brand, #46d27e); }
+.edit-login__error { margin: 10px 0 0; font-size: 12px; font-weight: 600; color: #ff6b6b; }
+.edit-login__actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-top: 18px; }
+.edit-login__cancel { color: #8c98a8; font-size: 13px; text-decoration: none; }
+.edit-login__cancel:hover { color: #fff; }
+.edit-login__btn {
+  border: 1px solid #46d27e; background: #46d27e; color: #08230f;
+  padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer;
+}
+.edit-login__btn:hover { background: #5bdc8e; border-color: #5bdc8e; }

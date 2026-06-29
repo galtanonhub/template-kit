@@ -33,7 +33,13 @@
       "sub": "Broken springs, jammed doors, full replacements — most repairs done same day across Central Florida.",
       "cta_primary": "Get a Free Estimate",
       "image": "https://picsum.photos/seed/garagedoor/1600/900",
-      "badges": ["Same-Day Service", "Free Written Estimates", "Financing Available", "2-Yr Warranty"]
+      "badges": ["Same-Day Service", "Free Written Estimates", "Financing Available", "2-Yr Warranty"],
+      "gallery": [
+        "https://picsum.photos/seed/garagedoor/800/1000",
+        "https://picsum.photos/seed/svc1/800/520",
+        "https://picsum.photos/seed/svc2/800/520",
+        "https://picsum.photos/seed/svc3/1200/520"
+      ]
     },
     "proof": {
       "stats": [

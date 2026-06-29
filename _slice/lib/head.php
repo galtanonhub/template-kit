@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="<?= $webRel ?>">
 <?php endforeach; ?>
 <link rel="stylesheet" href="slice.css">
-<?php if (edit_mode()): ?><link rel="stylesheet" href="editor.css"><?php endif; ?>
+<?php if (edit_requested()): ?><link rel="stylesheet" href="editor.css"><?php endif; ?>
 </head>
 <body class="<?= edit_mode() ? 'is-editing' : '' ?>">
 
@@ -28,7 +28,15 @@
       <a href="about.php<?= $eq ?>"<?= $PAGE==='about' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.about', 'Our Story')) ?></a>
       <a class="btn btn--brand" href="contact.php<?= $eq ?>"<?= $PAGE==='contact' ? ' aria-current="page"' : '' ?>><?= e(c('theme.nav.contact', 'Get a Quote')) ?></a>
     </nav>
+    <button class="nav__toggle" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
+  <nav class="nav__mobile" aria-label="Mobile">
+    <a href="index.php<?= $eq ?>"<?= $PAGE==='home' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.home', 'Home')) ?></a>
+    <a href="services.php<?= $eq ?>"<?= $PAGE==='services' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.services', 'What We Do')) ?></a>
+    <a href="service-areas.php<?= $eq ?>"<?= $PAGE==='service-areas' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.service-areas', 'Where We Work')) ?></a>
+    <a href="about.php<?= $eq ?>"<?= $PAGE==='about' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.about', 'Our Story')) ?></a>
+    <a class="btn btn--brand" href="contact.php<?= $eq ?>"<?= $PAGE==='contact' ? ' aria-current="page"' : '' ?>><?= e(c('theme.nav.contact', 'Get a Quote')) ?></a>
+  </nav>
 </header>
 
 <main>

@@ -175,13 +175,13 @@
   /* ---- the recipe space ---- */
   const SECTIONS = [
     { key: 'nav',      label: 'Nav',      variants: ['classic', 'phone-bar', 'centered', 'minimal'] },
-    { key: 'hero',     label: 'Hero',     variants: ['overlay', 'split', 'editorial', 'collage'] },
+    { key: 'hero',     label: 'Hero',     variants: ['overlay', 'split', 'editorial', 'collage', 'mosaic'] },
     { key: 'proof',    label: 'Proof',    variants: ['stat-bar'] },
-    { key: 'services', label: 'Services', variants: ['cards-3', 'carousel', 'framed', 'framed2'] },
-    { key: 'process',  label: 'Process',  variants: ['numbered'] },
+    { key: 'services', label: 'Services', variants: ['cards-3', 'carousel', 'framed', 'framed2', 'need-state', 'selector'] },
+    { key: 'process',  label: 'Process',  variants: ['numbered', 'carousel'] },
     { key: 'about',    label: 'About',    variants: ['split-photo'] },
     { key: 'areas',    label: 'Areas',    variants: ['chips', 'marquee'] },
-    { key: 'faq',      label: 'FAQ',      variants: ['accordion'] },
+    { key: 'faq',      label: 'FAQ',      variants: ['accordion', 'carousel', 'selector'] },
     { key: 'stories',  label: 'Stories',  variants: ['spotlight'] },
     { key: 'cta',      label: 'CTA',      variants: ['band'] },
     { key: 'footer',   label: 'Footer',   variants: ['columns', 'simple', 'cta-combo', 'contact-focus'] },
@@ -341,39 +341,16 @@
     if (e.key === 'ArrowDown') { setFocus(SECTIONS[(idx + 1) % SECTIONS.length].key); e.preventDefault(); }
   });
 
-  /* ---- delegated handlers — survive section swaps ---- */
-  document.addEventListener('click', e => {
-    const q = e.target.closest('.faq__q');
-    if (q) q.closest('.faq__item').classList.toggle('open');
-
-    const t = e.target.closest('.nav__toggle');
-    if (t) t.closest('.nav').classList.toggle('open');
-
-    /* stories spotlight — picture switcher */
-    const thumb = e.target.closest('.stories--spotlight__thumb');
-    if (thumb) {
-      const sec = thumb.closest('.stories');
-      sec.querySelector('.js-spotlight-img').src = thumb.dataset.img;
-      sec.querySelector('.js-spotlight-quote').textContent = thumb.dataset.quote;
-      sec.querySelector('.js-spotlight-name').textContent = thumb.dataset.name;
-      sec.querySelector('.js-spotlight-role').textContent = thumb.dataset.role;
-      sec.querySelectorAll('.stories--spotlight__thumb').forEach(x => x.classList.remove('is-active'));
-      thumb.classList.add('is-active');
-    }
-
-    /* services carousel — prev/next arrows */
-    const arrow = e.target.closest('.services--carousel__arrow');
-    if (arrow) {
-      const track = arrow.closest('.services--carousel').querySelector('.services--carousel__track');
-      const card = track.querySelector('.card');
-      const step = card.getBoundingClientRect().width + 24;
-      track.scrollBy({ left: step * Number(arrow.dataset.dir), behavior: 'smooth' });
-    }
-  });
+  /* ---- delegated interaction handlers ----
+     The builder shares the SAME engine the stamped sites use: ../_slice/site.js
+     (loaded below). It handles faq/nav/stories/selector/need-state/kit-carousel/
+     services-carousel via delegation on document, so it survives section swaps
+     and never drifts from what we actually ship. */
 
   /* ---- initial load ---- */
   Promise.all(SECTIONS.map(s => loadSection(s.key, s.variants[0])))
     .then(() => { renderVariantRow(); highlightFocus(); });
 </script>
+<script src="../_slice/site.js"></script>
 </body>
 </html>

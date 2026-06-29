@@ -5,11 +5,35 @@
    "revert to original". It can ONLY change data — never structure —
    so there is no way for the buyer to break the layout.
 
-   TODO (before delivery): gate this behind a password/session. For the
-   local slice proof it is intentionally open.
+   Locked behind a password (lib/auth.php): login sets a session, every
+   write/upload/revert calls require_edit_auth() first. Unauthenticated
+   requests get 401 and change nothing.
    ------------------------------------------------------------------ */
 require __DIR__ . '/lib/content.php';
 header('Content-Type: application/json');
+
+/* Read the JSON body once (empty for multipart image uploads). Reused below
+   for login/logout/revert/patch. */
+$body = json_decode(file_get_contents('php://input'), true);
+
+/* ---- login / logout (the only unauthenticated actions) ---- */
+if (is_array($body) && ($body['action'] ?? '') === 'login') {
+  if (kit_edit_login($body['password'] ?? '')) {
+    echo json_encode(['ok' => true, 'unlocked' => true]);
+  } else {
+    http_response_code(401);
+    echo json_encode(['ok' => false, 'error' => 'wrong password']);
+  }
+  exit;
+}
+if (is_array($body) && ($body['action'] ?? '') === 'logout') {
+  kit_edit_logout();
+  echo json_encode(['ok' => true, 'locked' => true]);
+  exit;
+}
+
+/* ---- everything past here writes data — must be unlocked ---- */
+require_edit_auth();
 
 /* set a value at a dot-path inside a nested array, creating as needed */
 function set_path(array &$data, $path, $value) {
@@ -57,7 +81,6 @@ if (!empty($_FILES['image'])) {
 }
 
 /* ---- JSON body (text patch or revert) ---- */
-$body = json_decode(file_get_contents('php://input'), true);
 if (!is_array($body)) fail('invalid request');
 
 if (($body['action'] ?? '') === 'revert') {

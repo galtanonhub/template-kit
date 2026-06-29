@@ -6,6 +6,8 @@
    markup; they only ever change the data this file loads.
    ------------------------------------------------------------------ */
 
+require_once __DIR__ . '/auth.php';
+
 define('SLICE_DIR', dirname(__DIR__));
 define('CONTENT_LIVE', SLICE_DIR . '/content.json');
 define('CONTENT_ORIG', SLICE_DIR . '/content.original.json');
@@ -39,5 +41,11 @@ function c($path, $fallback = '') {
 /* escape for safe HTML output */
 function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
-/* are we in buyer edit mode? (?edit=1) */
-function edit_mode() { return isset($_GET['edit']); }
+/* has the buyer asked for edit mode? (?edit=1 in the URL) — may still be locked */
+function edit_requested() { return isset($_GET['edit']); }
+
+/* are we ACTUALLY editing? requested AND the session is unlocked (auth.php).
+   Everything that renders editor chrome keys off this, so a logged-out visitor
+   who guesses ?edit=1 sees the normal site (plus a password prompt), never the
+   editing UI — and save.php refuses their writes regardless. */
+function edit_mode() { return edit_requested() && edit_unlocked(); }

@@ -9,6 +9,15 @@ document.addEventListener('keydown', function (e) {
 });
 
 document.addEventListener('click', function (e) {
+  /* In ?edit=1 mode, a click that lands on an editable element is the buyer
+     placing a cursor to edit — not an interaction. Don't fire toggles/tabs/etc,
+     or editing text nested in a control (e.g. faq question inside .faq__q) would
+     collapse the panel on every click. Clicking a NON-editable part of the same
+     control (the chevron, padding) still works, so collapsed content stays
+     reachable. Live site (no .is-editing) is unaffected. */
+  if (document.body.classList.contains('is-editing') &&
+      e.target.closest('[data-edit], [data-edit-field], [data-edit-img]')) return;
+
   /* need-state cards → open modal */
   var nsCard = e.target.closest('.need-state__card');
   if (nsCard) {
@@ -46,7 +55,11 @@ document.addEventListener('click', function (e) {
 
   /* nav — mobile hamburger toggle */
   var t = e.target.closest('.nav__toggle');
-  if (t) { t.closest('.nav').classList.toggle('open'); return; }
+  if (t) {
+    var open = t.closest('.nav').classList.toggle('open');
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    return;
+  }
 
   /* stories spotlight — thumbnail picker */
   var thumb = e.target.closest('.stories--spotlight__thumb');

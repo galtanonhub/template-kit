@@ -25,6 +25,8 @@
 'use strict';
 const fs   = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+const { execFileSync } = require('child_process');
 
 const KIT   = path.join(__dirname, '..');
 const SLICE = path.join(KIT, '_slice');
@@ -52,6 +54,18 @@ if (!Array.isArray(recipe.sections) || !recipe.sections.length) {
 }
 if (!recipe.skin) {
   console.error('Recipe has no "skin".'); process.exit(1);
+}
+
+/* Shell slots are rendered by the page shell (head.php / foot.php), NOT by a
+   stamped partial. The builder exports them as recipe sections, so drop them
+   here — otherwise every straight Export → stamp dies on "No partial mapping
+   for nav/...". (When nav/footer become recipe-driven, give them PARTIAL_MAP
+   entries and remove them from this set.) */
+const SHELL_SLOTS = new Set(['nav', 'footer']);
+recipe.sections = recipe.sections.filter(s => !SHELL_SLOTS.has(s.slot));
+if (!recipe.sections.length) {
+  console.error('Recipe has no body sections after dropping shell slots (nav/footer).');
+  process.exit(1);
 }
 
 const name    = arg('--name') || recipe.name || 'untitled';
@@ -96,7 +110,7 @@ const INNER_PARTIALS = [
 ];
 
 /* ---- lib files (copied verbatim) ---- */
-const LIB_FILES = ['content.php', 'foot.php'];
+const LIB_FILES = ['content.php', 'foot.php', 'auth.php'];
 
 /* ---- support files (root of site, copied verbatim) ---- */
 const SUPPORT_FILES = ['save.php', 'editor.js', 'editor.css', 'site.js'];
@@ -165,9 +179,29 @@ fs.copyFileSync(skinFile, path.join(cssDir, 'skin.css'));
 /* slice.css becomes site.css — page layout rules for the stamped site */
 fs.copyFileSync(path.join(SLICE, 'slice.css'), path.join(cssDir, 'site.css'));
 
-/* ---- lib/: content.php + foot.php verbatim; head.php generated ---- */
+/* ---- lib/: content.php + foot.php + auth.php verbatim; head.php generated ---- */
 LIB_FILES.forEach(f => fs.copyFileSync(path.join(SLICE, 'lib', f), path.join(libDir, f)));
 fs.writeFileSync(path.join(libDir, 'head.php'), buildHeadPhp(name, mode), 'utf8');
+
+/* ---- per-site edit password: unique random password, only the hash on disk.
+   Printed once below so we can hand it to the buyer; never stored in plaintext.
+   Needs php on PATH to compute the bcrypt hash; if absent, the site falls back
+   to auth.php's dev password and we warn loudly. ---- */
+const editPassword = crypto.randomBytes(9).toString('base64')
+  .replace(/[+/=]/g, '').slice(0, 12);
+let editPasswordNote;
+try {
+  const hash = execFileSync('php', ['-r', `echo password_hash($argv[1], PASSWORD_DEFAULT);`, '--', editPassword], { encoding: 'utf8' }).trim();
+  if (!/^\$2y\$/.test(hash)) throw new Error('unexpected hash: ' + hash);
+  fs.writeFileSync(
+    path.join(libDir, 'auth-secret.php'),
+    `<?php\n/* Per-site edit password hash — generated at stamp time. Do NOT commit\n   this file or put it in a public repo. Regenerate by re-stamping. */\ndefine('KIT_EDIT_HASH', '${hash}');\n`,
+    'utf8'
+  );
+  editPasswordNote = `  edit pass:  ${editPassword}   (open <site>/?edit=1 and enter this)`;
+} catch (err) {
+  editPasswordNote = `  ⚠ edit pass: could not generate (php not found) — site uses auth.php's DEV password "edit". Set lib/auth-secret.php before delivery.`;
+}
 
 /* ---- partials: homepage + inner pages ---- */
 picks.forEach(p => {
@@ -205,6 +239,7 @@ console.log(`  sections: ${picks.map(p => p.key).join(', ')}`);
 const pages = ['index.php'];
 if (mode === 'multi') pages.push('services.php', 'service-areas.php', 'about.php', 'contact.php');
 console.log(`  pages:    ${pages.join(', ')}`);
+console.log(editPasswordNote);
 console.log(`\n  preview:  add "${rel}" to launch.json with php.exe -S localhost:<PORT> -t "${rel}"`);
 
 /* ================================================================
@@ -250,7 +285,7 @@ function buildHeadPhp(siteName, siteMode) {
 <link rel="stylesheet" href="css/sections.css">
 <link rel="stylesheet" href="css/skin.css">
 <link rel="stylesheet" href="css/site.css">
-<?php if (edit_mode()): ?><link rel="stylesheet" href="editor.css"><?php endif; ?>
+<?php if (edit_requested()): ?><link rel="stylesheet" href="editor.css"><?php endif; ?>
 </head>
 <body class="<?= edit_mode() ? 'is-editing' : '' ?>">
 
@@ -264,7 +299,15 @@ ${siteMode === 'multi' ? `      <a href="services.php<?= $eq ?>"<?= $PAGE==='ser
       <a href="about.php<?= $eq ?>"<?= $PAGE==='about' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.about', 'Our Story')) ?></a>
       <a class="btn btn--brand" href="contact.php<?= $eq ?>"<?= $PAGE==='contact' ? ' aria-current="page"' : '' ?>><?= e(c('theme.nav.contact', 'Get a Quote')) ?></a>` : `      <a class="btn btn--brand" href="tel:<?= e(preg_replace('/[^+\\d]/', '', c('business.phone', ''))) ?>"><?= e(c('business.phone', '')) ?></a>`}
     </nav>
+${siteMode === 'multi' ? `    <button class="nav__toggle" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>` : ''}
   </div>
+${siteMode === 'multi' ? `  <nav class="nav__mobile" aria-label="Mobile">
+    <a href="index.php<?= $eq ?>"<?= $PAGE==='home' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.home', 'Home')) ?></a>
+    <a href="services.php<?= $eq ?>"<?= $PAGE==='services' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.services', 'What We Do')) ?></a>
+    <a href="service-areas.php<?= $eq ?>"<?= $PAGE==='service-areas' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.service-areas', 'Where We Work')) ?></a>
+    <a href="about.php<?= $eq ?>"<?= $PAGE==='about' ? ' class="is-current"' : '' ?>><?= e(c('theme.nav.about', 'Our Story')) ?></a>
+    <a class="btn btn--brand" href="contact.php<?= $eq ?>"<?= $PAGE==='contact' ? ' aria-current="page"' : '' ?>><?= e(c('theme.nav.contact', 'Get a Quote')) ?></a>
+  </nav>` : ''}
 </header>
 
 <main>
