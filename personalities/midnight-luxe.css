@@ -1,0 +1,76 @@
+/* ============================================================
+   PERSONALITY — Midnight Luxe
+   For: luxury brands, high-end salons & spas, fine dining,
+        premium real estate, jewelry, boutique agencies —
+        businesses that sell prestige & taste.
+
+   Tells: warm near-black canvas, champagne-gold brand, dramatic
+   high-contrast serif headlines, pill buttons, airy spacing,
+   faint gold glow on hover.
+
+   NOTE: this is a DARK skin — --c-bg is near-black and --c-ink is
+   near-white (the usual light/dark roles are flipped).
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — warm near-black canvas, champagne gold brand, burgundy accent */
+  --c-bg:          #15120e;   /* warm near-black page */
+  --c-bg-alt:      #1e1a14;   /* slightly lifted band */
+  --c-bg-deep:     #0a0908;   /* deepest dramatic section */
+  --c-surface:     #211c15;   /* cards — lighter than page, lifts without shadow */
+  --c-ink:         #f5efe6;   /* warm ivory text */
+  --c-ink-soft:    #b8ae9c;   /* muted warm grey */
+  --c-ink-invert:  #ffffff;   /* text on the deepest/black sections */
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #c9a227;   /* champagne gold */
+  --c-brand-deep:  #a8851c;   /* gold hover/pressed */
+  --c-brand-ink:   #15120e;   /* near-black text ON gold buttons */
+  --c-accent:      #b14a5e;   /* deep burgundy pop */
+  --c-line:        #2e2820;   /* hairline borders on dark */
+  --c-line-strong: #4a4234;
+
+  /* Type — dramatic high-contrast serif display, clean sans body */
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+  --font-accent:  'Manrope', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.24em;   /* wide, luxe */
+  --leading-tight: 1.08;
+  --leading-body:  1.7;          /* airy */
+
+  /* Shape — softly rounded, pill buttons, thin borders */
+  --radius:    14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   1px;
+
+  /* Buttons — pill, gently spaced */
+  --btn-radius:    999px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.08em;
+
+  /* Elevation — cards lift via lighter surface; hover gets a faint gold glow */
+  --shadow:    0 8px 24px rgba(0,0,0,0.35);
+  --shadow-lg: 0 0 28px rgba(201,162,39,0.22), 0 16px 44px rgba(0,0,0,0.5);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — generous, expensive */
+  --section-pad: clamp(72px, 6vw + 48px, 140px);
+  --gap: 34px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes */
+.eyebrow { color: var(--c-brand); letter-spacing: var(--tracking-eyebrow); }
+h1 em, h2 em, .display em { font-style: italic; color: var(--c-brand); }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { box-shadow: 0 0 22px rgba(201,162,39,0.35); }

@@ -118,6 +118,21 @@
     background: #1f8f4e; color: #fff; font: 700 12px system-ui; padding: 8px 16px; border-radius: 8px;
     z-index: 400; opacity: 0; transition: opacity .2s; pointer-events: none; }
   .toast.show { opacity: 1; }
+
+  /* new-skin form */
+  .skinform { display: grid; gap: 14px; margin: 8px 0 4px; }
+  .skinform label { display: grid; gap: 5px; font: 600 13px system-ui, sans-serif; color: #1a1d23; }
+  .skinform small { font-weight: 400; color: #8a93a0; }
+  .skinform input[type=text], .skinform select {
+    padding: 8px 10px; border: 1px solid #cbd2db; border-radius: 6px; font: 14px system-ui, sans-serif;
+  }
+  .skinform__color { display: flex; gap: 8px; align-items: center; }
+  .skinform__color input[type=color] { width: 44px; height: 38px; padding: 2px; border: 1px solid #cbd2db; border-radius: 6px; background: #fff; }
+  .skinform__color input[type=text] { flex: 1; }
+  .skinform__result { font: 13px system-ui, sans-serif; margin: 4px 0; min-height: 18px; white-space: pre-line; }
+  .skinform__result.ok   { color: #1a7f4b; }
+  .skinform__result.warn { color: #9a6a00; }
+  .skinform__result.err  { color: #c0392b; }
 </style>
 </head>
 <body>
@@ -147,6 +162,7 @@
     <div class="dock__group">
       <span class="dock__label">Skin</span>
       <select id="skin-select"></select>
+      <button class="dock__btn" id="new-skin-btn" title="Create a new skin">＋ New</button>
     </div>
 
     <div class="dock__spacer"></div>
@@ -165,6 +181,44 @@
     <div class="modal__row">
       <button class="dock__btn" id="modal-close">Close</button>
       <button class="dock__btn dock__btn--accent" id="copy-json">Copy JSON</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== new-skin modal ===== -->
+<div class="modal" id="skin-modal">
+  <div class="modal__card">
+    <h2>New skin</h2>
+    <p>Pick one brand color — every other color is derived &amp; contrast-checked for you.</p>
+    <div class="skinform">
+      <label>Name <small>(lowercase, e.g. coastal-calm)</small>
+        <input type="text" id="sf-name" placeholder="coastal-calm" autocomplete="off">
+      </label>
+      <label>Brand color
+        <span class="skinform__color">
+          <input type="color" id="sf-seed" value="#2563eb">
+          <input type="text" id="sf-seed-hex" value="#2563eb" autocomplete="off">
+        </span>
+      </label>
+      <label>Mode
+        <select id="sf-mode">
+          <option value="light">Light (dark text on light bg)</option>
+          <option value="dark">Dark (light text on dark bg)</option>
+        </select>
+      </label>
+      <label>Style preset
+        <select id="sf-preset">
+          <option value="modern">Modern — clean sans, subtle shadows</option>
+          <option value="elegant">Elegant — serif headlines, pill buttons, airy</option>
+          <option value="industrial">Industrial — heavy, sharp corners, hard shadows</option>
+          <option value="clean">Clean — crisp sans, small radius</option>
+        </select>
+      </label>
+    </div>
+    <div class="skinform__result" id="sf-result"></div>
+    <div class="modal__row">
+      <button class="dock__btn" id="sf-cancel">Cancel</button>
+      <button class="dock__btn dock__btn--accent" id="sf-create">Create skin</button>
     </div>
   </div>
 </div>
@@ -189,7 +243,7 @@
   const SKINS = [
     { id: 'industrial-bold',  label: 'Industrial Bold' },
     { id: 'warm-residential', label: 'Warm Residential' },
-    { id: 'painting-photo',   label: 'Painting (from photo)' },
+    { id: 'midnight-luxe',    label: 'Midnight Luxe' },
   ];
 
   /* ---- state ---- */
@@ -270,15 +324,18 @@
 
   /* ---- dock: skin selector ---- */
   const skinSelect = document.getElementById('skin-select');
-  SKINS.forEach(sk => {
+  function addSkinOption(sk) {
     const o = document.createElement('option');
     o.value = sk.id; o.textContent = sk.label;
     skinSelect.appendChild(o);
-  });
-  skinSelect.addEventListener('change', () => {
-    skin = skinSelect.value;
-    document.getElementById('theme').href = `../personalities/${skin}.css`;
-  });
+  }
+  SKINS.forEach(addSkinOption);
+  function applySkin(id) {
+    skin = id;
+    skinSelect.value = id;
+    document.getElementById('theme').href = `../personalities/${id}.css`;
+  }
+  skinSelect.addEventListener('change', () => applySkin(skinSelect.value));
 
   /* ---- shuffle ---- */
   const rand = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -315,6 +372,68 @@
   document.getElementById('copy-json').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(recipeJson.value); showToast('Recipe copied'); }
     catch { recipeJson.select(); document.execCommand('copy'); showToast('Recipe copied'); }
+  });
+
+  /* ---- new skin ---- */
+  const skinModal = document.getElementById('skin-modal');
+  const sfName = document.getElementById('sf-name');
+  const sfSeed = document.getElementById('sf-seed');
+  const sfSeedHex = document.getElementById('sf-seed-hex');
+  const sfMode = document.getElementById('sf-mode');
+  const sfPreset = document.getElementById('sf-preset');
+  const sfResult = document.getElementById('sf-result');
+  const sfCreate = document.getElementById('sf-create');
+
+  // keep the color swatch and the hex text field in sync
+  sfSeed.addEventListener('input', () => { sfSeedHex.value = sfSeed.value; });
+  sfSeedHex.addEventListener('input', () => {
+    if (/^#?[0-9a-f]{6}$/i.test(sfSeedHex.value.trim())) {
+      sfSeed.value = sfSeedHex.value.trim().replace(/^#?/, '#');
+    }
+  });
+
+  function setResult(cls, msg) { sfResult.className = 'skinform__result ' + cls; sfResult.textContent = msg; }
+
+  document.getElementById('new-skin-btn').addEventListener('click', () => {
+    setResult('', ''); skinModal.classList.add('open'); sfName.focus();
+  });
+  document.getElementById('sf-cancel').addEventListener('click', () => skinModal.classList.remove('open'));
+  skinModal.addEventListener('click', e => { if (e.target === skinModal) skinModal.classList.remove('open'); });
+
+  sfCreate.addEventListener('click', async () => {
+    setResult('', 'Creating…');
+    sfCreate.disabled = true;
+    try {
+      const res = await fetch('/api/create-skin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: sfName.value, seed: sfSeedHex.value,
+          mode: sfMode.value, preset: sfPreset.value,
+        }),
+      });
+      const data = await res.json();
+      if (data.fatal) { setResult('err', '✗ ' + data.fatal); sfCreate.disabled = false; return; }
+
+      // register in the dropdown and switch to it live
+      SKINS.push({ id: data.id, label: data.label });
+      addSkinOption({ id: data.id, label: data.label });
+      applySkin(data.id);
+
+      const warn = data.warnings.length ? `\n! ${data.warnings.length} warning(s) (non-blocking)` : '';
+      if (data.ok) {
+        setResult('ok', `✓ Created "${data.label}" — validator passed.${warn}`);
+        showToast('Skin created ✓');
+        setTimeout(() => skinModal.classList.remove('open'), 1200);
+      } else {
+        setResult('warn', `Created, but validator flagged issues:\n` +
+          data.errors.map(e => '✗ ' + e).join('\n') + warn);
+      }
+    } catch (err) {
+      setResult('err', '✗ Could not reach the dev server. Start it with:\n' +
+        'node scaffold/dev-server.js');
+    }
+    sfCreate.disabled = false;
   });
 
   /* ---- collapse ---- */

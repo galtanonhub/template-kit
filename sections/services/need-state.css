@@ -27,11 +27,11 @@
 }
 .need-state__card:hover {
   border-color: var(--c-brand);
-  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  box-shadow: var(--shadow);
   transform: translateY(-2px);
 }
 .need-state__card-icon  { font-size: 1.5rem; flex: none; }
-.need-state__card-name  { flex: 1; font-weight: var(--fw-semibold); }
+.need-state__card-name  { flex: 1; font-weight: var(--fw-medium); }
 .need-state__card-arrow { color: var(--c-ink-soft); font-size: 1.2rem; flex: none; }
 
 /* modal overlay (class-toggled so CSS display:flex isn't stomped by [hidden]) */
@@ -56,12 +56,12 @@
 .need-state__modal-box {
   position: relative;
   background: var(--c-surface);
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   max-width: 580px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 24px 64px rgba(0,0,0,.3);
+  box-shadow: var(--shadow-lg);
   animation: ns-modal-in .18s ease;
 }
 @keyframes ns-modal-in {
@@ -78,7 +78,7 @@
   height: 34px;
   border-radius: 50%;
   border: none;
-  background: rgba(255,255,255,.85);
+  background: var(--c-surface);
   backdrop-filter: blur(4px);
   font-size: 1.1rem;
   cursor: pointer;
@@ -88,12 +88,12 @@
   color: var(--c-ink);
   line-height: 1;
 }
-.need-state__modal-close:hover { background: #fff; }
+.need-state__modal-close:hover { background: var(--c-bg-alt); }
 
 .need-state__modal-header {
   height: 200px;
   background: var(--c-brand) center/cover no-repeat;
-  border-radius: 20px 20px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   position: relative;
 }
 .need-state__modal-header::after {
@@ -116,7 +116,7 @@
 }
 .need-state__feature { display: flex; gap: 12px; align-items: flex-start; }
 .need-state__feature-icon { font-size: 1.3rem; flex: none; margin-top: 2px; }
-.need-state__feature strong { display: block; font-weight: var(--fw-semibold); margin-bottom: 4px; font-size: .95rem; }
+.need-state__feature strong { display: block; font-weight: var(--fw-medium); margin-bottom: 4px; font-size: .95rem; }
 .need-state__feature p { font-size: .875rem; color: var(--c-ink-soft); margin: 0; line-height: 1.5; }
 
 body.modal-open { overflow: hidden; }

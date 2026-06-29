@@ -23,7 +23,7 @@
   list-style: none; padding: 0; margin: 0;
 }
 .hero--mosaic__badges li {
-  font-size: var(--fs-small); font-weight: var(--fw-semibold);
+  font-size: var(--fs-small); font-weight: var(--fw-medium);
   color: var(--c-ink-soft);
   padding: 5px 12px;
   border: 1px solid var(--c-line);
