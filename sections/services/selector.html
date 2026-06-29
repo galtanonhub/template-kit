@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Services — Selector</title>
-<link rel="stylesheet" href="../../base/base.css">
-<link rel="stylesheet" href="../../personalities/warm-residential.css">
-<link rel="stylesheet" href="selector.css">
-</head>
-<body>
 <section class="section services services--selector" data-selector>
   <div class="container">
 
     <div class="selector__panels">
 
       <div class="selector__panel is-active" role="tabpanel">
-        <img class="svc-sel__img" src="https://picsum.photos/seed/svc1/600/450" alt="">
+        <img class="svc-sel__img" src="https://picsum.photos/seed/svc1/600/450" alt="Technician repairing a garage door spring">
         <div class="svc-sel__body">
           <div class="svc-sel__icon">🔧</div>
           <h2 class="svc-sel__name">Garage Door Repair</h2>
@@ -30,7 +19,7 @@
       </div>
 
       <div class="selector__panel" role="tabpanel">
-        <img class="svc-sel__img" src="https://picsum.photos/seed/svc2/600/450" alt="">
+        <img class="svc-sel__img" src="https://picsum.photos/seed/svc2/600/450" alt="Newly installed modern garage door on a home">
         <div class="svc-sel__body">
           <div class="svc-sel__icon">🚪</div>
           <h2 class="svc-sel__name">New Door Installation</h2>
@@ -45,7 +34,7 @@
       </div>
 
       <div class="selector__panel" role="tabpanel">
-        <img class="svc-sel__img" src="https://picsum.photos/seed/svc3/600/450" alt="">
+        <img class="svc-sel__img" src="https://picsum.photos/seed/svc3/600/450" alt="Technician performing a garage door tune-up">
         <div class="svc-sel__body">
           <div class="svc-sel__icon">🔩</div>
           <h2 class="svc-sel__name">Tune-Ups &amp; Maintenance</h2>
@@ -78,22 +67,3 @@
 
   </div>
 </section>
-<script>
-(function () {
-  document.addEventListener('click', function (e) {
-    var tab = e.target.closest('.selector__tab');
-    if (!tab) return;
-    var sec    = tab.closest('[data-selector]');
-    var tabs   = Array.prototype.slice.call(sec.querySelectorAll('.selector__tab'));
-    var panels = Array.prototype.slice.call(sec.querySelectorAll('.selector__panel'));
-    var idx    = tabs.indexOf(tab);
-    tabs.forEach(function (t, i) {
-      t.classList.toggle('is-active', i === idx);
-      t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
-    });
-    panels.forEach(function (p, i) { p.classList.toggle('is-active', i === idx); });
-  });
-})();
-</script>
-</body>
-</html>
