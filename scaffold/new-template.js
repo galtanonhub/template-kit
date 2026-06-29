@@ -89,6 +89,7 @@ const PARTIAL_MAP = {
   'services/carousel':  'services-carousel.php',
   'services/framed':    'services-framed.php',
   'services/framed2':   'services-framed2.php',
+  'services/panel-grid':'services-panel-grid.php',
   'process/numbered':   'process-numbered.php',
   'process/carousel':   'process-carousel.php',
   'about/split-photo':  'about-teaser.php',

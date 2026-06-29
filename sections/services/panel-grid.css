@@ -1,0 +1,93 @@
+/* SERVICES VARIANT — Panel Grid
+   Left lead panel (heading + blurb + CTA) beside a 2×3 colored card grid.
+   Each card: image banner top, colored body below (cycles brand/accent/deep). */
+
+.services--panel-grid__layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.services--panel-grid__lead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.services--panel-grid__lead h2 { margin: 0; }
+.services--panel-grid__lead p  { color: var(--c-ink-soft); margin: 0; }
+
+.services--panel-grid__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.services--panel-grid__card {
+  --card-bg: var(--c-brand);
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.services--panel-grid__card:nth-child(3n+2) { --card-bg: var(--c-accent); }
+.services--panel-grid__card:nth-child(3n+3) { --card-bg: var(--c-bg-deep); }
+
+.services--panel-grid__thumb { height: 130px; flex-shrink: 0; }
+.services--panel-grid__thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.services--panel-grid__body {
+  background: var(--card-bg);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 18px 20px;
+}
+.services--panel-grid__body h3 {
+  margin: 0;
+  color: var(--c-ink-invert);
+  font-size: var(--fs-h3);
+  line-height: var(--leading-tight);
+}
+.services--panel-grid__body p {
+  margin: 0;
+  color: var(--c-ink-invert-soft);
+  font-size: var(--fs-small);
+  line-height: var(--leading-body);
+  flex: 1;
+}
+
+.services--panel-grid__more {
+  display: inline-block;
+  margin-top: 12px;
+  align-self: flex-start;
+  padding: 0.5em 1.1em;
+  border-radius: var(--btn-radius);
+  border: 2px solid var(--c-ink-invert-soft);
+  color: var(--c-ink-invert);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  transition: background var(--transition), border-color var(--transition);
+}
+.services--panel-grid__more:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: var(--c-ink-invert);
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .services--panel-grid__layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+@media (max-width: 580px) {
+  .services--panel-grid__grid { grid-template-columns: repeat(2, 1fr); }
+}
