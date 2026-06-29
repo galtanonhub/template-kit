@@ -35,9 +35,9 @@
   --leading-tight: 0.96;
 
   /* Shape — razor sharp, heavy borders */
-  --radius:    20px;
-  --radius-lg: 20px;
-  --radius-pill: 20px;
+  --radius:    0px;
+  --radius-lg: 0px;
+  --radius-pill: 0px;
   --border-weight: 2px;
   --rule-weight:   4px;
 

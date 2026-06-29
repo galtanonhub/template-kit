@@ -107,9 +107,102 @@ function resolve(tokens, name, seen = new Set()) {
   return v;
 }
 
+/* --- differentiation fingerprint ---
+   Reduces a skin to 5 categorical axes so we can compare skins against
+   each other and block ones that are too similar.
+
+   Axes:
+     1. bgMode      — 'light' or 'dark' (lightness of --c-bg)
+     2. fontDisplay — first font-family name, lowercased
+     3. radiusCat   — 'sharp' (0-2px), 'subtle' (3-9px), 'rounded' (10-30px), 'pill' (>30px)
+     4. shadowStyle — 'none', 'hard-offset' (no blur keyword, px px 0), 'glow' (rgba glow), 'soft-drop'
+     5. brandHue    — color family bucket (red/orange/yellow/green/teal/blue/purple/pink/neutral)
+
+   A new skin must differ from every existing skin on AT LEAST 3 of 5 axes.
+   Matching on 2 → warning. Matching on 3+ → error (too close).
+   Same display font as any existing skin → immediate error (most visible axis).
+*/
+
+function fingerprint(tokens, css) {
+  // 1. bgMode
+  const bgRgb = parseHex(tokens['--c-bg']);
+  const bgLum = bgRgb ? relLum(bgRgb) : 0.5;
+  const bgMode = bgLum < 0.2 ? 'dark' : 'light';
+
+  // 2. fontDisplay — grab first quoted or unquoted name
+  const fd = (tokens['--font-display'] || '').match(/['"]?([A-Za-z][^'",]+)['"]?/);
+  const fontDisplay = fd ? fd[1].trim().toLowerCase() : 'unknown';
+
+  // 3. radiusCat — use --radius (card corners, most visible)
+  const rVal = parseFloat(tokens['--radius'] || '0');
+  const radiusCat = rVal <= 2 ? 'sharp' : rVal <= 9 ? 'subtle' : rVal <= 30 ? 'rounded' : 'pill';
+
+  // 4. shadowStyle
+  const sh = (tokens['--shadow'] || '').toLowerCase();
+  const shLg = (tokens['--shadow-lg'] || '').toLowerCase();
+  let shadowStyle;
+  if (sh === 'none' && /rgba.*0\.\d+.*rgba|0 0 \d+px/.test(shLg)) shadowStyle = 'glow';
+  else if (sh === 'none' && /\d+px \d+px 0/.test(shLg))           shadowStyle = 'hard-offset';
+  else if (sh === 'none')                                           shadowStyle = 'flat';
+  else                                                               shadowStyle = 'soft-drop';
+
+  // 5. brandHue — bucket the --c-brand hex into a color family
+  const brandRgb = parseHex(tokens['--c-brand']);
+  let brandHue = 'neutral';
+  if (brandRgb) {
+    const [r, g, b] = brandRgb;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+    if (d > 20) {
+      let h = max === r ? (g - b) / d + (g < b ? 6 : 0)
+            : max === g ? (b - r) / d + 2
+            : (r - g) / d + 4;
+      h = (h / 6) * 360;
+      brandHue = h < 20 ? 'red' : h < 45 ? 'orange' : h < 70 ? 'yellow'
+               : h < 150 ? 'green' : h < 190 ? 'teal' : h < 250 ? 'blue'
+               : h < 290 ? 'purple' : h < 330 ? 'pink' : 'red';
+    }
+  }
+
+  return { bgMode, fontDisplay, radiusCat, shadowStyle, brandHue };
+}
+
+function diffCheck(file, tokens, css) {
+  const dir = path.join(path.dirname(file));
+  const thisName = path.basename(file);
+  const mine = fingerprint(tokens, css);
+  const issues = [];
+
+  let siblings;
+  try { siblings = fs.readdirSync(dir).filter(f => f.endsWith('.css') && f !== thisName); }
+  catch { return issues; }
+
+  for (const sib of siblings) {
+    const sibPath = path.join(dir, sib);
+    let sibCss;
+    try { sibCss = fs.readFileSync(sibPath, 'utf8'); } catch { continue; }
+    const sibTokens = readTokens(sibCss);
+    const theirs = fingerprint(sibTokens, sibCss);
+
+    // same display font is an immediate error — most visible axis
+    if (mine.fontDisplay !== 'unknown' && mine.fontDisplay === theirs.fontDisplay) {
+      issues.push({ level: 'error', msg: `same display font as ${sib} ("${mine.fontDisplay}") — must use a different typeface` });
+      continue;
+    }
+
+    const AXES = ['bgMode', 'radiusCat', 'shadowStyle', 'brandHue'];
+    const matches = AXES.filter(a => mine[a] === theirs[a]);
+    if (matches.length >= 3) {
+      issues.push({ level: 'error', msg: `too similar to ${sib} — matches on ${matches.join(', ')} (need to differ on at least 3 of 4 remaining axes)` });
+    } else if (matches.length === 2) {
+      issues.push({ level: 'warn', msg: `close to ${sib} — matches on ${matches.join(', ')} — consider differentiating further` });
+    }
+  }
+  return issues;
+}
+
 /* --- validate one file --- */
 
-function validate(file) {
+function validate(file, { diff = true } = {}) {
   const css = fs.readFileSync(file, 'utf8');
   const tokens = readTokens(css);
   const name = path.basename(file);
@@ -134,7 +227,15 @@ function validate(file) {
     errors.push('no @import url(...) — display & body fonts must be loaded by the skin');
   }
 
-  // 4. contrast on key pairs
+  // 4. differentiation against existing skins
+  if (diff) {
+    for (const { level, msg } of diffCheck(file, tokens, css)) {
+      if (level === 'error') errors.push(`[differentiation] ${msg}`);
+      else                   warnings.push(`[differentiation] ${msg}`);
+    }
+  }
+
+  // 5. contrast on key pairs
   for (const [fgT, bgT, label, min] of CONTRAST_PAIRS) {
     const fg = parseHex(resolve(tokens, fgT));
     const bg = parseHex(resolve(tokens, bgT));

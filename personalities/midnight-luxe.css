@@ -4,73 +4,83 @@
         premium real estate, jewelry, boutique agencies —
         businesses that sell prestige & taste.
 
-   Tells: warm near-black canvas, champagne-gold brand, dramatic
-   high-contrast serif headlines, pill buttons, airy spacing,
-   faint gold glow on hover.
+   Tells: near-black canvas, champagne gold, razor-thin editorial
+   serif headlines (Cormorant), flat-card architecture with pill
+   buttons, gold glow on hover, generous spacing. Reads like a
+   luxury magazine — NOT like a cosy boutique (that's warm-residential).
 
-   NOTE: this is a DARK skin — --c-bg is near-black and --c-ink is
-   near-white (the usual light/dark roles are flipped).
+   Differs from warm-residential on every axis:
+     - dark bg vs cream  — immediately obvious
+     - Cormorant (ultra-thin, tall) vs Fraunces (chunky, warm)
+     - 4px radius vs 14px
+     - gold glow vs soft warm drop shadow
+     - no italic em flourish (warm-residential's signature)
+     - wide-tracked eyebrows vs sage-colored minimal
+
+   NOTE: DARK skin — --c-bg is near-black, --c-ink is near-white.
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Manrope:wght@400;500;600;700&display=swap');
 
 :root {
   /* Color — warm near-black canvas, champagne gold brand, burgundy accent */
-  --c-bg:          #15120e;   /* warm near-black page */
-  --c-bg-alt:      #1e1a14;   /* slightly lifted band */
-  --c-bg-deep:     #0a0908;   /* deepest dramatic section */
-  --c-surface:     #211c15;   /* cards — lighter than page, lifts without shadow */
-  --c-ink:         #f5efe6;   /* warm ivory text */
-  --c-ink-soft:    #b8ae9c;   /* muted warm grey */
-  --c-ink-invert:  #ffffff;   /* text on the deepest/black sections */
+  --c-bg:          #15120e;
+  --c-bg-alt:      #1e1a14;
+  --c-bg-deep:     #0a0908;
+  --c-surface:     #211c15;
+  --c-ink:         #f5efe6;
+  --c-ink-soft:    #b8ae9c;
+  --c-ink-invert:  #ffffff;
   --c-ink-invert-soft: rgba(255,255,255,0.72);
-  --c-brand:       #c9a227;   /* champagne gold */
-  --c-brand-deep:  #a8851c;   /* gold hover/pressed */
-  --c-brand-ink:   #15120e;   /* near-black text ON gold buttons */
-  --c-accent:      #b14a5e;   /* deep burgundy pop */
-  --c-line:        #2e2820;   /* hairline borders on dark */
+  --c-brand:       #c9a227;
+  --c-brand-deep:  #a8851c;
+  --c-brand-ink:   #15120e;
+  --c-accent:      #b14a5e;
+  --c-line:        #2e2820;
   --c-line-strong: #4a4234;
 
-  /* Type — dramatic high-contrast serif display, clean sans body */
-  --font-display: 'DM Serif Display', Georgia, serif;
+  /* Type — ultra-thin high-contrast editorial serif, clean sans body */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body:    'Manrope', system-ui, sans-serif;
   --font-accent:  'Manrope', system-ui, sans-serif;
   --fw-normal: 400;
   --fw-medium: 500;
   --fw-bold:   600;
-  --fw-heavy:  700;
-  --tracking-display: 0;
-  --tracking-eyebrow:  0.24em;   /* wide, luxe */
-  --leading-tight: 1.08;
-  --leading-body:  1.7;          /* airy */
+  --fw-heavy:  600;         /* Cormorant reads best lighter; 600 IS heavy for this face */
+  --tracking-display: 0.02em;    /* slight open tracking — editorial */
+  --tracking-eyebrow:  0.4em;    /* very wide — luxury magazine masthead feel */
+  --leading-tight: 1.05;
+  --leading-body:  1.72;
 
-  /* Shape — softly rounded, pill buttons, thin borders */
-  --radius:    14px;
-  --radius-lg: 22px;
+  /* Shape — nearly flat cards, pill buttons (the contrast IS the signature) */
+  --radius:    4px;
+  --radius-lg: 6px;
   --radius-pill: 999px;
   --border-weight: 1px;
   --rule-weight:   1px;
 
-  /* Buttons — pill, gently spaced */
+  /* Buttons — pill, wide-tracked, medium weight */
   --btn-radius:    999px;
   --btn-transform: none;
-  --btn-weight:    600;
-  --btn-tracking:  0.08em;
+  --btn-weight:    500;
+  --btn-tracking:  0.12em;
 
-  /* Elevation — cards lift via lighter surface; hover gets a faint gold glow */
-  --shadow:    0 8px 24px rgba(0,0,0,0.35);
-  --shadow-lg: 0 0 28px rgba(201,162,39,0.22), 0 16px 44px rgba(0,0,0,0.5);
+  /* Elevation — flat by default; gold glow on hover only */
+  --shadow:    none;
+  --shadow-lg: 0 0 32px rgba(201,162,39,0.28), 0 12px 40px rgba(0,0,0,0.55);
   --card-border: 1px solid var(--c-line);
 
-  /* Rhythm — generous, expensive */
-  --section-pad: clamp(72px, 6vw + 48px, 140px);
-  --gap: 34px;
+  /* Rhythm — very generous, expensive */
+  --section-pad: clamp(80px, 7vw + 48px, 148px);
+  --gap: 36px;
 
   --eyebrow-transform: uppercase;
 }
 
-/* Signature flourishes */
-.eyebrow { color: var(--c-brand); letter-spacing: var(--tracking-eyebrow); }
-h1 em, h2 em, .display em { font-style: italic; color: var(--c-brand); }
-.card { transition: transform var(--transition), box-shadow var(--transition); }
-.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.btn--brand:hover { box-shadow: 0 0 22px rgba(201,162,39,0.35); }
+/* Signature flourishes — editorial, NOT warm/cosy */
+.eyebrow { color: var(--c-brand); letter-spacing: var(--tracking-eyebrow); font-size: 0.72rem; }
+h1, h2 { font-weight: 400; letter-spacing: 0.01em; }   /* Cormorant is expressive at regular weight */
+.card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--c-line-strong); }
+.btn--brand:hover { box-shadow: 0 0 24px rgba(201,162,39,0.40); }
+.section-head { border-bottom: 1px solid var(--c-line); padding-bottom: 20px; margin-bottom: 36px; }
+.section-head.center { border-bottom: 1px solid var(--c-line); }
