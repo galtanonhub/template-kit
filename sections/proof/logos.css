@@ -1,0 +1,51 @@
+/* PROOF VARIANT — Logos
+   Eyebrow label + a row of individually boxed logos (padded tiles with border).
+   Each logo sits in its own card-like box; grayscale keeps it neutral. */
+
+.proof--logos { background: var(--c-bg-alt); padding-block: clamp(28px, 3vw, 44px); }
+
+.proof--logos__eyebrow {
+  display: block;
+  margin-bottom: 20px;
+}
+.proof--logos__eyebrow::before {
+  content: '•';
+  margin-right: 0.5em;
+  color: var(--c-brand);
+}
+
+.proof--logos__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.proof--logos__box {
+  background: var(--c-surface);
+  border: var(--border-weight) solid var(--c-line);
+  border-radius: var(--radius);
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 140px;
+}
+
+.proof--logos__box img {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.55);
+  transition: filter var(--transition);
+}
+
+.proof--logos__box:hover img {
+  filter: grayscale(0) opacity(1);
+}
+
+@media (max-width: 600px) {
+  .proof--logos__box { flex: 1 1 calc(50% - 6px); }
+}
