@@ -84,6 +84,7 @@ const PARTIAL_MAP = {
   'hero/mosaic':        'hero-mosaic.php',
   'proof/stat-bar':     'proof-stat-bar.php',
   'proof/logos':        'proof-logos.php',
+  'proof/pipe-row':     'proof-pipe-row.php',
   'services/cards-3':   'services-teaser.php',
   'services/need-state':'services-need-state.php',
   'services/selector':  'services-selector.php',
