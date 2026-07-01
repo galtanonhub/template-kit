@@ -4,6 +4,7 @@
 <section class="section inner-header inner-header--banner areas-header">
   <img class="inner-header--banner__bg" src="<?= e(c('areas.page.image', 'https://picsum.photos/seed/areasheader/1600/700')) ?>" alt="" data-edit-img="areas.page.image">
   <div class="inner-header--banner__scrim"></div>
+  <?php kit_shape_divider($SECTION_OPTS['edge'] ?? 'none'); ?>
   <div class="container inner-header--banner__inner">
     <span class="eyebrow" data-edit="areas.page.eyebrow"><?= e(c('areas.page.eyebrow', 'Service Area')) ?></span>
     <h1 data-edit="areas.page.heading"><?= e(c('areas.page.heading', 'Where we work')) ?></h1>

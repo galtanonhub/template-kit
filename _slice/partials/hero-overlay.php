@@ -3,6 +3,7 @@
 <section class="hero hero--overlay">
   <img class="hero--overlay__bg" src="<?= e(c('home.hero.image', 'https://picsum.photos/seed/trades/1600/900')) ?>" alt="" data-edit-img="home.hero.image">
   <div class="hero--overlay__scrim"></div>
+  <?php kit_shape_divider($SECTION_OPTS['edge'] ?? 'none'); ?>
   <div class="container hero--overlay__inner">
     <span class="eyebrow" data-edit="home.hero.eyebrow"><?= e(c('home.hero.eyebrow', 'Licensed & Insured')) ?></span>
     <h1 class="display" data-edit="home.hero.headline"><?= e(c('home.hero.headline', 'We get it done right.')) ?></h1>

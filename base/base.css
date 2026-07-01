@@ -284,6 +284,22 @@ p  { color: var(--c-ink-soft); }
 .checklist li { position: relative; padding-left: 28px; color: var(--c-ink-soft); }
 .checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--c-brand); font-weight: var(--fw-heavy); }
 
+/* Shape divider — an SVG notch/wave laid over the bottom edge of a
+   full-bleed photo section, filled with the page background so the photo's
+   bottom edge reads as cut on a curve instead of a hard rectangle. Structural
+   only (position/fill); which shape shows is a per-variant `edge` option
+   (none/wave/triangle) — see manifest.json variant.options + $SECTION_OPTS.
+   Only ever placed inside sections that unconditionally render a photo
+   (hero--overlay, inner-header--banner, the feature-band photo band) so the
+   effect never shows over an empty/missing image. */
+.shape-divider { position: absolute; left: 0; bottom: -1px; width: 100%; line-height: 0; overflow: hidden; pointer-events: none; }
+.shape-divider svg { display: block; width: 100%; height: 110px; }
+.shape-divider path { fill: var(--c-bg); }
+
+@media (max-width: 760px) {
+  .shape-divider svg { height: 60px; }
+}
+
 /* ---------------------------------------------------------------
    11. NAV  (shared mechanics; per-variant layout in .nav--<name>)
    --------------------------------------------------------------- */

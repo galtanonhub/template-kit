@@ -7,7 +7,15 @@
       "variants": [{ "id": "classic" }, { "id": "centered" }, { "id": "stacked" }] },
     { "key": "hero", "label": "Hero", "required": true,
       "variants": [
-        { "id": "overlay", "partial": "hero-overlay.php" },
+        { "id": "overlay", "partial": "hero-overlay.php",
+          "options": [
+            { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+              "choices": [
+                { "id": "none", "label": "None" },
+                { "id": "wave", "label": "Wave" },
+                { "id": "triangle", "label": "Triangle" }
+              ] }
+          ] },
         { "id": "split", "partial": "hero-split.php" },
         { "id": "editorial", "partial": "hero-editorial.php" },
         { "id": "mosaic", "partial": "hero-mosaic.php" }
@@ -77,7 +85,15 @@
         { "key": "services-header", "label": "Page Header", "required": true,
           "variants": [
             { "id": "standard", "partial": "services-header.php" },
-            { "id": "banner", "partial": "services-header-banner.php" },
+            { "id": "banner", "partial": "services-header-banner.php",
+              "options": [
+                { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "wave", "label": "Wave" },
+                    { "id": "triangle", "label": "Triangle" }
+                  ] }
+              ] },
             { "id": "split", "partial": "services-header-split.php" }
           ] },
         { "key": "services-detail", "label": "Services Detail",
@@ -93,6 +109,15 @@
                     { "id": "bordered", "label": "Bordered" },
                     { "id": "divided", "label": "Bordered + divided" }
                   ] }
+              ] },
+            { "id": "feature-band", "partial": "services-detail-feature-band.php",
+              "options": [
+                { "id": "edge", "label": "Photo band bottom edge", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "wave", "label": "Wave" },
+                    { "id": "triangle", "label": "Triangle" }
+                  ] }
               ] }
           ] }
       ]
@@ -104,7 +129,15 @@
         { "key": "areas-header", "label": "Page Header", "required": true,
           "variants": [
             { "id": "standard", "partial": "areas-header.php" },
-            { "id": "banner", "partial": "areas-header-banner.php" },
+            { "id": "banner", "partial": "areas-header-banner.php",
+              "options": [
+                { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "wave", "label": "Wave" },
+                    { "id": "triangle", "label": "Triangle" }
+                  ] }
+              ] },
             { "id": "split", "partial": "areas-header-split.php" }
           ] },
         { "key": "areas-body", "label": "Areas Body",
@@ -118,7 +151,15 @@
         { "key": "about-header", "label": "Page Header", "required": true,
           "variants": [
             { "id": "standard", "partial": "about-header.php" },
-            { "id": "banner", "partial": "about-header-banner.php" },
+            { "id": "banner", "partial": "about-header-banner.php",
+              "options": [
+                { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "wave", "label": "Wave" },
+                    { "id": "triangle", "label": "Triangle" }
+                  ] }
+              ] },
             { "id": "split", "partial": "about-header-split.php" }
           ] },
         { "key": "about-body", "label": "About Body",
@@ -135,7 +176,15 @@
         { "key": "contact-header", "label": "Page Header", "required": true,
           "variants": [
             { "id": "standard", "partial": "contact-header.php" },
-            { "id": "banner", "partial": "contact-header-banner.php" },
+            { "id": "banner", "partial": "contact-header-banner.php",
+              "options": [
+                { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "wave", "label": "Wave" },
+                    { "id": "triangle", "label": "Triangle" }
+                  ] }
+              ] },
             { "id": "split", "partial": "contact-header-split.php" }
           ] },
         { "key": "contact-body", "label": "Contact Body",

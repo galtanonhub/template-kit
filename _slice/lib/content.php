@@ -64,3 +64,32 @@ function kit_social_roster() {
     'tiktok'    => ['icon' => '🎵',  'label' => 'TikTok'],
   ];
 }
+
+/* Shape divider — echoes the `.shape-divider` SVG (see base.css) for a
+   variant's `edge` option (none/wave/triangle). STRUCTURE (locked): the
+   caller only ever passes a value from $SECTION_OPTS, never buyer content.
+   Only call this inside a section that unconditionally renders a photo
+   (hero--overlay, inner-header--banner, the feature-band photo band) — the
+   effect is meaningless without one, so it's never offered as an option on
+   variants that don't guarantee an image. */
+function kit_shape_divider($edge) {
+  $paths = [
+    /* two full repeating sine-like cycles (down-up-down-up), mirror-symmetric
+       so the pattern reads consistently across the whole width rather than
+       one lopsided dip on one side — each quarter-cycle uses BOTH cubic
+       control points pulled to the same extreme (0 or 100) rather than just
+       one, which pulls the curve's actual peak/trough much closer to the
+       full 0–100 range without any point exceeding it (exceeding would clip
+       against .shape-divider's overflow:hidden, as an earlier version did). */
+    'wave'     => 'M0,50 C62.5,100 187.5,100 250,50 C312.5,0 437.5,0 500,50 C562.5,100 687.5,100 750,50 C812.5,0 937.5,0 1000,50 L1000,100 L0,100 Z',
+    /* photo dips to a point at center (background recedes there) and the
+       background fully covers the corners — not the other way around */
+    'triangle' => 'M0,0 L500,85 L1000,0 L1000,100 L0,100 Z',
+  ];
+  if (!isset($paths[$edge])) return;
+  ?>
+  <div class="shape-divider" aria-hidden="true">
+    <svg viewBox="0 0 1000 100" preserveAspectRatio="none"><path d="<?= $paths[$edge] ?>"/></svg>
+  </div>
+  <?php
+}
