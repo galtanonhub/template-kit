@@ -1,0 +1,23 @@
+/* CTA VARIANT — Split
+   Contained two-column layout: rounded/shadowed photo one side, message +
+   actions the other. Plain page background, no color band — a quieter
+   closer built to follow a busy full-bleed section (hero/feature-band)
+   without repeating that same visual weight. */
+
+.cta--split__media {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4 / 3;
+}
+.cta--split__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.cta--split__text h2 { margin: 0 0 12px; }
+.cta--split__text p { margin: 0 0 26px; font-size: var(--fs-lead); max-width: 44ch; }
+
+.cta--split__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+  .cta--split .split { grid-template-columns: 1fr; }
+  .cta--split__media { order: -1; }
+}

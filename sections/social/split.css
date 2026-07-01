@@ -1,0 +1,36 @@
+/* SOCIAL VARIANT — Split
+   Text one side, a contained photo the other with platform icons floating
+   as a compact strip over its bottom edge. */
+
+.social--split__text p { margin-top: 14px; color: var(--c-ink-soft); max-width: 40ch; }
+
+.social--split__media {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  aspect-ratio: 4 / 3;
+}
+.social--split__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.social--split__strip {
+  position: absolute; left: 16px; bottom: 16px;
+  display: flex; gap: 8px;
+  background: var(--c-surface);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+}
+.social--split__strip a {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+}
+.social--split__strip a:hover { background: var(--c-bg-alt); transform: translateY(-2px); }
+
+@media (max-width: 720px) {
+  .social--split .split { grid-template-columns: 1fr; }
+}

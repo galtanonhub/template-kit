@@ -52,14 +52,6 @@
     font-size: 12px; font-weight: 600; padding: 6px 8px; cursor: pointer; font-family: inherit;
   }
 
-  /* variant row for the focused section */
-  .dock__variants { display: flex; align-items: center; gap: 5px; flex: none; }
-  .dock__variants button {
-    padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 600;
-    border: 1px solid #2a313d; background: #1a212c; color: #c3cad6; cursor: pointer; white-space: nowrap;
-  }
-  .dock__variants button:hover { border-color: #495568; }
-  .dock__variants button.active { background: #fff; color: #11151c; border-color: #fff; }
   .dock__tabs { display: flex; align-items: center; gap: 5px; flex: none; }
   .dock__tabs button {
     padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 700;
@@ -167,7 +159,7 @@
 
     <div class="dock__group">
       <button class="dock__cycle" id="prev-variant" title="Previous variant (←)">‹</button>
-      <div class="dock__variants" id="variant-row"></div>
+      <select id="variant-select"></select>
       <button class="dock__cycle" id="next-variant" title="Next variant (→)">›</button>
     </div>
 
@@ -396,7 +388,7 @@
     else excluded.add(focus);
     applyInclusion(focus);
     refreshSectionOptions();
-    renderVariantRow();
+    renderVariantSelect();
   });
   function applyInclusion(key) {
     const slot = document.getElementById('slot-' + key);
@@ -408,26 +400,25 @@
     includeToggle.checked = isIncluded(focus);
   }
 
-  /* ---- dock: variant row for focused section ---- */
-  const variantRow = document.getElementById('variant-row');
-  function renderVariantRow() {
+  /* ---- dock: variant select for focused section ---- */
+  const variantSelect = document.getElementById('variant-select');
+  function renderVariantSelect() {
     const s = sectionByKey(focus);
     const off = !isIncluded(focus);
-    variantRow.innerHTML = '';
-    variantRow.style.opacity = off ? '0.4' : '';
+    variantSelect.innerHTML = '';
+    variantSelect.disabled = off;
     s.variants.forEach(v => {
-      const b = document.createElement('button');
-      b.textContent = titleCase(v);
-      if (recipe[focus] === v) b.classList.add('active');
-      b.disabled = off;
-      b.addEventListener('click', () => chooseVariant(v));
-      variantRow.appendChild(b);
+      const o = document.createElement('option');
+      o.value = v; o.textContent = titleCase(v);
+      variantSelect.appendChild(o);
     });
+    variantSelect.value = recipe[focus];
   }
+  variantSelect.addEventListener('change', () => chooseVariant(variantSelect.value));
 
   function chooseVariant(v) {
     loadSection(focus, v).then(() => highlightFocus());
-    renderVariantRow();
+    renderVariantSelect();
     renderModRow();   // a different variant may have its own style options
   }
 
@@ -509,7 +500,7 @@
     cur.focus = key;            // remember focus per page across tab switches
     sectionSelect.value = key;
     renderIncludeToggle();
-    renderVariantRow();
+    renderVariantSelect();
     renderModRow();
     highlightFocus();
     if (scroll) document.getElementById('slot-' + key)

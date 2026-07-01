@@ -215,7 +215,13 @@
       "intro": "We cover a wide stretch of Orange, Seminole, Osceola, and Lake counties — and we come to you.",
       "image": "https://picsum.photos/seed/areasheader/1600/700"
     },
-    "list": ["Orlando", "Winter Park", "Maitland", "Apopka", "Altamonte Springs", "Lake Mary", "Sanford", "Oviedo", "Winter Garden", "Clermont", "Kissimmee", "Casselberry"]
+    "list": ["Orlando", "Winter Park", "Maitland", "Apopka", "Altamonte Springs", "Lake Mary", "Sanford", "Oviedo", "Winter Garden", "Clermont", "Kissimmee", "Casselberry"],
+    "regions": [
+      { "region": "Orange County", "cities": ["Orlando", "Winter Park", "Maitland", "Apopka", "Winter Garden"] },
+      { "region": "Seminole County", "cities": ["Altamonte Springs", "Lake Mary", "Sanford", "Oviedo", "Casselberry"] },
+      { "region": "Osceola County", "cities": ["Kissimmee"] },
+      { "region": "Lake County", "cities": ["Clermont"] }
+    ]
   },
 
   "about": {

@@ -1,0 +1,30 @@
+/* SOCIAL VARIANT — Cards
+   Each platform as its own small card, not a flat row of pill buttons —
+   makes each channel read as its own invitation. */
+
+.social--cards__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+.social--cards__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: clamp(22px, 2.4vw, 30px) 20px;
+  background: var(--c-surface);
+  border: var(--card-border);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.social--cards__card:hover {
+  border-color: var(--c-brand);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+.social--cards__icon { font-size: 1.8rem; line-height: 1; }
+.social--cards__name { font-weight: var(--fw-bold); color: var(--c-ink); }
+.social--cards__follow { font-size: var(--fs-small); color: var(--c-brand); font-weight: var(--fw-medium); }

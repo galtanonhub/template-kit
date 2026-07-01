@@ -1,0 +1,12 @@
+/* CTA VARIANT — Overlay
+   Full-bleed photo + dark scrim, centered white text, single dual-action
+   row — same mechanic as hero/overlay, joining the shape-divider `edge`
+   family of full-bleed-photo sections. */
+
+.cta--overlay { position: relative; min-height: clamp(360px, 40vh, 480px); display: grid; align-items: center; overflow: hidden; color: var(--c-ink-invert); }
+.cta--overlay__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cta--overlay__scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--c-bg-deep) 62%, transparent); }
+.cta--overlay__inner { position: relative; z-index: 1; max-width: 640px; margin-inline: auto; padding-block: 60px; text-align: center; }
+.cta--overlay h2 { color: var(--c-ink-invert); margin: 0 0 14px; }
+.cta--overlay p { color: var(--c-ink-invert-soft); font-size: var(--fs-lead); margin: 0 0 30px; }
+.cta--overlay__actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }

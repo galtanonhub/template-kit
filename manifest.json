@@ -78,12 +78,23 @@
       ] },
     { "key": "social", "label": "Social",
       "variants": [
-        { "id": "buttons", "partial": "social-buttons.php" }
+        { "id": "buttons", "partial": "social-buttons.php" },
+        { "id": "split", "partial": "social-split.php" },
+        { "id": "cards", "partial": "social-cards.php" }
       ] },
     { "key": "cta", "label": "CTA",
       "variants": [
         { "id": "band", "partial": "cta-band.php" },
-        { "id": "dark-left", "partial": "cta-dark-left.php" }
+        { "id": "dark-left", "partial": "cta-dark-left.php" },
+        { "id": "split", "partial": "cta-split.php" },
+        { "id": "card", "partial": "cta-card.php" },
+        { "id": "overlay", "partial": "cta-overlay.php", "options": [
+          { "id": "edge", "label": "Bottom edge", "type": "select", "default": "none",
+            "choices": [
+              { "id": "none", "label": "None" },
+              { "id": "wave", "label": "Wave" },
+              { "id": "triangle", "label": "Triangle" }
+            ] } ] }
       ] },
     { "key": "footer", "label": "Footer", "required": true, "shell": true,
       "variants": [{ "id": "columns" }, { "id": "simple" }, { "id": "cta-combo" }, { "id": "contact-focus" }] }
@@ -152,7 +163,11 @@
             { "id": "split", "partial": "areas-header-split.php" }
           ] },
         { "key": "areas-body", "label": "Areas Body",
-          "variants": [{ "id": "grid", "partial": "areas-body-grid.php" }] }
+          "variants": [
+            { "id": "grid", "partial": "areas-body-grid.php" },
+            { "id": "split", "partial": "areas-body-split.php" },
+            { "id": "counties", "partial": "areas-body-counties.php" }
+          ] }
       ]
     },
     "about": {
@@ -199,7 +214,11 @@
             { "id": "split", "partial": "contact-header-split.php" }
           ] },
         { "key": "contact-body", "label": "Contact Body",
-          "variants": [{ "id": "split", "partial": "contact-body-split.php" }] }
+          "variants": [
+            { "id": "split", "partial": "contact-body-split.php" },
+            { "id": "cards", "partial": "contact-body-cards.php" },
+            { "id": "photo", "partial": "contact-body-photo.php" }
+          ] }
       ]
     }
   }
