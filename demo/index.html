@@ -4,38 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Template Kit — Builder</title>
-<link rel="stylesheet" href="../base/base.css">
-<!-- nav variants -->
-<link rel="stylesheet" href="../sections/nav/classic.css">
-<link rel="stylesheet" href="../sections/nav/centered.css">
-<link rel="stylesheet" href="../sections/nav/stacked.css">
-<link rel="stylesheet" href="../sections/nav/_mods/utility-strip.css">
-<!-- hero variants -->
-<link rel="stylesheet" href="../sections/hero/overlay.css">
-<link rel="stylesheet" href="../sections/hero/split.css">
-<link rel="stylesheet" href="../sections/hero/editorial.css">
-<!-- other sections -->
-<link rel="stylesheet" href="../sections/proof/stat-bar.css">
-<link rel="stylesheet" href="../sections/proof/logos.css">
-<link rel="stylesheet" href="../sections/proof/pipe-row.css">
-<link rel="stylesheet" href="../sections/services/cards-3.css">
-<link rel="stylesheet" href="../sections/services/carousel.css">
-<link rel="stylesheet" href="../sections/services/framed.css">
-<link rel="stylesheet" href="../sections/services/framed2.css">
-<link rel="stylesheet" href="../sections/services/panel-grid.css">
-<link rel="stylesheet" href="../sections/process/numbered.css">
-<link rel="stylesheet" href="../sections/about/split-photo.css">
-<link rel="stylesheet" href="../sections/areas/chips.css">
-<link rel="stylesheet" href="../sections/areas/marquee.css">
-<link rel="stylesheet" href="../sections/faq/accordion.css">
-<link rel="stylesheet" href="../sections/stories/spotlight.css">
-<link rel="stylesheet" href="../sections/cta/band.css">
-<link rel="stylesheet" href="../sections/cta/dark-left.css">
-<!-- footer variants -->
-<link rel="stylesheet" href="../sections/footer/columns.css">
-<link rel="stylesheet" href="../sections/footer/simple.css">
-<link rel="stylesheet" href="../sections/footer/cta-combo.css">
-<link rel="stylesheet" href="../sections/footer/contact-focus.css">
+<!-- ALL section CSS in one generated bundle (base + every variant + slice).
+     render.php concatenates from disk, so the builder can never show a variant
+     unstyled because someone forgot to add a <link> (the old failure mode). -->
+<link rel="stylesheet" href="../_slice/render.php?bundle=css">
 <!-- skin -->
 <link rel="stylesheet" id="theme" href="../personalities/industrial-bold.css">
 <style>
@@ -88,6 +60,13 @@
   }
   .dock__variants button:hover { border-color: #495568; }
   .dock__variants button.active { background: #fff; color: #11151c; border-color: #fff; }
+  .dock__tabs { display: flex; align-items: center; gap: 5px; flex: none; }
+  .dock__tabs button {
+    padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 700;
+    border: 1px solid #2a313d; background: #1a212c; color: #c3cad6; cursor: pointer; white-space: nowrap;
+  }
+  .dock__tabs button:hover { border-color: #495568; }
+  .dock__tabs button.active { background: #ffcb00; color: #11151c; border-color: #ffcb00; }
   .dock__cycle {
     width: 26px; height: 26px; border-radius: 6px; border: 1px solid #2a313d; background: #1a212c;
     color: #c3cad6; cursor: pointer; font-size: 13px; line-height: 1; flex: none;
@@ -154,9 +133,28 @@
     <span class="dock__brand">Template&nbsp;Kit</span>
     <span class="dock__sep"></span>
 
+    <div class="dock__group" id="page-tabs-group">
+      <span class="dock__label">Page</span>
+      <div class="dock__tabs" id="page-tabs"></div>
+    </div>
+    <span class="dock__sep"></span>
+
+    <div class="dock__group">
+      <span class="dock__label">Site</span>
+      <select id="mode-select">
+        <option value="multi">Multi-page</option>
+        <option value="single">Single-page</option>
+      </select>
+    </div>
+
+    <span class="dock__sep"></span>
+
     <div class="dock__group">
       <span class="dock__label">Section</span>
       <select id="section-select"></select>
+      <label class="dock__mod" id="include-label" title="Include this section on the site">
+        <input type="checkbox" id="include-toggle" checked> On
+      </label>
     </div>
 
     <div class="dock__group">
@@ -239,52 +237,102 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  /* ---- the recipe space ---- */
-  const SECTIONS = [
-    { key: 'nav',      label: 'Nav',      variants: ['classic', 'centered', 'stacked'],
-      modifiers: [{ id: 'utility-strip', label: 'Utility strip', file: 'utility-strip', target: '.nav', position: 'afterbegin', default: false }] },
-    { key: 'hero',     label: 'Hero',     variants: ['overlay', 'split', 'editorial', 'mosaic'] },
-    { key: 'proof',    label: 'Proof',    variants: ['stat-bar', 'logos', 'pipe-row'] },
-    { key: 'services', label: 'Services', variants: ['cards-3', 'carousel', 'framed', 'framed2', 'need-state', 'selector', 'panel-grid'] },
-    { key: 'process',  label: 'Process',  variants: ['numbered', 'carousel'] },
-    { key: 'about',    label: 'About',    variants: ['split-photo'] },
-    { key: 'areas',    label: 'Areas',    variants: ['chips', 'marquee'] },
-    { key: 'faq',      label: 'FAQ',      variants: ['accordion', 'carousel', 'selector'] },
-    { key: 'stories',  label: 'Stories',  variants: ['spotlight'] },
-    { key: 'cta',      label: 'CTA',      variants: ['band', 'dark-left'] },
-    { key: 'footer',   label: 'Footer',   variants: ['columns', 'simple', 'cta-combo', 'contact-focus'] },
-  ];
+(async () => {
+  /* ---- the section catalog comes from the manifest — single source of truth
+     shared with the stamp (new-template.js) and the validator. PARTIAL maps
+     "slot/variant" → the _slice partial render.php renders; shell slots
+     (nav/footer) have no partial and fall back to a static preview fragment. ---- */
+  const MANIFEST = await fetch('../manifest.json').then(r => r.json());
+  const PARTIAL = {};   // "slot/variant" -> _slice partial file (null = shell slot, static preview)
+  const OPTIONS = {};   // "slot/variant" -> per-variant style toggles (e.g. banded's flip/frame)
   const SKINS = [
     { id: 'industrial-bold',  label: 'Industrial Bold' },
     { id: 'warm-residential', label: 'Warm Residential' },
     { id: 'midnight-luxe',    label: 'Midnight Luxe' },
   ];
 
-  /* ---- state ---- */
-  const recipe = {};                     // slot key -> chosen variant
-  const mods = {};                       // slot key -> { modifierId: bool }
-  SECTIONS.forEach(s => {
-    recipe[s.key] = s.variants[0];
-    if (s.modifiers) { mods[s.key] = {}; s.modifiers.forEach(m => mods[s.key][m.id] = !!m.default); }
-  });
+  /* ---- per-page state ----
+     Home + (in multi mode) the 4 inner pages. Each page composes independently;
+     the dock + preview always act on the ACTIVE page (`cur`). The module-level
+     aliases (recipe/mods/excluded/sections/focus) are re-pointed on page switch
+     so every existing dock function keeps working unchanged. */
+  function makeSections(defs) {
+    return defs.map(slot => {
+      slot.variants.forEach(v => {
+        PARTIAL[`${slot.key}/${v.id}`] = v.partial || null;
+        if (v.options) OPTIONS[`${slot.key}/${v.id}`] = v.options;
+      });
+      return {
+        key: slot.key, label: slot.label,
+        required: !!slot.required, shell: !!slot.shell,
+        variants: slot.variants.map(v => v.id),
+        ...(slot.modifiers ? { modifiers: slot.modifiers } : {}),
+      };
+    });
+  }
+  function makePage(slug, label, defs) {
+    const secs = makeSections(defs);
+    const rec = {}, md = {}, op = {};
+    secs.forEach(s => {
+      rec[s.key] = s.variants[0];
+      if (s.modifiers) { md[s.key] = {}; s.modifiers.forEach(m => md[s.key][m.id] = !!m.default); }
+    });
+    return { slug, label, sections: secs, recipe: rec, mods: md, opts: op, excluded: new Set(), focus: secs[0].key };
+  }
+
+  const PAGES = [ makePage('home', 'Home', MANIFEST.home) ];
+  for (const [slug, pg] of Object.entries(MANIFEST.pages)) PAGES.push(makePage(slug, pg.label, pg.slots));
+  const pageBySlug = s => PAGES.find(p => p.slug === s);
+
+  let cur, recipe, mods, opts, excluded, sections, focus;
+  function setActivePage(p) {
+    cur = p; recipe = p.recipe; mods = p.mods; opts = p.opts; excluded = p.excluded; sections = p.sections; focus = p.focus;
+  }
+  setActivePage(PAGES[0]);
+
   let skin = SKINS[0].id;
-  let focus = SECTIONS[0].key;           // section currently being edited
+  let siteMode = 'multi';                // 'single' | 'multi' — first choice; affects export shape
+  const isIncluded = k => !excluded.has(k);
 
   const page = document.getElementById('page');
   const titleCase = s => s.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  const sectionByKey = k => SECTIONS.find(s => s.key === k);
+  const sectionByKey = k => sections.find(s => s.key === k);
 
-  /* build page slots in order */
-  SECTIONS.forEach(s => {
-    const slot = document.createElement('div');
-    slot.id = 'slot-' + s.key;
-    slot.dataset.key = s.key;
-    page.appendChild(slot);
-  });
+  /* (re)build the preview DOM for the active page, then load every section */
+  async function buildPreview() {
+    page.innerHTML = '';
+    sections.forEach(s => {
+      const slot = document.createElement('div');
+      slot.id = 'slot-' + s.key;
+      slot.dataset.key = s.key;
+      page.appendChild(slot);
+    });
+    await Promise.all(sections.map(s => loadSection(s.key, recipe[s.key])));
+    sections.forEach(s => applyInclusion(s.key));
+  }
 
   async function loadSection(key, variant) {
     recipe[key] = variant;
-    const res = await fetch(`../sections/${key}/${variant}.html`);
+    const partial = PARTIAL[`${key}/${variant}`];
+    const optDefs = OPTIONS[`${key}/${variant}`];
+    if (optDefs) {
+      opts[key] = opts[key] || {};
+      optDefs.forEach(o => { if (!(o.id in opts[key])) opts[key][o.id] = o.default; });
+    }
+    // body sections render through the real _slice partial (same as the stamp);
+    // shell slots (nav/footer) have no partial → static preview fragment
+    let url;
+    if (partial) {
+      const params = new URLSearchParams({ partial });
+      if (optDefs) optDefs.forEach(o => {
+        const val = opts[key][o.id];
+        params.set(o.id, o.type === 'boolean' ? (val ? '1' : '0') : String(val));
+      });
+      url = `../_slice/render.php?${params}`;
+    } else {
+      url = `../sections/${key}/${variant}.html`;
+    }
+    const res = await fetch(url);
     document.getElementById('slot-' + key).innerHTML = await res.text();
     await applyModifiers(key);
   }
@@ -303,25 +351,58 @@
     }
   }
 
-  /* ---- dock: section selector ---- */
+  /* ---- dock: section selector (repopulated per active page) ---- */
   const sectionSelect = document.getElementById('section-select');
-  SECTIONS.forEach(s => {
-    const o = document.createElement('option');
-    o.value = s.key;
-    o.textContent = `${s.label}${s.variants.length > 1 ? '  ('+s.variants.length+')' : ''}`;
-    sectionSelect.appendChild(o);
-  });
+  function rebuildSectionSelect() {
+    sectionSelect.innerHTML = '';
+    sections.forEach(s => {
+      const o = document.createElement('option');
+      o.value = s.key;
+      sectionSelect.appendChild(o);
+    });
+    refreshSectionOptions();
+  }
+  function refreshSectionOptions() {
+    [...sectionSelect.options].forEach(o => {
+      const s = sectionByKey(o.value);
+      const count = s.variants.length > 1 ? '  ('+s.variants.length+')' : '';
+      o.textContent = `${isIncluded(s.key) ? '' : '✕ '}${s.label}${count}`;
+    });
+  }
   sectionSelect.addEventListener('change', () => setFocus(sectionSelect.value));
+
+  /* ---- dock: include / exclude the focused section ---- */
+  const includeLabel = document.getElementById('include-label');
+  const includeToggle = document.getElementById('include-toggle');
+  includeToggle.addEventListener('change', () => {
+    if (includeToggle.checked) excluded.delete(focus);
+    else excluded.add(focus);
+    applyInclusion(focus);
+    refreshSectionOptions();
+    renderVariantRow();
+  });
+  function applyInclusion(key) {
+    const slot = document.getElementById('slot-' + key);
+    if (slot) slot.hidden = !isIncluded(key);
+  }
+  function renderIncludeToggle() {
+    const s = sectionByKey(focus);
+    includeLabel.hidden = !!s.required;        // required slots can't be excluded
+    includeToggle.checked = isIncluded(focus);
+  }
 
   /* ---- dock: variant row for focused section ---- */
   const variantRow = document.getElementById('variant-row');
   function renderVariantRow() {
     const s = sectionByKey(focus);
+    const off = !isIncluded(focus);
     variantRow.innerHTML = '';
+    variantRow.style.opacity = off ? '0.4' : '';
     s.variants.forEach(v => {
       const b = document.createElement('button');
       b.textContent = titleCase(v);
       if (recipe[focus] === v) b.classList.add('active');
+      b.disabled = off;
       b.addEventListener('click', () => chooseVariant(v));
       variantRow.appendChild(b);
     });
@@ -330,16 +411,24 @@
   function chooseVariant(v) {
     loadSection(focus, v).then(() => highlightFocus());
     renderVariantRow();
+    renderModRow();   // a different variant may have its own style options
   }
 
-  /* ---- dock: modifier toggles for focused section ---- */
+  /* ---- dock: modifier toggles + per-variant style options, both rendered into
+     the same "Options" group so picking a layout (banded, etc.) doesn't add a
+     new dropdown — its toggles just appear here when that variant is focused. ---- */
   const modGroup = document.getElementById('mod-group');
   const modRow = document.getElementById('mod-row');
   function renderModRow() {
     const s = sectionByKey(focus);
+    const optDefs = OPTIONS[`${focus}/${recipe[focus]}`];
     modRow.innerHTML = '';
-    if (!s.modifiers) { modGroup.hidden = true; return; }
+    if (!s.modifiers && !optDefs) { modGroup.hidden = true; return; }
     modGroup.hidden = false;
+    if (s.modifiers) renderModifierToggles(s);
+    if (optDefs) renderVariantOptions(optDefs);
+  }
+  function renderModifierToggles(s) {
     s.modifiers.forEach(m => {
       const label = document.createElement('label');
       label.className = 'dock__mod';
@@ -352,6 +441,38 @@
       });
       label.appendChild(cb);
       label.appendChild(document.createTextNode(' ' + m.label));
+      modRow.appendChild(label);
+    });
+  }
+  function renderVariantOptions(optDefs) {
+    optDefs.forEach(o => {
+      const label = document.createElement('label');
+      label.className = 'dock__mod';
+      if (o.type === 'select') {
+        label.appendChild(document.createTextNode(o.label + ' '));
+        const sel = document.createElement('select');
+        o.choices.forEach(c => {
+          const op = document.createElement('option');
+          op.value = c.id; op.textContent = c.label;
+          if (opts[focus][o.id] === c.id) op.selected = true;
+          sel.appendChild(op);
+        });
+        sel.addEventListener('change', () => {
+          opts[focus][o.id] = sel.value;
+          loadSection(focus, recipe[focus]).then(highlightFocus);
+        });
+        label.appendChild(sel);
+      } else {
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = !!opts[focus][o.id];
+        cb.addEventListener('change', () => {
+          opts[focus][o.id] = cb.checked;
+          loadSection(focus, recipe[focus]).then(highlightFocus);
+        });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' ' + o.label));
+      }
       modRow.appendChild(label);
     });
   }
@@ -368,7 +489,9 @@
   /* ---- focus management ---- */
   function setFocus(key, scroll = true) {
     focus = key;
+    cur.focus = key;            // remember focus per page across tab switches
     sectionSelect.value = key;
+    renderIncludeToggle();
     renderVariantRow();
     renderModRow();
     highlightFocus();
@@ -398,27 +521,76 @@
   /* ---- shuffle ---- */
   const rand = arr => arr[Math.floor(Math.random() * arr.length)];
   document.getElementById('shuffle-btn').addEventListener('click', () => {
-    SECTIONS.forEach(s => {
+    sections.forEach(s => {
+      // optional slots get a ~35% chance of being dropped entirely
+      if (!s.required && Math.random() < 0.35) excluded.add(s.key);
+      else excluded.delete(s.key);
       if (s.modifiers) s.modifiers.forEach(m => mods[s.key][m.id] = Math.random() < 0.5);
-      loadSection(s.key, rand(s.variants)).then(highlightFocus);
+      loadSection(s.key, rand(s.variants)).then(() => { applyInclusion(s.key); highlightFocus(); });
     });
     skin = rand(SKINS).id;
     skinSelect.value = skin;
     document.getElementById('theme').href = `../personalities/${skin}.css`;
+    refreshSectionOptions();
     setFocus(focus, false);
   });
 
+  /* ---- site mode (single vs multi) ---- */
+  const modeSelect = document.getElementById('mode-select');
+  modeSelect.value = siteMode;
+  modeSelect.addEventListener('change', () => {
+    siteMode = modeSelect.value;
+    // leaving multi while on an inner page → snap back to Home (inner pages don't exist in single mode)
+    if (siteMode === 'single' && cur.slug !== 'home') switchPage('home');
+    else renderTabs();
+  });
+
+  /* ---- page tabs (Home + inner pages; inner tabs only in multi mode) ---- */
+  const pageTabsGroup = document.getElementById('page-tabs-group');
+  const pageTabs = document.getElementById('page-tabs');
+  function renderTabs() {
+    pageTabsGroup.hidden = siteMode !== 'multi';     // single mode = Home only, no tab strip
+    pageTabs.innerHTML = '';
+    (siteMode === 'multi' ? PAGES : PAGES.slice(0, 1)).forEach(p => {
+      const b = document.createElement('button');
+      b.textContent = p.label;
+      if (p === cur) b.classList.add('active');
+      b.addEventListener('click', () => { if (p !== cur) switchPage(p.slug); });
+      pageTabs.appendChild(b);
+    });
+  }
+  function switchPage(slug) {
+    setActivePage(pageBySlug(slug));
+    rebuildSectionSelect();
+    renderTabs();
+    buildPreview().then(() => setFocus(focus, false));
+  }
+
   /* ---- export ---- */
-  function buildRecipe() {
-    return {
-      name: 'untitled',
-      skin,
-      sections: SECTIONS.map(s => ({
+  function pageSections(p) {
+    return p.sections.filter(s => !p.excluded.has(s.key)).map(s => {
+      const variant = p.recipe[s.key];
+      const hasOptions = !!OPTIONS[`${s.key}/${variant}`];
+      return {
         slot: s.key,
-        variant: recipe[s.key],
-        ...(s.modifiers ? { modifiers: { ...mods[s.key] } } : {}),
-      })),
+        variant,
+        ...(s.modifiers ? { modifiers: { ...p.mods[s.key] } } : {}),
+        ...(hasOptions ? { options: { ...p.opts[s.key] } } : {}),
+      };
+    });
+  }
+  function buildRecipe() {
+    const out = {
+      name: 'untitled',
+      mode: siteMode,
+      skin,
+      sections: pageSections(pageBySlug('home')),
     };
+    if (siteMode === 'multi') {
+      out.pages = {};
+      for (const p of PAGES) if (p.slug !== 'home') out.pages[p.slug] = pageSections(p);
+    }
+    return out;
   }
   const modal = document.getElementById('modal');
   const recipeJson = document.getElementById('recipe-json');
@@ -518,11 +690,11 @@
   document.addEventListener('keydown', e => {
     if (modal.classList.contains('open')) return;
     if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
-    const idx = SECTIONS.findIndex(s => s.key === focus);
+    const idx = sections.findIndex(s => s.key === focus);
     if (e.key === 'ArrowLeft')  { cycleVariant(-1); e.preventDefault(); }
     if (e.key === 'ArrowRight') { cycleVariant(1);  e.preventDefault(); }
-    if (e.key === 'ArrowUp')   { setFocus(SECTIONS[(idx - 1 + SECTIONS.length) % SECTIONS.length].key); e.preventDefault(); }
-    if (e.key === 'ArrowDown') { setFocus(SECTIONS[(idx + 1) % SECTIONS.length].key); e.preventDefault(); }
+    if (e.key === 'ArrowUp')   { setFocus(sections[(idx - 1 + sections.length) % sections.length].key); e.preventDefault(); }
+    if (e.key === 'ArrowDown') { setFocus(sections[(idx + 1) % sections.length].key); e.preventDefault(); }
   });
 
   /* ---- delegated interaction handlers ----
@@ -532,8 +704,10 @@
      and never drifts from what we actually ship. */
 
   /* ---- initial load ---- */
-  Promise.all(SECTIONS.map(s => loadSection(s.key, s.variants[0])))
-    .then(() => { renderVariantRow(); renderModRow(); highlightFocus(); });
+  rebuildSectionSelect();
+  renderTabs();
+  buildPreview().then(() => setFocus(focus, false));
+})();
 </script>
 <script src="../_slice/site.js"></script>
 </body>

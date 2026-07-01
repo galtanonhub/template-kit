@@ -1,15 +1,9 @@
-<?php /* CONTACT page — page header + two-column: contact info (left) + form (right).
-   Form POSTs to form.php which redirects back here with ?sent=1.
-   business.{phone,email,address,hours} are the contact details. */ ?>
+<?php /* CONTACT body — two columns: contact info (left) + form (right).
+   Form POSTs to form.php which redirects back with ?sent=1. Reads
+   business.{phone,email,address,hours}. Pairs with contact-header.
+   Keeps .contact-page class so existing slice.css applies. */ ?>
 <section class="section contact-page">
   <div class="container">
-
-    <div class="section-head">
-      <span class="eyebrow">Contact</span>
-      <h1 data-edit="contact.page.heading"><?= e(c('contact.page.heading', 'Get a free estimate')) ?></h1>
-      <p class="lead" data-edit="contact.page.intro"><?= e(c('contact.page.intro', 'Fill out the form and we\'ll get back to you quickly.')) ?></p>
-    </div>
-
     <?php if (isset($_GET['sent'])): ?>
     <div class="contact-success">
       <p>Thanks! We received your message and will follow up shortly.</p>
@@ -39,7 +33,7 @@
         <form class="contact-form" method="post" action="form.php<?= edit_mode() ? '?edit=1' : '' ?>">
           <label>Your name<input type="text" name="name" required placeholder="Jane Smith"></label>
           <label>Best way to reach you<input type="text" name="contact" required placeholder="Phone or email"></label>
-          <label>How can we help?<textarea name="message" rows="5" required placeholder="Describe what's happening with your door, or ask anything…"></textarea></label>
+          <label>How can we help?<textarea name="message" rows="5" required placeholder="Describe what's happening, or ask anything…"></textarea></label>
           <button class="btn btn--brand btn--lg" type="submit" data-edit="contact.page.button"><?= e(c('contact.page.button', 'Send My Request')) ?></button>
         </form>
       </div>

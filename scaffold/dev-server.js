@@ -15,12 +15,61 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { spawn, execFileSync } = require('child_process');
 const { buildSkinCss } = require('./derive-skin');
 const { validate } = require('./validate-skin');
 const forms = require('./forms');
 
 const ROOT = path.join(__dirname, '..');
 const PORT = 8093;
+const PHP_PORT = 8390;   // internal PHP child the builder proxies .php requests to
+
+/* ------------------------------------------------------------------
+   PHP child + proxy. The builder previews sections by fetching the REAL
+   _slice partials through render.php (so preview == stamped output). Node
+   can't run PHP, so we spawn `php -S` on an internal port and proxy any
+   .php request to it. One builder origin still does everything:
+   static files + /api/create-skin + PHP-rendered previews.
+   ------------------------------------------------------------------ */
+function resolvePhpBin() {
+  if (process.env.PHP_BIN && fs.existsSync(process.env.PHP_BIN)) return process.env.PHP_BIN;
+  const winget = 'C:\\Users\\galta\\AppData\\Local\\Microsoft\\WinGet\\Packages\\PHP.PHP.8.4_Microsoft.Winget.Source_8wekyb3d8bbwe\\php.exe';
+  if (fs.existsSync(winget)) return winget;
+  try { execFileSync('php', ['-v'], { stdio: 'ignore' }); return 'php'; } catch { return null; }
+}
+
+let phpChild = null, phpShuttingDown = false;
+function startPhp() {
+  const bin = resolvePhpBin();
+  if (!bin) {
+    console.warn('  ⚠ php not found — section previews (render.php) will not work. Set PHP_BIN.');
+    return;
+  }
+  phpChild = spawn(bin, ['-S', `127.0.0.1:${PHP_PORT}`, '-t', ROOT], { stdio: 'ignore' });
+  // respawn if it dies unexpectedly (e.g. a stray `taskkill php`), so the builder
+  // preview can't get permanently bricked while the dev-server is up
+  phpChild.on('exit', () => { phpChild = null; if (!phpShuttingDown) setTimeout(startPhp, 500); });
+}
+const stopPhp = () => { phpShuttingDown = true; if (phpChild) phpChild.kill(); };
+process.on('exit', stopPhp);
+process.on('SIGINT', () => { stopPhp(); process.exit(0); });
+process.on('SIGTERM', () => { stopPhp(); process.exit(0); });
+
+function proxyToPhp(req, res) {
+  const opts = {
+    host: '127.0.0.1', port: PHP_PORT, method: req.method,
+    path: req.url, headers: req.headers,
+  };
+  const up = http.request(opts, upRes => {
+    res.writeHead(upRes.statusCode, upRes.headers);
+    upRes.pipe(res);
+  });
+  up.on('error', () => {
+    res.writeHead(502, { 'Content-Type': 'text/plain' });
+    res.end('PHP preview server unavailable');
+  });
+  req.pipe(up);
+}
 const MIME = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
   '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg',
@@ -93,6 +142,11 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // PHP requests (render.php preview endpoint) → proxy to the PHP child
+  if (req.url.split('?')[0].endsWith('.php')) {
+    return proxyToPhp(req, res);
+  }
+
   // static files
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
   if (urlPath === '/') urlPath = '/demo/';
@@ -110,7 +164,9 @@ const server = http.createServer((req, res) => {
   });
 });
 
+startPhp();
 server.listen(PORT, () => {
   console.log(`Template Kit builder → http://localhost:${PORT}/demo/`);
   console.log('  POST /api/create-skin is live (used by the "New skin" button)');
+  console.log(`  .php requests proxied to an internal PHP server on :${PHP_PORT} (section previews)`);
 });

@@ -75,13 +75,16 @@
     "page": {
       "eyebrow": "Our Services",
       "heading": "Everything we do for your garage door",
-      "intro": "From a snapped spring at 6am to a full new-door install, here is the complete range of work we handle — and exactly what you can expect from each."
+      "intro": "From a snapped spring at 6am to a full new-door install, here is the complete range of work we handle — and exactly what you can expect from each.",
+      "image": "https://picsum.photos/seed/svcheader/1600/700",
+      "book_cta": "Book This Service"
     },
     "items": [
       {
         "id": "repair",
         "name": "Garage Door Repair",
         "icon": "🔧",
+        "tag": "Most Popular",
         "blurb": "Fast fixes for broken springs, cables, rollers, and openers.",
         "description": "A broken spring or snapped cable can leave your door stuck and your car trapped. We carry the common parts on every truck, so most repairs are finished in a single visit — safely tensioned, balance-tested, and backed by our workmanship warranty.",
         "image": "https://picsum.photos/seed/svc1/600/450",
@@ -101,6 +104,7 @@
         "id": "install",
         "name": "New Door Installation",
         "icon": "🚪",
+        "tag": "Full-Service Upgrade",
         "blurb": "Modern, insulated doors that boost curb appeal and efficiency.",
         "description": "Ready for an upgrade? We help you choose the right style, insulation, and finish for your home, then handle the full removal and installation. New doors come with manufacturer warranties and a smoother, quieter operation you will notice every day.",
         "image": "https://picsum.photos/seed/svc2/600/450",
@@ -120,6 +124,7 @@
         "id": "maintenance",
         "name": "Tune-Ups & Maintenance",
         "icon": "🔩",
+        "tag": "Preventive Care",
         "blurb": "Annual service that prevents the breakdowns before they happen.",
         "description": "Most garage door failures are preventable. Our multi-point tune-up lubricates moving parts, re-balances the door, tightens hardware, and catches worn components before they fail — extending the life of your system and keeping it quiet.",
         "image": "https://picsum.photos/seed/svc3/600/450",
@@ -147,7 +152,8 @@
     "page": {
       "eyebrow": "Service Area",
       "heading": "Garage door service across Central Florida",
-      "intro": "We cover a wide stretch of Orange, Seminole, Osceola, and Lake counties — and we come to you."
+      "intro": "We cover a wide stretch of Orange, Seminole, Osceola, and Lake counties — and we come to you.",
+      "image": "https://picsum.photos/seed/areasheader/1600/700"
     },
     "list": ["Orlando", "Winter Park", "Maitland", "Apopka", "Altamonte Springs", "Lake Mary", "Sanford", "Oviedo", "Winter Garden", "Clermont", "Kissimmee", "Casselberry"]
   },
@@ -168,7 +174,9 @@
     },
     "page": {
       "eyebrow": "Our Story",
-      "heading": "Built on showing up and doing it right"
+      "heading": "Built on showing up and doing it right",
+      "intro": "Family-run, licensed, and committed to treating every home like our own — here's a bit about how we got started.",
+      "image": "https://picsum.photos/seed/aboutheader/1600/700"
     },
     "story": [
       "Summit Garage Door was founded in 2004 by two techs who got tired of watching homeowners wait a week for a spring replacement. We started with one truck and a promise: same-day service, honest quotes, and no upsell games.",
@@ -185,6 +193,7 @@
     "page": {
       "heading": "Get a free estimate",
       "intro": "Fill out the form and we'll get back to you within one business day — usually much faster.",
+      "image": "https://picsum.photos/seed/contactheader/1600/700",
       "button": "Send My Request"
     }
   },

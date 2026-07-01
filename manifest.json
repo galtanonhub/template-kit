@@ -1,0 +1,146 @@
+{
+  "_comment": "SINGLE SOURCE OF TRUTH for the section catalog. Consumed by demo/index.html (builder), scaffold/new-template.js (stamp), and scaffold/validate-sections.js. Add/remove a variant HERE and all three stay in sync. Homepage slots map to _slice partials via `partial`; shell slots (nav/footer) have no partial (rendered by head.php/foot.php); inner-page slots live under `pages`. Per-section CSS for homepage slots is sections/<key>/<id>.css (derived, not stored); inner-page CSS lives in _slice/slice.css.",
+  "shellSlots": ["nav", "footer"],
+  "home": [
+    { "key": "nav", "label": "Nav", "required": true, "shell": true,
+      "modifiers": [{ "id": "utility-strip", "label": "Utility strip", "file": "utility-strip", "target": ".nav", "position": "afterbegin", "default": false }],
+      "variants": [{ "id": "classic" }, { "id": "centered" }, { "id": "stacked" }] },
+    { "key": "hero", "label": "Hero", "required": true,
+      "variants": [
+        { "id": "overlay", "partial": "hero-overlay.php" },
+        { "id": "split", "partial": "hero-split.php" },
+        { "id": "editorial", "partial": "hero-editorial.php" },
+        { "id": "mosaic", "partial": "hero-mosaic.php" }
+      ] },
+    { "key": "proof", "label": "Proof",
+      "variants": [
+        { "id": "stat-bar", "partial": "proof-stat-bar.php" },
+        { "id": "logos", "partial": "proof-logos.php" },
+        { "id": "pipe-row", "partial": "proof-pipe-row.php" }
+      ] },
+    { "key": "services", "label": "Services",
+      "variants": [
+        { "id": "cards-3", "partial": "services-teaser.php" },
+        { "id": "carousel", "partial": "services-carousel.php" },
+        { "id": "framed", "partial": "services-framed.php" },
+        { "id": "framed2", "partial": "services-framed2.php" },
+        { "id": "need-state", "partial": "services-need-state.php" },
+        { "id": "selector", "partial": "services-selector.php" },
+        { "id": "panel-grid", "partial": "services-panel-grid.php" },
+        { "id": "rail", "partial": "services-rail.php" },
+        { "id": "statement", "partial": "services-statement.php" }
+      ] },
+    { "key": "process", "label": "Process",
+      "variants": [
+        { "id": "numbered", "partial": "process-numbered.php" },
+        { "id": "carousel", "partial": "process-carousel.php" }
+      ] },
+    { "key": "about", "label": "About",
+      "variants": [
+        { "id": "split-photo", "partial": "about-teaser.php" },
+        { "id": "story-stack", "partial": "about-story-stack.php" }
+      ] },
+    { "key": "areas", "label": "Areas",
+      "variants": [
+        { "id": "chips", "partial": "areas-teaser.php" },
+        { "id": "marquee", "partial": "areas-marquee.php" }
+      ] },
+    { "key": "faq", "label": "FAQ",
+      "variants": [
+        { "id": "accordion", "partial": "faq-accordion.php" },
+        { "id": "carousel", "partial": "faq-carousel.php" },
+        { "id": "selector", "partial": "faq-selector.php" },
+        { "id": "rail", "partial": "faq-rail.php" }
+      ] },
+    { "key": "stories", "label": "Stories",
+      "variants": [
+        { "id": "spotlight", "partial": "stories-spotlight.php" },
+        { "id": "quote-cards", "partial": "stories-quote-cards.php" }
+      ] },
+    { "key": "social", "label": "Social",
+      "variants": [
+        { "id": "buttons", "partial": "social-buttons.php" }
+      ] },
+    { "key": "cta", "label": "CTA",
+      "variants": [
+        { "id": "band", "partial": "cta-band.php" },
+        { "id": "dark-left", "partial": "cta-dark-left.php" }
+      ] },
+    { "key": "footer", "label": "Footer", "required": true, "shell": true,
+      "variants": [{ "id": "columns" }, { "id": "simple" }, { "id": "cta-combo" }, { "id": "contact-focus" }] }
+  ],
+  "pages": {
+    "services": {
+      "label": "Services",
+      "default": [["services-header", "standard"], ["services-detail", "rows"]],
+      "slots": [
+        { "key": "services-header", "label": "Page Header", "required": true,
+          "variants": [
+            { "id": "standard", "partial": "services-header.php" },
+            { "id": "banner", "partial": "services-header-banner.php" },
+            { "id": "split", "partial": "services-header-split.php" }
+          ] },
+        { "key": "services-detail", "label": "Services Detail",
+          "variants": [
+            { "id": "rows", "partial": "services-detail-rows.php" },
+            { "id": "cards", "partial": "services-detail-cards.php" },
+            { "id": "banded", "partial": "services-detail-banded.php",
+              "options": [
+                { "id": "flip", "label": "Flip image side", "type": "boolean", "default": false },
+                { "id": "frame", "label": "Frame", "type": "select", "default": "none",
+                  "choices": [
+                    { "id": "none", "label": "None" },
+                    { "id": "bordered", "label": "Bordered" },
+                    { "id": "divided", "label": "Bordered + divided" }
+                  ] }
+              ] }
+          ] }
+      ]
+    },
+    "service-areas": {
+      "label": "Service Areas",
+      "default": [["areas-header", "standard"], ["areas-body", "grid"]],
+      "slots": [
+        { "key": "areas-header", "label": "Page Header", "required": true,
+          "variants": [
+            { "id": "standard", "partial": "areas-header.php" },
+            { "id": "banner", "partial": "areas-header-banner.php" },
+            { "id": "split", "partial": "areas-header-split.php" }
+          ] },
+        { "key": "areas-body", "label": "Areas Body",
+          "variants": [{ "id": "grid", "partial": "areas-body-grid.php" }] }
+      ]
+    },
+    "about": {
+      "label": "About",
+      "default": [["about-header", "standard"], ["about-body", "story"]],
+      "slots": [
+        { "key": "about-header", "label": "Page Header", "required": true,
+          "variants": [
+            { "id": "standard", "partial": "about-header.php" },
+            { "id": "banner", "partial": "about-header-banner.php" },
+            { "id": "split", "partial": "about-header-split.php" }
+          ] },
+        { "key": "about-body", "label": "About Body",
+          "variants": [
+            { "id": "story", "partial": "about-body-story.php" },
+            { "id": "editorial", "partial": "about-body-editorial.php" }
+          ] }
+      ]
+    },
+    "contact": {
+      "label": "Contact",
+      "default": [["contact-header", "standard"], ["contact-body", "split"]],
+      "slots": [
+        { "key": "contact-header", "label": "Page Header", "required": true,
+          "variants": [
+            { "id": "standard", "partial": "contact-header.php" },
+            { "id": "banner", "partial": "contact-header-banner.php" },
+            { "id": "split", "partial": "contact-header-split.php" }
+          ] },
+        { "key": "contact-body", "label": "Contact Body",
+          "variants": [{ "id": "split", "partial": "contact-body-split.php" }] }
+      ]
+    }
+  }
+}

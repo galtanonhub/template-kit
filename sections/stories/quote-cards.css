@@ -1,0 +1,9 @@
+/* STORIES VARIANT — Quote Cards
+   Static testimonial grid (no JS): quote + avatar + name/role per card.
+   Distinct from spotlight (single interactive media+quote switcher). */
+.stories--quote-cards__quote { font-size: var(--fs-lead); line-height: var(--leading-body); color: var(--c-ink); margin-bottom: 22px; }
+.stories--quote-cards__meta { display: flex; align-items: center; gap: 12px; }
+.stories--quote-cards__avatar { width: 48px; height: 48px; border-radius: var(--radius-pill); object-fit: cover; flex: none; }
+.stories--quote-cards__person { display: flex; flex-direction: column; }
+.stories--quote-cards__person strong { color: var(--c-ink); }
+.stories--quote-cards__person span { font-size: var(--fs-small); color: var(--c-ink-soft); }

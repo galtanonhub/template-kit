@@ -1,0 +1,25 @@
+/* SOCIAL VARIANT — Buttons
+   A centered band of labelled social buttons. Reuses base tokens so it inherits
+   the skin. (Edit-mode URL fields reuse the footer's .social-editor styles.) */
+.social--buttons .social-buttons {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 14px;
+}
+.social--buttons .social-buttons__btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  border: var(--border-weight, 1px) solid var(--c-line);
+  border-radius: var(--radius-pill);
+  background: var(--c-surface);
+  color: var(--c-ink);
+  font-family: var(--font-accent);
+  font-weight: var(--fw-bold);
+  text-decoration: none;
+  /* only the hover props animate — never border-radius (it would animate on skin change) */
+  transition: border-color var(--transition), color var(--transition), transform var(--transition);
+}
+.social--buttons .social-buttons__btn:hover {
+  border-color: var(--c-brand);
+  color: var(--c-brand);
+  transform: translateY(-2px);
+}
+.social--buttons .social-buttons__icon { font-size: 1.25rem; line-height: 1; }

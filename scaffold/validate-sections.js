@@ -38,8 +38,9 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const SECTIONS_DIR = path.join(ROOT, 'sections');
-const DEMO = path.join(ROOT, 'demo', 'index.html');
+const PARTIALS_DIR = path.join(ROOT, '_slice', 'partials');
 const BASE = path.join(ROOT, 'base', 'base.css');
+const MANIFEST = JSON.parse(fs.readFileSync(path.join(ROOT, 'manifest.json'), 'utf8'));
 
 const findings = [];   // { level, where, msg }
 const add = (level, where, msg) => findings.push({ level, where, msg });
@@ -131,40 +132,85 @@ function checkCss(file, rel, known) {
   }
 }
 
-/* ---- builder <-> disk registration sync ---- */
+/* ---- manifest <-> disk sync (manifest.json is the single source of truth) ----
+   Homepage body variants render via _slice PHP partials; shell slots (nav/footer)
+   render via static preview fragments; inner-page variants render via partials.
+   Per-variant CSS (sections/<slot>/<id>.css) feeds the builder's CSS bundle. */
 function checkSync() {
-  const demo = fs.readFileSync(DEMO, 'utf8');
-  const block = (demo.match(/const SECTIONS = \[([\s\S]*?)\n\s*\];/) || [])[1] || '';
-  const registered = {};                       // slot -> Set(variant)
-  const re = /key:\s*'([^']+)'[\s\S]*?variants:\s*\[([^\]]*)\]/g;
-  let m;
-  while ((m = re.exec(block)) !== null) {
-    const slot = m[1];
-    const variants = m[2].split(',').map(s => s.trim().replace(/['"]/g, '')).filter(Boolean);
-    registered[slot] = new Set(variants);
-  }
+  const homeVariants = [];   // {slot, id, partial, shell}
+  for (const slot of MANIFEST.home)
+    for (const v of slot.variants)
+      homeVariants.push({ slot: slot.key, id: v.id, partial: v.partial || null, shell: !!slot.shell });
 
-  // registered -> disk
-  for (const [slot, variants] of Object.entries(registered)) {
-    for (const v of variants) {
-      for (const ext of ['html', 'css']) {
-        const p = path.join(SECTIONS_DIR, slot, `${v}.${ext}`);
-        if (!fs.existsSync(p)) add('error', 'sync', `${slot}/${v} is in the builder but ${slot}/${v}.${ext} is missing on disk`);
-      }
-    }
-  }
+  const pageVariants = [];   // {slot, id, partial}
+  for (const pg of Object.values(MANIFEST.pages))
+    for (const slot of pg.slots)
+      for (const v of slot.variants)
+        pageVariants.push({ slot: slot.key, id: v.id, partial: v.partial || null });
 
-  // disk -> registered (orphans)
+  // what's actually on disk
+  const cssOnDisk = new Set(), htmlOnDisk = new Set();
   for (const slot of fs.readdirSync(SECTIONS_DIR)) {
     const slotDir = path.join(SECTIONS_DIR, slot);
     if (!fs.statSync(slotDir).isDirectory()) continue;
     for (const f of fs.readdirSync(slotDir)) {
-      if (!f.endsWith('.html') || f.startsWith('_')) continue;   // _mods etc. are not variants
-      const v = f.replace(/\.html$/, '');
-      if (!registered[slot] || !registered[slot].has(v)) {
-        add('error', 'sync', `${slot}/${v}.html exists on disk but is not registered in the builder SECTIONS[]`);
-      }
+      if (f.startsWith('_')) continue;   // _mods are not variants
+      if (f.endsWith('.css'))  cssOnDisk.add(`${slot}/${f.replace(/\.css$/, '')}`);
+      if (f.endsWith('.html')) htmlOnDisk.add(`${slot}/${f.replace(/\.html$/, '')}`);
     }
+  }
+  const partialsOnDisk = new Set(fs.readdirSync(PARTIALS_DIR).filter(f => f.endsWith('.php')));
+  const usedPartials = new Set();
+
+  // manifest -> disk
+  for (const v of homeVariants) {
+    const key = `${v.slot}/${v.id}`;
+    if (!cssOnDisk.has(key)) add('error', 'sync', `${key} is in the manifest but sections/${key}.css is missing`);
+    if (v.shell) {
+      if (!htmlOnDisk.has(key)) add('error', 'sync', `shell variant ${key} needs sections/${key}.html (preview fragment) — missing`);
+    } else if (v.partial) {
+      if (!partialsOnDisk.has(v.partial)) add('error', 'sync', `${key} maps to _slice/partials/${v.partial} — missing`);
+      usedPartials.add(v.partial);
+    } else {
+      add('error', 'sync', `${key} has no partial and is not a shell slot — nothing to render`);
+    }
+  }
+  for (const v of pageVariants) {
+    const key = `${v.slot}/${v.id}`;
+    if (!v.partial) { add('error', 'sync', `inner ${key} has no partial in the manifest`); continue; }
+    if (!partialsOnDisk.has(v.partial)) add('error', 'sync', `inner ${key} maps to _slice/partials/${v.partial} — missing`);
+    usedPartials.add(v.partial);
+  }
+
+  // disk -> manifest (orphans)
+  const homeKeys  = new Set(homeVariants.map(v => `${v.slot}/${v.id}`));
+  const shellKeys = new Set(homeVariants.filter(v => v.shell).map(v => `${v.slot}/${v.id}`));
+  for (const key of cssOnDisk)
+    if (!homeKeys.has(key)) add('error', 'sync', `sections/${key}.css exists but is not in the manifest home[]`);
+  for (const key of htmlOnDisk)
+    if (!shellKeys.has(key)) add('warn', 'sync', `sections/${key}.html is a dead fragment — body/inner sections render via PHP now; delete it`);
+  for (const f of partialsOnDisk)
+    if (!usedPartials.has(f)) add('warn', 'sync', `_slice/partials/${f} is not referenced by the manifest (orphan)`);
+}
+
+/* ---- _slice partials: bare-fragment hygiene (they are injected via innerHTML
+   in the builder preview too, so a stray <link>/<head> breaks the same way).
+   We DON'T reuse checkHtml's img-alt / tel:# checks here: PHP interpolation
+   (<?= … ?>) contains '>' and confuses those attribute regexes. The structural
+   checks below are PHP-safe. ---- */
+function checkPartials() {
+  for (const f of fs.readdirSync(PARTIALS_DIR)) {
+    if (!f.endsWith('.php')) continue;
+    const rel = `_slice/partials/${f}`;
+    const src = fs.readFileSync(path.join(PARTIALS_DIR, f), 'utf8');
+    if (/<!doctype|<html[\s>]|<\/html>|<head[\s>]|<\/head>|<body[\s>]|<\/body>/i.test(src))
+      add('error', rel, 'is a full HTML document — partials must be bare fragments (injected via innerHTML in the builder preview)');
+    if (/<link\b/i.test(src))
+      add('error', rel, 'contains a <link> tag — a stray skin link overrides the chosen one');
+    if (/<script\b/i.test(src))
+      add('warn', rel, 'contains an inline <script> — dead when injected via innerHTML; put interaction in _slice/site.js');
+    if (/<style\b/i.test(src))
+      add('warn', rel, 'contains an inline <style> — put styling in the section CSS');
   }
 }
 
@@ -186,6 +232,7 @@ function main() {
     if (file.endsWith('.html')) checkHtml(file, rel);
     else if (file.endsWith('.css')) checkCss(file, rel, known);
   }
+  checkPartials();
   checkSync();
 
   const errors = findings.filter(f => f.level === 'error');

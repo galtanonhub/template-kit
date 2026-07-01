@@ -49,3 +49,18 @@ function edit_requested() { return isset($_GET['edit']); }
    who guesses ?edit=1 sees the normal site (plus a password prompt), never the
    editing UI — and save.php refuses their writes regardless. */
 function edit_mode() { return edit_requested() && edit_unlocked(); }
+
+/* Social roster — STRUCTURE (locked): which platforms exist + their emoji and
+   label. The buyer never edits this; they only set the URL (data) per platform
+   at business.social.<key>. Shared by the footer AND the social section so the
+   roster can never drift between them. */
+function kit_social_roster() {
+  return [
+    'facebook'  => ['icon' => '📘',  'label' => 'Facebook'],
+    'instagram' => ['icon' => '📷',  'label' => 'Instagram'],
+    'x'         => ['icon' => '🐦',  'label' => 'X (Twitter)'],
+    'youtube'   => ['icon' => '▶️', 'label' => 'YouTube'],
+    'linkedin'  => ['icon' => '💼',  'label' => 'LinkedIn'],
+    'tiktok'    => ['icon' => '🎵',  'label' => 'TikTok'],
+  ];
+}

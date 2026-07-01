@@ -61,7 +61,8 @@ if (!recipe.skin) {
    here — otherwise every straight Export → stamp dies on "No partial mapping
    for nav/...". (When nav/footer become recipe-driven, give them PARTIAL_MAP
    entries and remove them from this set.) */
-const SHELL_SLOTS = new Set(['nav', 'footer']);
+const MANIFEST = JSON.parse(fs.readFileSync(path.join(KIT, 'manifest.json'), 'utf8'));
+const SHELL_SLOTS = new Set(MANIFEST.shellSlots);
 recipe.sections = recipe.sections.filter(s => !SHELL_SLOTS.has(s.slot));
 if (!recipe.sections.length) {
   console.error('Recipe has no body sections after dropping shell slots (nav/footer).');
@@ -75,43 +76,42 @@ const mode    = arg('--mode') || recipe.mode || 'multi';
 const outDir  = arg('--out') || path.join(KIT, '_generated', slug);
 const contentSrc = arg('--content') || path.join(SLICE, 'content.original.json');
 
-/* ---- map recipe {slot/variant} → PHP partial filename in _slice/partials/ ---- */
-const PARTIAL_MAP = {
-  'hero/overlay':       'hero-overlay.php',
-  'hero/split':         'hero-split.php',
-  'hero/editorial':     'hero-editorial.php',
-  'hero/collage':       'hero-collage.php',
-  'hero/mosaic':        'hero-mosaic.php',
-  'proof/stat-bar':     'proof-stat-bar.php',
-  'proof/logos':        'proof-logos.php',
-  'proof/pipe-row':     'proof-pipe-row.php',
-  'services/cards-3':   'services-teaser.php',
-  'services/need-state':'services-need-state.php',
-  'services/selector':  'services-selector.php',
-  'services/carousel':  'services-carousel.php',
-  'services/framed':    'services-framed.php',
-  'services/framed2':   'services-framed2.php',
-  'services/panel-grid':'services-panel-grid.php',
-  'process/numbered':   'process-numbered.php',
-  'process/carousel':   'process-carousel.php',
-  'about/split-photo':  'about-teaser.php',
-  'areas/chips':        'areas-teaser.php',
-  'areas/marquee':      'areas-marquee.php',
-  'stories/spotlight':  'stories-spotlight.php',
-  'faq/accordion':      'faq-accordion.php',
-  'faq/carousel':       'faq-carousel.php',
-  'faq/selector':       'faq-selector.php',
-  'cta/band':           'cta-band.php',
-  'cta/dark-left':      'cta-dark-left.php',
-};
+/* ---- map recipe {slot/variant} → PHP partial filename — derived from the
+   manifest's homepage slots (skipping shell slots, which have no partial). ---- */
+const PARTIAL_MAP = {};
+MANIFEST.home.forEach(slot => {
+  if (slot.shell) return;
+  slot.variants.forEach(v => { if (v.partial) PARTIAL_MAP[`${slot.key}/${v.id}`] = v.partial; });
+});
 
-/* ---- inner-page partials (always included in multi mode) ---- */
-const INNER_PARTIALS = [
-  'services-page.php',
-  'areas-page.php',
-  'about-page.php',
-  'contact-page.php',
-];
+/* ---- inner-page section library + page order — derived from manifest.pages.
+   Inner pages are composed from these the same way the homepage is composed
+   from sections. ---- */
+const INNER_PARTIAL_MAP = {};
+const INNER_PAGES = Object.entries(MANIFEST.pages).map(([slug, pg]) => {
+  pg.slots.forEach(slot => slot.variants.forEach(v => {
+    if (v.partial) INNER_PARTIAL_MAP[`${slot.key}/${v.id}`] = v.partial;
+  }));
+  return { slug, default: pg.default.map(([slot, variant]) => ({ slot, variant })) };
+});
+
+/* Resolve each inner page to its ordered list of {slot, variant, key, file, options}.
+   Uses recipe.pages[slug] when present, else the page's default recipe.
+   `options` (e.g. { flip: true, frame: "divided" }) is the builder dock's
+   per-variant style toggles — passed through as-is to buildInnerPhp. */
+function resolveInnerPages() {
+  return INNER_PAGES.map(pg => {
+    const secs = (recipe.pages && Array.isArray(recipe.pages[pg.slug]) && recipe.pages[pg.slug].length)
+      ? recipe.pages[pg.slug]
+      : pg.default;
+    const partials = secs.map(({ slot, variant, options }) => {
+      const key = `${slot}/${variant}`;
+      return { slot, variant, key, file: INNER_PARTIAL_MAP[key], options };
+    });
+    return { slug: pg.slug, partials };
+  });
+}
+const innerPages = mode === 'multi' ? resolveInnerPages() : [];
 
 /* ---- lib files (copied verbatim) ---- */
 const LIB_FILES = ['content.php', 'foot.php', 'auth.php'];
@@ -128,7 +128,7 @@ if (!fs.existsSync(skinFile)) missing.push(`personalities/${recipe.skin}.css`);
 
 if (!fs.existsSync(contentSrc)) missing.push(contentSrc);
 
-const picks = recipe.sections.map(({ slot, variant }) => {
+const picks = recipe.sections.map(({ slot, variant, options }) => {
   const key     = `${slot}/${variant}`;
   const partial = PARTIAL_MAP[key];
   const phpFile = partial ? path.join(SLICE, 'partials', partial) : null;
@@ -138,14 +138,14 @@ const picks = recipe.sections.map(({ slot, variant }) => {
   else if (!fs.existsSync(phpFile))  missing.push(`_slice/partials/${partial}`);
   if (!fs.existsSync(cssFile))       missing.push(`sections/${slot}/${variant}.css`);
 
-  return { slot, variant, key, partial, phpFile, cssFile };
+  return { slot, variant, key, partial, phpFile, cssFile, options };
 });
 
 if (mode === 'multi') {
-  INNER_PARTIALS.forEach(f => {
-    const p = path.join(SLICE, 'partials', f);
-    if (!fs.existsSync(p)) missing.push(`_slice/partials/${f}`);
-  });
+  innerPages.forEach(pg => pg.partials.forEach(p => {
+    if (!p.file)                                                   missing.push(`No inner-page mapping for ${p.key} — add it to INNER_PARTIAL_MAP`);
+    else if (!fs.existsSync(path.join(SLICE, 'partials', p.file))) missing.push(`_slice/partials/${p.file}`);
+  }));
   MULTI_SUPPORT.forEach(f => {
     const p = path.join(SLICE, f);
     if (!fs.existsSync(p)) missing.push(`_slice/${f}`);
@@ -212,7 +212,9 @@ picks.forEach(p => {
   fs.copyFileSync(p.phpFile, path.join(partialsDir, p.partial));
 });
 if (mode === 'multi') {
-  INNER_PARTIALS.forEach(f => fs.copyFileSync(path.join(SLICE, 'partials', f), path.join(partialsDir, f)));
+  // copy every inner-page partial referenced by the resolved pages (dedup)
+  const innerFiles = [...new Set(innerPages.flatMap(pg => pg.partials.map(p => p.file)))];
+  innerFiles.forEach(f => fs.copyFileSync(path.join(SLICE, 'partials', f), path.join(partialsDir, f)));
 }
 
 /* ---- support files ---- */
@@ -224,10 +226,13 @@ if (mode === 'multi') {
 /* ---- page PHP files ---- */
 fs.writeFileSync(path.join(outDir, 'index.php'), buildIndexPhp(picks), 'utf8');
 if (mode === 'multi') {
-  fs.writeFileSync(path.join(outDir, 'services.php'),      buildInnerPhp('services',      'services-page.php'), 'utf8');
-  fs.writeFileSync(path.join(outDir, 'service-areas.php'), buildInnerPhp('service-areas', 'areas-page.php'),    'utf8');
-  fs.writeFileSync(path.join(outDir, 'about.php'),         buildInnerPhp('about',         'about-page.php'),    'utf8');
-  fs.writeFileSync(path.join(outDir, 'contact.php'),       buildInnerPhp('contact',       'contact-page.php'),  'utf8');
+  innerPages.forEach(pg => {
+    fs.writeFileSync(
+      path.join(outDir, `${pg.slug}.php`),
+      buildInnerPhp(pg.slug, pg.partials),
+      'utf8'
+    );
+  });
 }
 
 /* ---- content JSON ---- */
@@ -240,9 +245,9 @@ console.log(`✓ stamped "${titleFn(name)}" → ${rel}`);
 console.log(`  skin:     ${recipe.skin}`);
 console.log(`  mode:     ${mode}`);
 console.log(`  sections: ${picks.map(p => p.key).join(', ')}`);
-const pages = ['index.php'];
-if (mode === 'multi') pages.push('services.php', 'service-areas.php', 'about.php', 'contact.php');
+const pages = ['index.php', ...innerPages.map(pg => `${pg.slug}.php`)];
 console.log(`  pages:    ${pages.join(', ')}`);
+if (mode === 'multi') innerPages.forEach(pg => console.log(`    └ ${pg.slug}: ${pg.partials.map(p => p.key).join(' + ')}`));
 console.log(editPasswordNote);
 console.log(`\n  preview:  add "${rel}" to launch.json with php.exe -S localhost:<PORT> -t "${rel}"`);
 
@@ -250,9 +255,29 @@ console.log(`\n  preview:  add "${rel}" to launch.json with php.exe -S localhost
    Generators
    ================================================================ */
 
+/* One include, optionally fenced by a $SECTION_OPTS assignment when the
+   recipe carries per-variant style toggles (builder dock "Options" — see
+   manifest variant.options + render.php). Mirrors render.php's $SECTION_OPTS
+   convention so the stamp renders identically to the builder preview. */
+// PHP single-quoted string literal (only \ and ' need escaping; no $-interpolation
+// risk like a double-quoted literal would have).
+function phpSingleQuoted(s) {
+  return `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+}
+
+function buildIncludeLine(file, options) {
+  if (!options || !Object.keys(options).length) {
+    return `<?php include __DIR__ . '/partials/${file}'; ?>`;
+  }
+  // PHP has no {...} object-literal syntax — decode the JSON at runtime instead
+  // of hand-emitting a PHP array literal.
+  const json = phpSingleQuoted(JSON.stringify(options));
+  return `<?php $SECTION_OPTS = json_decode(${json}, true); include __DIR__ . '/partials/${file}'; unset($SECTION_OPTS); ?>`;
+}
+
 function buildIndexPhp(sectionPicks) {
   const includes = sectionPicks
-    .map(p => `<?php include __DIR__ . '/partials/${p.partial}'; ?>`)
+    .map(p => buildIncludeLine(p.partial, p.options))
     .join('\n');
   return `<?php require __DIR__ . '/lib/content.php'; $PAGE = 'home'; ?>
 <?php require __DIR__ . '/lib/head.php'; ?>
@@ -263,11 +288,14 @@ ${includes}
 `;
 }
 
-function buildInnerPhp(pageSlot, partialFile) {
+function buildInnerPhp(pageSlot, partials) {
+  const includes = partials
+    .map(p => buildIncludeLine(p.file, p.options))
+    .join('\n');
   return `<?php require __DIR__ . '/lib/content.php'; $PAGE = '${pageSlot}'; ?>
 <?php require __DIR__ . '/lib/head.php'; ?>
 
-<?php include __DIR__ . '/partials/${partialFile}'; ?>
+${includes}
 
 <?php require __DIR__ . '/lib/foot.php'; ?>
 `;

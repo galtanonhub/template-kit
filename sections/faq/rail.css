@@ -1,0 +1,56 @@
+/* FAQ VARIANT — Rail
+   Vertical list of plain-text questions on the left; selecting one fills a
+   simple Q+A panel on the right. Mirrors services--rail's layout, but the
+   panel is text-only (faq.items have no image/bullets to build a card from).
+   Reuses the [data-selector]/.selector__tab/.selector__panel JS hook
+   (site.js) shared with faq--selector and services--selector/rail — tab
+   chrome below explicitly resets every property the OTHER selector variants'
+   shared chrome sets (display/min-height/background/border/padding), since
+   that chrome isn't scoped to its own variant and the builder bundles every
+   variant's CSS together (see services/rail.css for the bug this avoids). */
+
+/* ===== shared selector chrome (duplicated across selector variants) ===== */
+[data-selector] .selector__panel { display: none; }
+[data-selector] .selector__panel.is-active { display: block; }
+/* ===== end shared chrome ===== */
+
+.faq--rail .faq-rail__eyebrow { display: block; margin-bottom: 28px; }
+
+.faq--rail .rail__layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+.faq--rail .rail__tabs { display: flex; flex-direction: column; gap: 10px; }
+.faq--rail .rail__tabs .rail__tab {
+  display: block; min-height: auto;
+  background: none; border: none; border-right: none; padding: 6px 0;
+  text-align: left; cursor: pointer; font-family: inherit;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-weight: var(--fw-bold);
+  color: var(--c-ink-soft);
+  line-height: 1.4;
+  transition: color .15s;
+}
+.faq--rail .rail__tabs .rail__tab:hover:not(.is-active) { color: var(--c-ink); background: none; }
+.faq--rail .rail__tabs .rail__tab.is-active { color: var(--c-ink); background: none; }
+
+.faq-rail__q {
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  font-weight: var(--fw-heavy);
+  line-height: 1.25;
+  max-width: 720px;
+  margin-bottom: 18px;
+}
+.faq-rail__a {
+  max-width: 640px;
+  color: var(--c-ink-soft);
+  line-height: 1.75;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 760px) {
+  .faq--rail .rail__layout { grid-template-columns: 1fr; }
+}

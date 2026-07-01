@@ -1,17 +1,9 @@
 </main>
 
 <?php
-/* Social roster — STRUCTURE (locked). Which platforms exist + their emoji and
-   label. The buyer never edits this; they only set the URL (data) per platform.
+/* Social roster (shared, locked) — see kit_social_roster() in lib/content.php.
    A platform renders on the live site only if its URL is non-empty. */
-$SOCIAL = [
-  'facebook'  => ['icon' => '📘', 'label' => 'Facebook'],
-  'instagram' => ['icon' => '📷', 'label' => 'Instagram'],
-  'x'         => ['icon' => '🐦', 'label' => 'X (Twitter)'],
-  'youtube'   => ['icon' => '▶️', 'label' => 'YouTube'],
-  'linkedin'  => ['icon' => '💼', 'label' => 'LinkedIn'],
-  'tiktok'    => ['icon' => '🎵', 'label' => 'TikTok'],
-];
+$SOCIAL = kit_social_roster();
 ?>
 <footer class="slice-foot">
   <div class="container">

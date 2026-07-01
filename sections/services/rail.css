@@ -1,0 +1,98 @@
+/* SERVICES VARIANT — Rail
+   Vertical list of plain-text service names on the left; selecting one swaps
+   an image pair + detail card on the right. Modeled on table22.com's services
+   section. Reuses the [data-selector]/.selector__tab/.selector__panel JS hook
+   (site.js) shared with services--selector and faq--selector, but the tab
+   chrome is fully re-skinned below (specificity bumped via the extra
+   .services--rail .rail__tabs prefix so it always wins over the other
+   selector variants' shared tab styling, regardless of CSS bundle order). */
+
+/* ===== shared selector chrome (duplicated across selector variants) ===== */
+[data-selector] .selector__panel { display: none; }
+[data-selector] .selector__panel.is-active { display: block; }
+/* ===== end shared chrome ===== */
+
+.services--rail .rail__layout {
+  display: grid;
+  grid-template-columns: minmax(190px, 260px) 1fr;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+/* ----- left rail: plain-text vertical tab list ----- */
+.services--rail .rail__tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.services--rail .rail__tabs .rail__tab {
+  display: block; min-height: auto;
+  background: none; border: none; border-right: none; padding: 2px 0;
+  text-align: left; cursor: pointer; font-family: inherit;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  font-weight: var(--fw-heavy);
+  color: var(--c-ink-soft);
+  line-height: 1.3;
+  transition: color .15s;
+}
+.services--rail .rail__tabs .rail__tab:hover:not(.is-active) { color: var(--c-ink); background: none; }
+.services--rail .rail__tabs .rail__tab.is-active { color: var(--c-ink); background: none; }
+
+/* ----- right side: image pair + detail card ----- */
+.services--rail .rail__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 3vw, 40px);
+  align-items: start;
+}
+.services--rail .rail__media { display: flex; flex-direction: column; gap: 20px; }
+.services--rail .rail__media-top,
+.services--rail .rail__media-bottom { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+.services--rail .rail__media-top img,
+.services--rail .rail__media-bottom img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+
+.services--rail .rail__card {
+  background: var(--c-surface);
+  border: var(--border-weight) solid var(--c-line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex; flex-direction: column;
+  height: 100%;
+}
+.services--rail .rail__card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 10px;
+}
+.services--rail .rail__card-tag {
+  font-size: .8rem; font-weight: var(--fw-medium);
+  color: var(--c-ink-soft);
+}
+.services--rail .rail__card-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: var(--radius-pill);
+  background: var(--c-brand); color: var(--c-brand-ink);
+  font-size: .75rem; flex-shrink: 0; line-height: 1;
+}
+.services--rail .rail__card-name {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  margin-bottom: 18px;
+}
+.services--rail .rail__card-list {
+  list-style: none; padding: 0; margin: 0 0 24px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.services--rail .rail__card-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: .95rem; color: var(--c-ink-soft);
+}
+.services--rail .rail__card-list .rail__card-check { width: 18px; height: 18px; font-size: .6rem; margin-top: 1px; }
+.services--rail .rail__cta { margin-top: auto; align-self: flex-start; }
+
+@media (max-width: 900px) {
+  .services--rail .rail__layout { grid-template-columns: 1fr; }
+  .services--rail .rail__tabs { flex-direction: row; flex-wrap: wrap; gap: 12px 22px; }
+  .services--rail .rail__tabs .rail__tab { min-height: auto; border-bottom: none; }
+}
+@media (max-width: 600px) {
+  .services--rail .rail__content { grid-template-columns: 1fr; }
+}

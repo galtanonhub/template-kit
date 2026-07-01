@@ -1,0 +1,8 @@
+/* ABOUT VARIANT — Story Stack
+   Centered heading, full-width banner photo, then a two-column lead | checklist
+   row below. Distinct from split-photo (strict image-beside-copy). */
+.about--story-stack__banner { margin: 0 0 clamp(28px, 4vw, 48px); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); }
+.about--story-stack__banner img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; display: block; }
+.about--story-stack__cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 64px); align-items: start; }
+.about--story-stack__cols .checklist { margin-bottom: 24px; }
+@media (max-width: 760px) { .about--story-stack__cols { grid-template-columns: 1fr; } }

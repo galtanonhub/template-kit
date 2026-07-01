@@ -1,14 +1,8 @@
-<?php /* ABOUT page — upgrade from the homepage about-teaser.
-   Teaser: one image + paragraph + checklist.
-   This page: full story prose + company values grid. Different layout, deeper. */ ?>
+<?php /* ABOUT body — full story prose + company values grid (the "upgrade").
+   Reads about.story[], about.values[], and about.teaser.image. Pairs with
+   about-header. Keeps .about-page class so existing slice.css applies. */ ?>
 <section class="section about-page">
   <div class="container">
-
-    <div class="section-head">
-      <span class="eyebrow" data-edit="about.page.eyebrow"><?= e(c('about.page.eyebrow', 'Our Story')) ?></span>
-      <h1 data-edit="about.page.heading"><?= e(c('about.page.heading', 'Built on doing it right')) ?></h1>
-    </div>
-
     <div class="about-story">
       <figure class="about-story__photo">
         <img src="<?= e(c('about.teaser.image', '')) ?>" alt="<?= e(c('business.name', '')) ?>" data-edit-img="about.teaser.image">
@@ -33,6 +27,5 @@
       </div>
     </div>
     <?php endif; ?>
-
   </div>
 </section>

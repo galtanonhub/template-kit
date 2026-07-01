@@ -1,14 +1,8 @@
-<?php /* SERVICES PAGE — the upgrade. Same items as the homepage teaser, but
-   the deep view: full "description" + "bullets", a different (alternating
-   detail-row) layout, and a page-specific header. NOT a reheated teaser. */ ?>
+<?php /* SERVICES detail body — alternating media/copy rows (the "upgrade" view).
+   Reads services.items[] (name, description, bullets, image). Pairs with
+   services-header. Keeps .services-page class so existing slice.css applies. */ ?>
 <section class="section services-page">
   <div class="container">
-    <div class="section-head">
-      <span class="eyebrow" data-edit="services.page.eyebrow"><?= e(c('services.page.eyebrow', 'Our Services')) ?></span>
-      <h1 data-edit="services.page.heading"><?= e(c('services.page.heading', 'What we do')) ?></h1>
-      <p class="lead" data-edit="services.page.intro"><?= e(c('services.page.intro', 'The full range of work we handle.')) ?></p>
-    </div>
-
     <div class="svc-detail-list">
       <?php foreach (c('services.items', []) as $i => $item): ?>
       <article class="svc-detail" id="<?= e($item['id'] ?? '') ?>">
