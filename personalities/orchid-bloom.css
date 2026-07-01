@@ -1,0 +1,76 @@
+/* ============================================================
+   PERSONALITY — Orchid Bloom
+   For: salons & spas, med-spa/aesthetics, boutique fitness
+        (yoga/pilates), beauty services, creative/branding
+        agencies — businesses that sell confidence & polish.
+
+   Tells: soft lavender-white canvas, vivid plum/orchid brand
+   (first purple-family skin in the kit), dramatic high-contrast
+   fashion-editorial serif display, rounded-not-pill cards, violet
+   glow on hover instead of a flat drop shadow, italic-diamond
+   eyebrow marker, warm blush-gold accent.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — lavender-white canvas, vivid plum brand, warm blush accent */
+  --c-bg:          #faf6fb;
+  --c-bg-alt:      #f1e3f6;
+  --c-bg-deep:     #2a1533;
+  --c-surface:     #fffdfe;
+  --c-ink:         #2b1c33;
+  --c-ink-soft:    #7c6a86;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #8a3fa0;
+  --c-brand-deep:  #6e2f80;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #d98fae;
+  --c-line:        #ecdcf0;
+  --c-line-strong: #d4b6dd;
+
+  /* Type — dramatic high-contrast editorial serif, clean geometric body */
+  --font-display: 'Bodoni Moda', Georgia, serif;
+  --font-body:    'Work Sans', system-ui, sans-serif;
+  --font-accent:  'Work Sans', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 1.06;
+  --leading-body:  1.7;
+
+  /* Shape — rounded, not pill (that's meadow-fresh's signature) */
+  --radius:    18px;
+  --radius-lg: 26px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   1px;
+
+  /* Buttons — pill, quiet weight, confident not shouty */
+  --btn-radius:    999px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.04em;
+
+  /* Elevation — violet glow on hover, not a flat drop shadow */
+  --shadow:    none;
+  --shadow-lg: 0 0 30px rgba(147,62,160,0.32), 0 16px 40px rgba(40,10,50,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — generous, polished */
+  --section-pad: clamp(70px, 5vw + 46px, 124px);
+  --gap: 30px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — diamond-marked eyebrow, violet-glow card/button hover */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-medium); }
+.eyebrow::before { content: '\25C6  '; color: var(--c-accent); font-size: 0.7em; }
+h1, h2 { letter-spacing: -0.01em; }
+.card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--c-brand); }
+.btn--brand:hover { box-shadow: 0 0 26px rgba(138,63,160,0.42); }

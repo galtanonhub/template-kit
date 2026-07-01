@@ -3,7 +3,7 @@
    Reads as: trades / contractor / "we show up and get it done." */
 .hero--overlay { position: relative; min-height: clamp(520px, 70vh, 720px); display: grid; align-items: center; overflow: hidden; color: var(--c-ink-invert); }
 .hero--overlay__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero--overlay__scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,10,14,0.82) 0%, rgba(8,10,14,0.58) 45%, rgba(8,10,14,0.22) 100%); }
+.hero--overlay__scrim { position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--c-bg-deep) 82%, transparent) 0%, color-mix(in srgb, var(--c-bg-deep) 58%, transparent) 45%, color-mix(in srgb, var(--c-bg-deep) 22%, transparent) 100%); }
 .hero--overlay__inner { position: relative; z-index: 1; max-width: 720px; padding-block: 60px; }
 .hero--overlay h1 { color: var(--c-ink-invert); margin: 16px 0 18px; }
 .hero--overlay .lead { color: var(--c-ink-invert-soft); max-width: 52ch; margin-bottom: 28px; }

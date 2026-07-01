@@ -101,7 +101,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.45));
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--c-bg-deep) 10%, transparent), color-mix(in srgb, var(--c-bg-deep) 45%, transparent));
 }
 
 .need-state__modal-body { padding: 28px 32px 36px; }

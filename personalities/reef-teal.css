@@ -1,0 +1,77 @@
+/* ============================================================
+   PERSONALITY — Reef Teal
+   For: cleaning services, pool/spa maintenance, dental &
+        orthodontic, veterinary/pet grooming, marine & boat
+        services — businesses that sell clean, clinical-fresh
+        trust rather than warmth or grit.
+
+   Tells: crisp teal-white canvas, clear turquoise brand (first
+   teal-family skin in the kit — reads "coastal/clinical", not
+   "tech" like aerospace-hud's cyan), modern geometric display
+   face, subtle radius, flat elevation, coral "reef bubble"
+   eyebrow marker as the one warm accent against all that cool teal.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Karla:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — crisp teal-white canvas, clear turquoise brand, coral accent */
+  --c-bg:          #f2fbfa;
+  --c-bg-alt:      #e2f4f1;
+  --c-bg-deep:     #0d2b28;
+  --c-surface:     #ffffff;
+  --c-ink:         #12302c;
+  --c-ink-soft:    #456f6b;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #12968a;
+  --c-brand-deep:  #0d786f;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #ff8c66;
+  --c-line:        #d8ece9;
+  --c-line-strong: #b9d9d4;
+
+  /* Type — modern geometric display, clean humanist body */
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body:    'Karla', system-ui, sans-serif;
+  --font-accent:  'Karla', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.18em;
+  --leading-tight: 1.1;
+  --leading-body:  1.68;
+
+  /* Shape — subtle radius, clean, not sharp not soft */
+  --radius:    8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — rounded-not-pill, plain case */
+  --btn-radius:    10px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.02em;
+
+  /* Elevation — flat; color/whitespace carries it, not shadow */
+  --shadow:    none;
+  --shadow-lg: 0 14px 34px rgba(10,90,85,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — airy, clean */
+  --section-pad: clamp(64px, 5vw + 46px, 116px);
+  --gap: 28px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — coral "bubble" dot after eyebrow, gentle card lift */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-medium); }
+.eyebrow::after { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--c-accent); margin-left: 8px; vertical-align: middle; }
+h1, h2 { letter-spacing: -0.01em; }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(18,150,138,0.32); }

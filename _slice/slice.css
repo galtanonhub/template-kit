@@ -31,7 +31,7 @@
    "banner" is picked). A compact page-banner, not full hero height. --- */
 .inner-header--banner { position: relative; min-height: clamp(280px, 32vw, 380px); padding-block: 0; display: grid; align-items: center; overflow: hidden; color: var(--c-ink-invert); }
 .inner-header--banner__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.inner-header--banner__scrim { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,10,14,0.78) 0%, rgba(8,10,14,0.5) 55%, rgba(8,10,14,0.18) 100%); }
+.inner-header--banner__scrim { position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--c-bg-deep) 78%, transparent) 0%, color-mix(in srgb, var(--c-bg-deep) 50%, transparent) 55%, color-mix(in srgb, var(--c-bg-deep) 18%, transparent) 100%); }
 .inner-header--banner__inner { position: relative; z-index: 1; max-width: 640px; }
 .inner-header--banner h1 { color: var(--c-ink-invert); margin: 14px 0 12px; }
 .inner-header--banner .lead { color: var(--c-ink-invert-soft); }
@@ -116,11 +116,11 @@
 .svc-feature-band { position: relative; min-height: clamp(320px, 34vw, 440px); display: grid; align-items: end; padding-bottom: clamp(64px, 9vw, 110px); overflow: hidden; }
 .svc-feature-band__media { position: absolute; inset: 0; }
 .svc-feature-band__bg { width: 100%; height: 100%; object-fit: cover; display: block; }
-.svc-feature-band__scrim { position: absolute; inset: 0; background: rgba(8,10,14,0.35); }
+.svc-feature-band__scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--c-bg-deep) 35%, transparent); }
 .svc-feature-band__box {
   position: relative; z-index: 1;
   max-width: 620px;
-  background: rgba(8,10,14,0.55);
+  background: color-mix(in srgb, var(--c-bg-deep) 55%, transparent);
   color: var(--c-ink-invert);
   padding: clamp(28px, 4vw, 44px);
   border-radius: var(--radius-lg);

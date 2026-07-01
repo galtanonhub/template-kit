@@ -1,0 +1,84 @@
+/* ============================================================
+   PERSONALITY — Studio Mono
+   For: architecture firms, high-end interior/furniture design
+        studios, photographers, minimalist portfolio-style local
+        businesses — businesses that sell taste through restraint,
+        not through color.
+
+   Tells: warm off-white + near-black canvas, almost NO brand
+   hue at all (graphite brand, "neutral" fingerprint bucket —
+   the only skin in the kit with no dominant color), one thin
+   blueprint-blue accent line, quirky geometric display face,
+   razor corners, hairline rules, mono "blueprint label" eyebrow.
+   The restraint itself IS the personality — the opposite move
+   from every other skin in the kit.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color — warm off-white canvas, graphite "brand" (deliberately near-neutral), blueprint-blue accent */
+  --c-bg:          #f7f7f5;
+  --c-bg-alt:      #ececea;
+  --c-bg-deep:     #131313;
+  --c-surface:     #ffffff;
+  --c-ink:         #141414;
+  --c-ink-soft:    #63666b;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #1c1c1c;
+  --c-brand-deep:  #000000;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #2f5fdb;
+  --c-line:        #e3e3e0;
+  --c-line-strong: #c9c9c5;
+
+  /* Type — quirky geometric display, clean neutral body, mono for blueprint-style labels */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Public Sans', system-ui, sans-serif;
+  --font-accent:  'JetBrains Mono', ui-monospace, monospace;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.18em;
+  --leading-tight: 1.05;
+  --leading-body:  1.65;
+
+  /* Shape — razor corners, hairline weight (technical-drawing feel) */
+  --radius:    0px;
+  --radius-lg: 0px;
+  --radius-pill: 0px;
+  --border-weight: 1px;
+  --rule-weight:   1px;
+
+  /* Buttons — square, quiet uppercase label, thin weight (not a shouting slab) */
+  --btn-radius:    0px;
+  --btn-transform: uppercase;
+  --btn-weight:    500;
+  --btn-tracking:  0.08em;
+
+  /* Elevation — flat by default; whitespace and hairlines carry the look */
+  --shadow:    none;
+  --shadow-lg: 0 10px 28px rgba(20,20,20,0.10);
+  --card-border: 1px solid var(--c-line-strong);
+
+  /* Rhythm — generous negative space, the key portfolio trait */
+  --section-pad: clamp(76px, 6vw + 44px, 132px);
+  --gap: 32px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — mono blueprint-style eyebrow label, blue accent on hover only */
+.eyebrow {
+  font-family: var(--font-accent);
+  color: var(--c-accent);
+  font-weight: var(--fw-medium);
+}
+.eyebrow::before { content: '\2014  '; color: var(--c-ink-soft); }
+h1, h2 { letter-spacing: -0.01em; }
+.card { transition: border-color var(--transition), box-shadow var(--transition); }
+.card:hover { border-color: var(--c-accent); box-shadow: var(--shadow-lg); }
+.section-head { border-bottom: 1px solid var(--c-line-strong); padding-bottom: 20px; }
+.btn--brand:hover { background: var(--c-brand-deep); }
