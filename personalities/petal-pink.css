@@ -1,0 +1,77 @@
+/* ============================================================
+   PERSONALITY — Petal Pink
+   For: bakeries & dessert shops, kids' services/daycare (the
+        boutique-upscale end, not the playful-loud end — that's
+        sunny-pastel), boutique fashion, women-focused salons —
+        businesses that sell delight & polish.
+
+   Tells: soft blush-white canvas, vivid magenta-pink brand (first
+   pink-family skin in the kit — a brighter, more fashion-forward
+   register than orchid-bloom's moody plum), rounded geometric
+   display face, generous pill radius, soft pink-tinted shadow,
+   gold-blush accent, small flower-marked eyebrow.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — blush-white canvas, vivid magenta-pink brand, warm gold accent */
+  --c-bg:          #fdf5fa;
+  --c-bg-alt:      #f7e3f0;
+  --c-bg-deep:     #2f1226;
+  --c-surface:     #ffffff;
+  --c-ink:         #34131f;
+  --c-ink-soft:    #8a5d78;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #d43fa0;
+  --c-brand-deep:  #b02f85;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #e0a94a;
+  --c-line:        #f5dced;
+  --c-line-strong: #e6b8d9;
+
+  /* Type — rounded geometric display, clean modern body */
+  --font-display: 'Poppins', system-ui, sans-serif;
+  --font-body:    'Figtree', system-ui, sans-serif;
+  --font-accent:  'Figtree', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 1.12;
+  --leading-body:  1.7;
+
+  /* Shape — generous pill radius, soft & confident */
+  --radius:    36px;
+  --radius-lg: 44px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — full pill, quiet weight */
+  --btn-radius:    999px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.02em;
+
+  /* Elevation — soft pink-tinted ambient shadow */
+  --shadow:    0 6px 18px rgba(180,40,120,0.12);
+  --shadow-lg: 0 20px 44px rgba(180,40,120,0.22);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — generous, delightful */
+  --section-pad: clamp(68px, 5vw + 46px, 120px);
+  --gap: 30px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — flower-marked eyebrow, gentle lift on hover */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-medium); }
+.eyebrow::after { content: '  \273F'; color: var(--c-accent); }
+h1, h2 { letter-spacing: -0.005em; }
+.card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--c-brand); }
+.btn--brand:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(212,63,160,0.32); }

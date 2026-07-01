@@ -1,0 +1,78 @@
+/* ============================================================
+   PERSONALITY — Oxford Reserve
+   For: law firms, insurance, financial advisors, funeral homes —
+        businesses that sell trust through tradition, not through
+        modern approachability (that's true-blue's job).
+
+   Tells: deep navy "boardroom" canvas, oxblood/burgundy brand
+   (first traditional-heritage skin — reads "old money", not
+   "corporate-modern"), authoritative serif display (Playfair),
+   brass/gold accent, a brass hard-offset "wax seal" shadow instead
+   of a soft drop shadow, warm ivory ink (aged-paper feel).
+
+   NOTE: DARK skin — --c-bg is near-black navy, --c-ink is warm ivory.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=PT+Sans:wght@400;700&display=swap');
+
+:root {
+  /* Color — deep navy canvas, oxblood brand, brass accent, ivory ink */
+  --c-bg:          #10141d;
+  --c-bg-alt:      #1a2029;
+  --c-bg-deep:     #05070a;
+  --c-surface:     #1c212b;
+  --c-ink:         #ede6d8;
+  --c-ink-soft:    #a89f8d;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #9c2f3f;
+  --c-brand-deep:  #7a2331;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #c9a24a;
+  --c-line:        #2a3140;
+  --c-line-strong: #3d4658;
+
+  /* Type — authoritative editorial serif, clean readable body */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'PT Sans', system-ui, sans-serif;
+  --font-accent:  'PT Sans', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+  --fw-heavy:  700;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.26em;
+  --leading-tight: 1.1;
+  --leading-body:  1.7;
+
+  /* Shape — rounded but formal, not soft-casual */
+  --radius:    10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — understated, not pill (pill reads too casual here) */
+  --btn-radius:    6px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.02em;
+
+  /* Elevation — brass "wax seal" hard-offset, not a soft drop shadow */
+  --shadow:    none;
+  --shadow-lg: 5px 5px 0 var(--c-accent);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — generous, formal */
+  --section-pad: clamp(76px, 6vw + 46px, 132px);
+  --gap: 32px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — brass underline beneath eyebrow, wax-seal card hover */
+.eyebrow { color: var(--c-accent); font-weight: var(--fw-medium); }
+.eyebrow::after { content: ''; display: block; width: 36px; height: 2px; background: var(--c-accent); margin-top: 8px; }
+h1, h2 { font-weight: 400; }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+.section-head { border-bottom: 1px solid var(--c-line-strong); padding-bottom: 20px; }

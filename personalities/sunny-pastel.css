@@ -1,0 +1,84 @@
+/* ============================================================
+   PERSONALITY — Sunny Pastel
+   For: daycare, family entertainment/kids' activities, children's
+        services — businesses that sell cheerful, bouncy, kid-safe
+        fun (the loud-playful end; petal-pink is the boutique-
+        upscale end of "delightful").
+
+   Tells: soft butter-cream canvas, cheerful sunshine-yellow brand
+   (a third, distinct take on yellow — industrial-bold's is stark
+   hi-vis, midnight-luxe's is moody champagne, this one is soft and
+   bright), rounded bubble display face, very generous pill radius,
+   a playful yellow glow, mint accent, a slight ROTATE on card hover
+   (the one skin in the kit that isn't afraid to wobble).
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — butter-cream canvas, sunshine-yellow brand, playful mint accent */
+  --c-bg:          #fdf9ec;
+  --c-bg-alt:      #fdeecb;
+  --c-bg-deep:     #2e2510;
+  --c-surface:     #ffffff;
+  --c-ink:         #3a2f1a;
+  --c-ink-soft:    #71603f;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #f5cd3b;
+  --c-brand-deep:  #d9ad1e;
+  --c-brand-ink:   #33280f;
+  --c-accent:      #4fc4b0;
+  --c-line:        #f5e6bf;
+  --c-line-strong: #e8cf8e;
+
+  /* Type — rounded bubble display, clean friendly body */
+  --font-display: 'Fredoka', system-ui, sans-serif;
+  --font-body:    'Rubik', system-ui, sans-serif;
+  --font-accent:  'Rubik', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  600;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.16em;
+  --leading-tight: 1.15;
+  --leading-body:  1.7;
+
+  /* Shape — very generous, bouncy */
+  --radius:    36px;
+  --radius-lg: 44px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — full pill, bouncy */
+  --btn-radius:    999px;
+  --btn-transform: none;
+  --btn-weight:    600;
+  --btn-tracking:  0.01em;
+
+  /* Elevation — cheerful sunshine glow */
+  --shadow:    none;
+  --shadow-lg: 0 0 24px rgba(245,205,59,0.35), 0 14px 30px rgba(40,30,10,0.15);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — bouncy, not too airy */
+  --section-pad: clamp(64px, 5vw + 44px, 112px);
+  --gap: 28px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — soft pill-chip eyebrow badge (reuses meadow-fresh's
+   mechanism, same pill/soft family), rotate + scale on hover — playful wobble */
+.eyebrow {
+  background: color-mix(in srgb, var(--c-brand) 20%, transparent);
+  color: var(--c-brand-deep);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  font-weight: var(--fw-medium);
+}
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-4px) rotate(-0.6deg); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(245,205,59,0.4); }

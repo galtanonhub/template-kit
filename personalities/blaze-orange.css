@@ -1,0 +1,78 @@
+/* ============================================================
+   PERSONALITY — Blaze Orange
+   For: moving companies, food trucks/casual dining, roofing &
+        exteriors, general home-services wanting energetic,
+        show-up-now branding (the HomeAdvisor/Home Depot register).
+
+   Tells: warm cream canvas, vivid saturated orange brand (first
+   true orange in the kit — warm-residential's terracotta buckets
+   as "red", this is unmistakably orange), tall condensed poster
+   display face, a colored hard-offset block shadow (not industrial-
+   bold's black offset — this one's tinted brand-deep), steel-blue
+   accent for contrast pop, triangle-marked eyebrow.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — warm cream canvas, vivid orange brand, steel-blue accent */
+  --c-bg:          #fdf6f0;
+  --c-bg-alt:      #f7e6d6;
+  --c-bg-deep:     #2b1608;
+  --c-surface:     #ffffff;
+  --c-ink:         #2b1608;
+  --c-ink-soft:    #8a6a52;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #f4761f;
+  --c-brand-deep:  #cc5c12;
+  --c-brand-ink:   #1f1710;
+  --c-accent:      #2f3b47;
+  --c-line:        #f0ddc9;
+  --c-line-strong: #dcbb92;
+
+  /* Type — tall condensed poster display, clean sans body */
+  --font-display: 'Oswald', system-ui, sans-serif;
+  --font-body:    'Mulish', system-ui, sans-serif;
+  --font-accent:  'Mulish', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 1.04;
+  --leading-body:  1.62;
+
+  /* Shape — bold, not razor sharp (that's industrial-bold's signature) */
+  --radius:    6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+  --border-weight: 2px;
+  --rule-weight:   3px;
+
+  /* Buttons — slab, uppercase, punchy */
+  --btn-radius:    6px;
+  --btn-transform: uppercase;
+  --btn-weight:    700;
+  --btn-tracking:  0.05em;
+
+  /* Elevation — hard offset block, tinted brand-deep instead of black */
+  --shadow:    none;
+  --shadow-lg: 6px 6px 0 var(--c-brand-deep);
+  --card-border: var(--border-weight) solid var(--c-ink);
+
+  /* Rhythm — tighter, punchy, show-up-now energy */
+  --section-pad: clamp(60px, 4vw + 42px, 104px);
+  --gap: 26px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — triangle-marked eyebrow, tinted hard-offset hover */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-bold); }
+.eyebrow::before { content: '\25B2  '; color: var(--c-accent); font-size: 0.75em; }
+h1, h2 { text-transform: uppercase; letter-spacing: -0.01em; }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lg); }
+.section-head { border-left: var(--rule-weight) solid var(--c-brand); padding-left: 20px; }
+.section-head.center { border-left: 0; padding-left: 0; }
