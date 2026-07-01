@@ -1,0 +1,75 @@
+/* ============================================================
+   PERSONALITY — True Blue
+   For: plumbing, HVAC, electrical, security, healthcare-adjacent,
+        insurance-like local services — trades that need to read
+        as reliable and competent above all else.
+
+   Tells: crisp cool-white canvas, confident corporate blue brand,
+   wide grotesque display face, subtle-radius cards, soft blue-tinted
+   shadow, a bold brand-colored rule under every section head.
+   The most "generic-but-effective" of the kit's skins on purpose —
+   this IS what trust looks like across a thousand contractor sites.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap');
+
+:root {
+  /* Color — cool-white canvas, confident blue brand, warm orange accent */
+  --c-bg:          #f4f8fb;
+  --c-bg-alt:      #e8f0f7;
+  --c-bg-deep:     #0f2438;
+  --c-surface:     #ffffff;
+  --c-ink:         #16232f;
+  --c-ink-soft:    #55697a;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #1f6fd1;
+  --c-brand-deep:  #164f9c;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #f2994a;
+  --c-line:        #dde6ee;
+  --c-line-strong: #c3d3e0;
+
+  /* Type — wide confident grotesque display, plain neutral body */
+  --font-display: 'Libre Franklin', system-ui, sans-serif;
+  --font-body:    'Source Sans 3', system-ui, sans-serif;
+  --font-accent:  'Source Sans 3', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 600;
+  --fw-bold:   700;
+  --fw-heavy:  800;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.16em;
+  --leading-tight: 1.08;
+  --leading-body:  1.68;
+
+  /* Shape — subtle radius, not sharp, not soft — professional middle ground */
+  --radius:    8px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — rounded-corporate, not pill, not slab */
+  --btn-radius:    8px;
+  --btn-transform: none;
+  --btn-weight:    700;
+  --btn-tracking:  0.01em;
+
+  /* Elevation — soft blue-tinted ambient shadow */
+  --shadow:    0 2px 6px rgba(16,60,110,0.08);
+  --shadow-lg: 0 16px 40px rgba(16,60,110,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — steady, professional */
+  --section-pad: clamp(64px, 5vw + 48px, 120px);
+  --gap: 28px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — bold brand rule under every section head, blue-glow lift on hover */
+.eyebrow { color: var(--c-brand); }
+.section-head { border-bottom: 3px solid var(--c-brand); padding-bottom: 18px; }
+.card { transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--c-brand); }
+.btn--brand:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(31,111,209,0.35); }

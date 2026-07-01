@@ -1,0 +1,79 @@
+/* ============================================================
+   PERSONALITY — Signal Red
+   For: 24/7 & emergency-positioned trades — locksmiths, water/fire
+        damage restoration, towing, emergency plumbing/electrical,
+        auto repair — businesses that sell speed and availability.
+
+   Tells: stark white canvas, vivid alert-red brand, ultra-bold
+   condensed poster display face, uppercase headings, a small red
+   "signal" marker tagging every section head, red glow on hover
+   instead of a hard shadow (deliberately NOT industrial-bold's
+   sharp/hard-offset combo, despite the shared "bold" territory).
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;700&display=swap');
+
+:root {
+  /* Color — stark white canvas, vivid alert red brand, hazard-amber accent */
+  --c-bg:          #ffffff;
+  --c-bg-alt:      #f5f0ef;
+  --c-bg-deep:     #1a1414;
+  --c-surface:     #ffffff;
+  --c-ink:         #1a1414;
+  --c-ink-soft:    #6b5f5c;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #e0263f;
+  --c-brand-deep:  #b81830;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #ffb703;
+  --c-line:        #ece4e2;
+  --c-line-strong: #d8c9c5;
+
+  /* Type — ultra-bold condensed poster display, plain readable body */
+  --font-display: 'Anton', system-ui, sans-serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-accent:  'DM Sans', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+  --fw-heavy:  400;   /* Anton ships one weight and is already maximally bold at 400 */
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.24em;
+  --leading-tight: 0.98;
+  --leading-body:  1.6;
+
+  /* Shape — crisp, tight, not fully sharp (that's industrial-bold's signature) */
+  --radius:    4px;
+  --radius-lg: 6px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — tight radius, uppercase, urgent */
+  --btn-radius:    4px;
+  --btn-transform: uppercase;
+  --btn-weight:    700;
+  --btn-tracking:  0.06em;
+
+  /* Elevation — red glow, not a drop shadow or hard offset */
+  --shadow:    none;
+  --shadow-lg: 0 0 28px rgba(224,38,63,0.35), 0 14px 36px rgba(0,0,0,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — tighter, punchier, urgent */
+  --section-pad: clamp(56px, 4vw + 40px, 100px);
+  --gap: 24px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — square "signal tag" marker on section heads, uppercase headings, red glow */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-bold); }
+h1, h2 { text-transform: uppercase; }
+.section-head { position: relative; padding-left: 24px; }
+.section-head::before { content: ''; position: absolute; left: 0; top: 6px; width: 12px; height: 12px; background: var(--c-brand); border-radius: 2px; }
+.section-head.center { padding-left: 0; }
+.section-head.center::before { display: none; }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { box-shadow: 0 0 24px rgba(224,38,63,0.45); }

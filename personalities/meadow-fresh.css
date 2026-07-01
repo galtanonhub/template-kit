@@ -1,0 +1,79 @@
+/* ============================================================
+   PERSONALITY — Meadow Fresh
+   For: landscaping, lawn care, tree service, pest control, solar,
+        wellness — trades that want to read as natural, healthy,
+        and approachable rather than corporate or rugged.
+
+   Tells: soft green-tinted off-white canvas, fresh leaf-green brand,
+   rounded friendly display face, very generous "blobby" radius
+   (organic, not sharp), flat elevation (color does the work, not
+   shadow), pill-badge eyebrow chip.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Lato:wght@400;700&display=swap');
+
+:root {
+  /* Color — soft green-white canvas, fresh leaf-green brand, warm amber accent */
+  --c-bg:          #f4f7ef;
+  --c-bg-alt:      #e9efdf;
+  --c-bg-deep:     #1c2b1e;
+  --c-surface:     #ffffff;
+  --c-ink:         #1e2b1f;
+  --c-ink-soft:    #5c6b5c;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #2f7a4f;
+  --c-brand-deep:  #21603a;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #e0a83e;
+  --c-line:        #e2e8da;
+  --c-line-strong: #ccd6c2;
+
+  /* Type — rounded friendly display, warm neutral body */
+  --font-display: 'Quicksand', system-ui, sans-serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+  --font-accent:  'Lato', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+  --fw-heavy:  700;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 1.15;
+  --leading-body:  1.7;
+
+  /* Shape — very generous "blobby" organic radius */
+  --radius:    32px;
+  --radius-lg: 40px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — fully pill, soft, friendly */
+  --btn-radius:    999px;
+  --btn-transform: none;
+  --btn-weight:    700;
+  --btn-tracking:  0;
+
+  /* Elevation — flat; color/roundness carries the look, not shadow */
+  --shadow:    none;
+  --shadow-lg: 0 14px 32px rgba(47,122,79,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — airy, calm */
+  --section-pad: clamp(72px, 6vw + 44px, 132px);
+  --gap: 32px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — soft pill-chip eyebrow badge, gentle lift+scale card hover */
+.eyebrow {
+  background: color-mix(in srgb, var(--c-brand) 12%, transparent);
+  color: var(--c-brand-deep);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+}
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-6px) scale(1.01); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(47,122,79,0.3); }
