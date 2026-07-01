@@ -14,20 +14,20 @@
 
 :root {
   /* Color — stark white canvas, vivid alert red brand, hazard-amber accent */
-  --c-bg:          #ffffff;
-  --c-bg-alt:      #f5f0ef;
-  --c-bg-deep:     #1a1414;
+  --c-bg:          #fdf6f5;
+  --c-bg-alt:      #f7e5e2;
+  --c-bg-deep:     #241313;
   --c-surface:     #ffffff;
-  --c-ink:         #1a1414;
-  --c-ink-soft:    #6b5f5c;
+  --c-ink:         #241414;
+  --c-ink-soft:    #8c5f5a;
   --c-ink-invert:  #ffffff;
   --c-ink-invert-soft: rgba(255,255,255,0.74);
   --c-brand:       #e0263f;
   --c-brand-deep:  #b81830;
   --c-brand-ink:   #ffffff;
   --c-accent:      #ffb703;
-  --c-line:        #ece4e2;
-  --c-line-strong: #d8c9c5;
+  --c-line:        #f0d9d5;
+  --c-line-strong: #dfb3ac;
 
   /* Type — ultra-bold condensed poster display, plain readable body */
   --font-display: 'Anton', system-ui, sans-serif;
