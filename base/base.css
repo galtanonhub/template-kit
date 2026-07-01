@@ -200,7 +200,7 @@ p  { color: var(--c-ink-soft); }
 
 .btn--brand   { background: var(--c-brand); color: var(--c-brand-ink); }
 .btn--brand:hover   { background: var(--c-brand-deep); }
-.btn--ink     { background: var(--c-ink); color: var(--c-ink-invert); }
+.btn--ink     { background: var(--c-bg-deep); color: var(--c-ink-invert); }
 .btn--ink:hover     { background: #000; }
 .btn--outline { background: transparent; color: var(--c-ink); border-color: var(--c-line-strong); }
 .btn--outline:hover { border-color: var(--c-ink); }

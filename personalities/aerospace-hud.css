@@ -1,0 +1,90 @@
+/* ============================================================
+   PERSONALITY — Aerospace HUD
+   For: solar, EV-charger install, home security/smart-home,
+        IT/cybersecurity, HVAC-with-tech-angle — trades that want
+        to read as precise, technical, forward-looking rather than
+        rugged (industrial-bold) or premium-soft (midnight-luxe).
+
+   Tells: cool near-black canvas, one crisp cyan-blue signal color
+   (no neon glow-everywhere), geometric technical display face,
+   monospace HUD-style labels, hairline 1px borders, chamfered
+   (corner-cut) brand buttons, restrained — precision over spectacle.
+   Modeled on SpaceX/NASA mission-control UI and Apple's Vision Pro
+   marketing pages, deliberately NOT the neon-cyberpunk direction.
+
+   NOTE: DARK skin — --c-bg is near-black, --c-ink is near-white.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color — cool graphite-black canvas, signal-blue brand, caution-amber accent */
+  --c-bg:          #0a0d10;
+  --c-bg-alt:      #11151b;
+  --c-bg-deep:     #05070a;
+  --c-surface:     #12171d;
+  --c-ink:         #eef2f5;
+  --c-ink-soft:    #8a96a3;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #38bdf8;
+  --c-brand-deep:  #0ea5e9;
+  --c-brand-ink:   #05070a;
+  --c-accent:      #ff8a3d;
+  --c-line:        #1c232b;
+  --c-line-strong: #2a333d;
+
+  /* Type — geometric technical display, clean utilitarian body, mono for HUD labels */
+  --font-display: 'Chakra Petch', system-ui, sans-serif;
+  --font-body:    'IBM Plex Sans', system-ui, sans-serif;
+  --font-accent:  'IBM Plex Mono', ui-monospace, monospace;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   600;
+  --fw-heavy:  700;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.28em;
+  --leading-tight: 1.05;
+  --leading-body:  1.65;
+
+  /* Shape — crisp near-flat panels, thin hairline rules */
+  --radius:    2px;
+  --radius-lg: 3px;
+  --radius-pill: 2px;
+  --border-weight: 1px;
+  --rule-weight:   1px;
+
+  /* Buttons — angular, wide-tracked, chamfered corner (see flourishes) */
+  --btn-radius:    0px;
+  --btn-transform: uppercase;
+  --btn-weight:    600;
+  --btn-tracking:  0.08em;
+
+  /* Elevation — near-flat panels; focus/hover reads as a cyan ring, not a drop shadow */
+  --shadow:    0 1px 2px rgba(0,0,0,0.4);
+  --shadow-lg: 0 0 0 1px rgba(56,189,248,0.35), 0 16px 40px rgba(0,0,0,0.6);
+  --card-border: 1px solid var(--c-line-strong);
+
+  /* Rhythm — engineered, not airy */
+  --section-pad: clamp(72px, 6vw + 40px, 130px);
+  --gap: 32px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — comment-style mono eyebrow, cyan focus ring on cards,
+   chamfered brand buttons, faint text-glow on headings */
+.eyebrow {
+  font-family: var(--font-accent);
+  color: var(--c-brand);
+  font-weight: var(--fw-medium);
+}
+.eyebrow::before { content: '// '; color: var(--c-accent); }
+h1, h2 { text-shadow: 0 0 24px rgba(56,189,248,0.16); }
+.card { transition: border-color var(--transition), box-shadow var(--transition); }
+.card:hover { border-color: var(--c-brand); box-shadow: var(--shadow-lg); }
+.section-head { border-left: 2px solid var(--c-brand); padding-left: 20px; }
+.section-head.center { border-left: 0; padding-left: 0; }
+.btn--brand {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.btn--brand:hover { box-shadow: 0 0 0 1px var(--c-brand), 0 0 24px rgba(56,189,248,0.35); }
