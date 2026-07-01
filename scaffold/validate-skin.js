@@ -107,6 +107,111 @@ function resolve(tokens, name, seen = new Set()) {
   return v;
 }
 
+/* --- perceptual distance checks ---
+   The bucket fingerprint below (bgMode/radiusCat/shadowStyle/brandHue) is
+   coarse on purpose, but that coarseness has a real failure mode: a skin
+   can shift a value JUST enough to land in a different bucket while still
+   looking basically identical to a human. Caught twice in the same session
+   (2026-07-01) — timber-lodge shared oxford-reserve's exact shadow offset
+   and a near-identical ink hex despite differing buckets, and harbor-navy's
+   first "fix" nudged its brand hue 1px past the blue/teal bucket boundary
+   while its green channel stayed byte-identical to true-blue's.
+
+   These checks measure the ACTUAL rendered values, not buckets:
+     - --c-ink and --c-bg are compared by raw color distance (redmean) —
+       these tokens sit near white or near black across most skins, so a
+       small numeric distance there reliably means "looks the same."
+     - --c-brand is compared by hue ANGLE distance instead — brand colors
+       are mid-tone and saturated, so raw RGB distance is a poor proxy for
+       "reads as the same color family" (two blues at very different
+       lightness can still be far apart in RGB yet look like "the same
+       blue" — hue angle is what a human actually perceives).
+     - --shadow (rest state, no hover) is compared too: if two skins share
+       an identical rest-state shadow and only differ in --shadow-lg (which
+       only appears on :hover), that's flagged as a warning — a difference
+       nobody sees without hovering doesn't count as real differentiation.
+*/
+// Thresholds calibrated against the actual distribution across all 17 shipped
+// skins (2026-07-01), not guessed — ink/bg values naturally cluster within a
+// narrow band (dark-skin inks are all "near white", light-skin bgs are all
+// "near white/cream"), so a strict threshold produces constant false positives.
+// Each number below sits in the real gap between "genuine duplicate" and
+// "coincidentally similar because the medium constrains it":
+//   ink:  known dupes measured at 10.8 / 13.5 — next cluster starts at 20.5
+//   bg:   known dupe measured at 2.0           — next cluster starts at 5.2
+//   hue:  known dupes measured at 0.2–2.2°     — next cluster starts at 6.3°
+const INK_DISTANCE_MIN = 16;     // redmean; below this, ink reads as "the same cream/near-black"
+const BG_DISTANCE_MIN = 4;       // redmean; below this, bg reads as "the same canvas"
+const BRAND_HUE_MIN_DEGREES = 5; // circular hue distance; below this, brand reads as "the same color family"
+
+function redmean(a, b) {
+  const rmean = (a[0] + b[0]) / 2;
+  const dr = a[0] - b[0], dg = a[1] - b[1], db = a[2] - b[2];
+  return Math.sqrt((2 + rmean / 256) * dr * dr + 4 * dg * dg + (2 + (255 - rmean) / 256) * db * db);
+}
+
+function hueAngle(rgb) {
+  if (!rgb) return null;
+  const [r, g, b] = rgb;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+  if (d <= 20) return null; // too gray/desaturated to have a meaningful hue
+  let h = max === r ? (g - b) / d + (g < b ? 6 : 0)
+        : max === g ? (b - r) / d + 2
+        : (r - g) / d + 4;
+  return (h / 6) * 360;
+}
+
+function circularHueDist(h1, h2) {
+  const d = Math.abs(h1 - h2) % 360;
+  return d > 180 ? 360 - d : d;
+}
+
+function perceptualCheck(tokens, sibTokens, sibName) {
+  const issues = [];
+
+  const inkA = parseHex(resolve(tokens, '--c-ink'));
+  const inkB = parseHex(resolve(sibTokens, '--c-ink'));
+  if (inkA && inkB) {
+    const dist = redmean(inkA, inkB);
+    if (dist < INK_DISTANCE_MIN) {
+      issues.push({ level: 'error', msg: `--c-ink is nearly identical to ${sibName} (color distance ${dist.toFixed(0)}, need ${INK_DISTANCE_MIN}+) — reads as the same text color, not a different skin` });
+    }
+  }
+
+  const bgA = parseHex(resolve(tokens, '--c-bg'));
+  const bgB = parseHex(resolve(sibTokens, '--c-bg'));
+  if (bgA && bgB) {
+    const dist = redmean(bgA, bgB);
+    if (dist < BG_DISTANCE_MIN) {
+      issues.push({ level: 'error', msg: `--c-bg is nearly identical to ${sibName} (color distance ${dist.toFixed(0)}, need ${BG_DISTANCE_MIN}+) — reads as the same canvas` });
+    }
+  }
+
+  const brandA = parseHex(resolve(tokens, '--c-brand'));
+  const brandB = parseHex(resolve(sibTokens, '--c-brand'));
+  const hueA = hueAngle(brandA), hueB = hueAngle(brandB);
+  if (hueA !== null && hueB !== null) {
+    const dist = circularHueDist(hueA, hueB);
+    if (dist < BRAND_HUE_MIN_DEGREES) {
+      issues.push({ level: 'error', msg: `--c-brand hue is only ${dist.toFixed(0)}° from ${sibName} (need ${BRAND_HUE_MIN_DEGREES}°+) — reads as the same color family regardless of lightness/saturation` });
+    }
+  }
+
+  // 'none' at rest is an extremely common, legitimate default (most glow/flat/
+  // hard-offset skins have no rest-state shadow at all) — only flag a REAL
+  // literal shadow value being copy-pasted between two skins, not two skins
+  // both independently choosing "no shadow at rest".
+  const shadowA = (tokens['--shadow'] || '').trim().toLowerCase();
+  const shadowB = (sibTokens['--shadow'] || '').trim().toLowerCase();
+  const shadowLgA = (tokens['--shadow-lg'] || '').trim();
+  const shadowLgB = (sibTokens['--shadow-lg'] || '').trim();
+  if (shadowA && shadowA !== 'none' && shadowA === shadowB && shadowLgA !== shadowLgB) {
+    issues.push({ level: 'warn', msg: `--shadow (rest state) is identical to ${sibName} — only --shadow-lg (hover) differs, so this difference is invisible until a card is hovered` });
+  }
+
+  return issues;
+}
+
 /* --- differentiation fingerprint ---
    Reduces a skin to 5 categorical axes so we can compare skins against
    each other and block ones that are too similar.
@@ -195,6 +300,12 @@ function diffCheck(file, tokens, css) {
       issues.push({ level: 'error', msg: `too similar to ${sib} — matches on ${matches.join(', ')} (need to differ on at least 3 of 4 remaining axes)` });
     } else if (matches.length === 2) {
       issues.push({ level: 'warn', msg: `close to ${sib} — matches on ${matches.join(', ')} — consider differentiating further` });
+    }
+
+    // perceptual checks run against EVERY sibling regardless of bucket match —
+    // buckets can differ while the actual rendered values still look the same
+    for (const { level, msg } of perceptualCheck(tokens, sibTokens, sib)) {
+      issues.push({ level, msg: `${msg}` });
     }
   }
   return issues;

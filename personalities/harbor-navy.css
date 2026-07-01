@@ -30,16 +30,16 @@
 
 :root {
   /* Color — warm sailcloth-white canvas, deep navy brand, rope-tan/rust accent */
-  --c-bg:          #faf7f0;
-  --c-bg-alt:      #f0e8d8;
+  --c-bg:          #f2ecd8;
+  --c-bg-alt:      #e8dcc0;
   --c-bg-deep:     #0d1f33;
   --c-surface:     #ffffff;
-  --c-ink:         #14262a;
+  --c-ink:         #1f1526;
   --c-ink-soft:    #6b6153;
   --c-ink-invert:  #ffffff;
   --c-ink-invert-soft: rgba(255,255,255,0.74);
-  --c-brand:       #0e6660;
-  --c-brand-deep:  #0a4a46;
+  --c-brand:       #0e5f66;
+  --c-brand-deep:  #094a50;
   --c-brand-ink:   #ffffff;
   --c-accent:      #a8432f;
   --c-line:        #ecdfc4;
