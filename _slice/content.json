@@ -139,6 +139,66 @@
           { "icon": "🔧", "title": "Hardware tightening", "text": "Loose bolts and hinges cause noise and premature wear — we tighten everything." },
           { "icon": "📅", "title": "Annual plan available", "text": "Ask about our annual tune-up plan — one call and we schedule the rest." }
         ]
+      },
+      {
+        "id": "opener",
+        "name": "Smart Opener Installation",
+        "icon": "📡",
+        "tag": "Popular Upgrade",
+        "blurb": "Wi-Fi openers you can check, open, and share from your phone.",
+        "description": "Swap a noisy old chain-drive opener for a quiet belt-drive smart opener you can control from anywhere. We handle the full install, pair it to your phone, and walk you through sharing access with family or guests before we leave.",
+        "image": "https://picsum.photos/seed/svc4/600/450",
+        "bullets": [
+          "Quiet belt-drive motors",
+          "Phone app setup included",
+          "Battery backup available"
+        ],
+        "features": [
+          { "icon": "📱", "title": "Control from anywhere", "text": "Open, close, and check your door's status from your phone, wherever you are." },
+          { "icon": "🔇", "title": "Whisper-quiet belt drive", "text": "No more middle-of-the-night garage rattling — belt drives run near-silent." },
+          { "icon": "🔋", "title": "Battery backup option", "text": "Keep working through a power outage with an optional battery backup unit." },
+          { "icon": "👨‍👩‍👧", "title": "Easy guest access", "text": "Share temporary or permanent access with family, guests, or dog walkers." }
+        ]
+      },
+      {
+        "id": "emergency",
+        "name": "Emergency Same-Day Service",
+        "icon": "🚨",
+        "tag": "24/7 Available",
+        "blurb": "Door stuck open or shut? We get someone out fast, day or night.",
+        "description": "A garage door that won't open or close is a security risk and a hassle. Our emergency line is answered around the clock, and most calls get a tech on-site the same day — often within a couple of hours.",
+        "image": "https://picsum.photos/seed/svc5/600/450",
+        "bullets": [
+          "24/7 phone line",
+          "Most calls seen same day",
+          "Fully stocked emergency trucks"
+        ],
+        "features": [
+          { "icon": "☎️", "title": "24/7 answered line", "text": "A real person answers any time, day or night — no automated runaround." },
+          { "icon": "⏱️", "title": "Fast response", "text": "Most emergency calls get a tech on-site within a couple of hours." },
+          { "icon": "🚚", "title": "Fully stocked trucks", "text": "Our emergency trucks carry the parts needed to fix most issues in one visit." },
+          { "icon": "🔒", "title": "Secure it same-day", "text": "We won't leave your home or shop insecure — the door gets fixed or safely secured." }
+        ]
+      },
+      {
+        "id": "commercial",
+        "name": "Commercial Garage Doors",
+        "icon": "🏢",
+        "tag": "Business Accounts",
+        "blurb": "Repair and installs for warehouses, shops, and fleet bays.",
+        "description": "From single-bay shop doors to high-cycle warehouse rollups, we service the commercial equipment homeowners' trucks don't carry parts for. Ask about maintenance plans and priority response for business accounts.",
+        "image": "https://picsum.photos/seed/svc6/600/450",
+        "bullets": [
+          "High-cycle commercial doors",
+          "Maintenance plans for fleets",
+          "Priority response for businesses"
+        ],
+        "features": [
+          { "icon": "🏭", "title": "Built for commercial doors", "text": "High-cycle springs and industrial track systems, not just residential parts." },
+          { "icon": "📋", "title": "Maintenance plans", "text": "Scheduled service plans keep multi-door properties running without surprises." },
+          { "icon": "⚡", "title": "Priority response", "text": "Business accounts get priority scheduling — downtime costs you money." },
+          { "icon": "🧾", "title": "Invoicing & accounts", "text": "Net-30 invoicing available for established business accounts." }
+        ]
       }
     ]
   },

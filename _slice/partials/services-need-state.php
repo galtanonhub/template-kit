@@ -7,7 +7,7 @@
    Editing in ?edit=1: service names/descriptions are data-edit in the
    modals (textContent works on un-opened modals). Open a card to edit
    its deep content, then Save. */ ?>
-<section class="section services services--need-state">
+<section class="section services services--need-state"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="section-head center">
       <span class="eyebrow" data-edit="services.teaser.eyebrow"><?= e(c('services.teaser.eyebrow', 'What We Do')) ?></span>

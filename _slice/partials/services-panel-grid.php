@@ -2,7 +2,7 @@
    Left lead panel (heading + blurb + CTA) + right 2×3 colored card grid.
    Reads same services.items[] as other teaser variants (name, blurb, image).
    Shows first 6 items. */ ?>
-<section class="section services services--panel-grid">
+<section class="section services services--panel-grid"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="services--panel-grid__layout">
 

@@ -1,7 +1,7 @@
 <?php /* HOMEPAGE services — framed2 variant (large 2-up framed cards).
    Same services.items[] as the teaser; name as eyebrow, blurb as headline,
    image in a large stage panel. Arrow links to the deep services page. */ ?>
-<section class="section services services--framed2">
+<section class="section services services--framed2"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="section-head center">
       <span class="eyebrow" data-edit="services.teaser.eyebrow"><?= e(c('services.teaser.eyebrow', 'What We Do')) ?></span>

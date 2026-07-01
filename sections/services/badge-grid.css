@@ -1,0 +1,95 @@
+/* SERVICES VARIANT — Badge Grid
+   Modeled on zola.com's homepage feature grid: a plain (no card chrome)
+   lead panel beside a 3x2 grid of hairline-divided cells, each holding
+   a linked title + short line above a rounded photo with a floating
+   pill "chip" overlaid on the photo. No card backgrounds/shadows here
+   — the hairline grid lines and photos carry the section, not boxes. */
+
+.badge-grid__layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(0, 1fr));
+}
+
+.badge-grid__lead {
+  grid-row: 1 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: clamp(24px, 3vw, 40px) clamp(24px, 3vw, 40px) clamp(24px, 3vw, 40px) 0;
+  border-right: 1px solid var(--c-line);
+  border-top: 1px solid var(--c-line);
+}
+.badge-grid__lead h2 { margin: 0; }
+.badge-grid__lead h2 strong { font-weight: var(--fw-heavy); }
+.badge-grid__lead p { margin: 0; color: var(--c-ink-soft); }
+
+.badge-grid__cell {
+  padding: clamp(20px, 2.4vw, 30px);
+  border-top: 1px solid var(--c-line);
+  border-right: 1px solid var(--c-line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.badge-grid__cell:nth-of-type(3n) { border-right: none; }
+
+.badge-grid__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-accent);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  color: var(--c-ink);
+}
+.badge-grid__arrow { transition: transform var(--transition); }
+.badge-grid__title:hover { color: var(--c-ink); text-decoration: none; }
+.badge-grid__title:hover .badge-grid__arrow { transform: translateX(4px); }
+
+.badge-grid__cell p {
+  margin: 0 0 4px;
+  color: var(--c-ink-soft);
+  font-size: 0.92rem;
+}
+
+.badge-grid__photo {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+.badge-grid__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.badge-grid__chip {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.85rem;
+  font-weight: var(--fw-bold);
+  max-width: calc(100% - 24px);
+}
+.badge-grid__chip-icon { font-size: 1rem; line-height: 1; }
+
+@media (max-width: 900px) {
+  .badge-grid__layout { grid-template-columns: 1fr; }
+  .badge-grid__lead {
+    grid-row: auto;
+    border-right: none;
+    padding: clamp(24px, 3vw, 40px) 0;
+  }
+  .badge-grid__cell { border-right: none; }
+}

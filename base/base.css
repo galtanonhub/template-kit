@@ -341,3 +341,20 @@ p  { color: var(--c-ink-soft); }
 .footer__col a { font-size: 0.92rem; }
 .footer__bottom { border-top: 1px solid rgba(255,255,255,0.12); padding-block: 18px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: var(--fs-small); color: var(--c-ink-invert-soft); }
 .footer__bottom p { color: var(--c-ink-invert-soft); margin: 0; }
+
+/* ---------------------------------------------------------------
+   13. ARRIVAL BEHAVIORS  (opt-in scroll-triggered entrances)
+   A per-variant boolean option (manifest.json variant.options, id
+   "arrival") sets data-arrival="<name>" on a section's root element —
+   see any services partial for the $SECTION_OPTS convention. site.js
+   arms it on load (adds .arrival-armed, so a no-JS visitor just sees
+   the section normally — it's never stuck invisible), then uses one
+   shared IntersectionObserver to add .is-in the first time the element
+   crosses into view. Add a new effect by giving it its own
+   [data-arrival="name"].arrival-armed rule below; the growing set of
+   these is the kit's "how content arrives" library, applicable to any
+   section, not just services.
+   --------------------------------------------------------------- */
+.arrival-armed[data-arrival] { transition: opacity 0.9s cubic-bezier(.16,.8,.28,1), transform 0.9s cubic-bezier(.16,.8,.28,1); }
+.arrival-armed[data-arrival="expand"] { opacity: 0; transform: scale(0.92) translateY(28px); }
+.arrival-armed[data-arrival].is-in { opacity: 1; transform: none; }

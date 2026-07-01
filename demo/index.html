@@ -73,7 +73,10 @@
   }
   .dock__cycle:hover { border-color: #495568; color: #fff; }
 
-  /* modifier toggles */
+  /* modifier toggles — bordered pill so this group doesn't blend into the bar;
+     it only appears conditionally (per focused variant), so it needs to stand
+     out rather than read as one more plain label+control pair. */
+  #mod-group { padding: 5px 10px; border: 1px solid #3a4456; border-radius: 8px; background: #171d27; }
   .dock__mods { display: flex; align-items: center; gap: 12px; flex: none; }
   .dock__mod { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #c3cad6; white-space: nowrap; cursor: pointer; }
   .dock__mod input { accent-color: #ffcb00; cursor: pointer; }
@@ -157,15 +160,15 @@
       </label>
     </div>
 
+    <div class="dock__group" id="mod-group" hidden>
+      <span class="dock__label">Options</span>
+      <div class="dock__mods" id="mod-row"></div>
+    </div>
+
     <div class="dock__group">
       <button class="dock__cycle" id="prev-variant" title="Previous variant (←)">‹</button>
       <div class="dock__variants" id="variant-row"></div>
       <button class="dock__cycle" id="next-variant" title="Next variant (→)">›</button>
-    </div>
-
-    <div class="dock__group" id="mod-group" hidden>
-      <span class="dock__label">Options</span>
-      <div class="dock__mods" id="mod-row"></div>
     </div>
 
     <span class="dock__sep"></span>

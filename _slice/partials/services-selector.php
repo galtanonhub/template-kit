@@ -1,7 +1,7 @@
 <?php /* HOMEPAGE services — selector variant.
    Same services.items[] data as services-teaser and services-need-state.
    Clicking a tab swaps the visible image+description panel above. JS handler in site.js. */ ?>
-<section class="section services services--selector" data-selector>
+<section class="section services services--selector" data-selector<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
 
     <div class="selector__panels">

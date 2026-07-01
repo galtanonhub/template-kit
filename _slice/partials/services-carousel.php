@@ -1,7 +1,7 @@
 <?php /* HOMEPAGE services — carousel variant. Same services.items[] as the
    teaser (name/blurb/image/id); a horizontal scroll track with prev/next
    arrows (site.js handles .services--carousel__arrow). */ ?>
-<section class="section services services--carousel">
+<section class="section services services--carousel"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="services--carousel__head">
       <div class="section-head" style="margin-bottom:0;">

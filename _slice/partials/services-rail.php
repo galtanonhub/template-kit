@@ -4,7 +4,7 @@
    and selector__tab/selector__panel JS hook as services-selector (site.js) —
    just a left rail instead of bottom tabs. Modeled on table22.com's services
    section (field-tabs__menu). */ ?>
-<section class="section services services--rail" data-selector>
+<section class="section services services--rail" data-selector<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="rail__layout">
 

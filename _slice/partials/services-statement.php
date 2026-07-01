@@ -6,7 +6,7 @@
    continuing below — no card chrome, no per-item CTA. Reuses the same
    services.items[] fields (name/blurb/image/description) as the other
    teaser variants; no new content schema. */ ?>
-<section class="section services services--statement">
+<section class="section services services--statement"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
 
     <div class="services--statement__head">

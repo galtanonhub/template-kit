@@ -1,6 +1,48 @@
 /* Interaction handlers for kit sections. Delegated — works regardless of
    which variants are present. Loaded on every page (tiny, cache-friendly). */
 
+/* ---- arrival behaviors — opt-in scroll-triggered entrances (base.css §13).
+   Progressive enhancement: an element only goes invisible once armed here,
+   so a failed/blocked script never leaves content stuck hidden. Fires once
+   per element, the first time it's ~15% into the viewport. A MutationObserver
+   re-arms any [data-arrival] element added later, since the builder preview
+   swaps section markup in via innerHTML after this script has already run. ---- */
+if ('IntersectionObserver' in window) {
+  var arrivalObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      arrivalObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.15 });
+  var armArrivals = function (root) {
+    var els = [];
+    if (root.matches && root.matches('[data-arrival]')) els.push(root);
+    if (root.querySelectorAll) els = els.concat(Array.prototype.slice.call(root.querySelectorAll('[data-arrival]')));
+    els.forEach(function (el) {
+      el.classList.add('arrival-armed');
+      /* If the element is already in the viewport when observe() runs, the
+         observer's first callback can fire before the browser ever paints
+         the hidden starting frame — both class changes land in the same
+         frame, so it snaps straight to visible with no animation. The
+         double rAF forces one real paint of the hidden state first. */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          arrivalObserver.observe(el);
+        });
+      });
+    });
+  };
+  armArrivals(document);
+  new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      Array.prototype.forEach.call(m.addedNodes, function (node) {
+        if (node.nodeType === 1) armArrivals(node);
+      });
+    });
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
 /* need-state modals: close on Escape */
 document.addEventListener('keydown', function (e) {
   if (e.key !== 'Escape') return;

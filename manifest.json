@@ -26,24 +26,35 @@
         { "id": "logos", "partial": "proof-logos.php" },
         { "id": "pipe-row", "partial": "proof-pipe-row.php" }
       ] },
-    { "key": "services", "label": "Services",
+    { "key": "services", "label": "Services Teaser",
       "variants": [
-        { "id": "cards-3", "partial": "services-teaser.php" },
-        { "id": "carousel", "partial": "services-carousel.php" },
-        { "id": "framed", "partial": "services-framed.php" },
-        { "id": "framed2", "partial": "services-framed2.php" },
-        { "id": "need-state", "partial": "services-need-state.php" },
-        { "id": "selector", "partial": "services-selector.php" },
-        { "id": "panel-grid", "partial": "services-panel-grid.php" },
-        { "id": "rail", "partial": "services-rail.php" },
-        { "id": "statement", "partial": "services-statement.php" }
+        { "id": "cards-3", "partial": "services-teaser.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "carousel", "partial": "services-carousel.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "framed", "partial": "services-framed.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "framed2", "partial": "services-framed2.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "need-state", "partial": "services-need-state.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "selector", "partial": "services-selector.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "panel-grid", "partial": "services-panel-grid.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "badge-grid", "partial": "services-badge-grid.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "rail", "partial": "services-rail.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] },
+        { "id": "statement", "partial": "services-statement.php", "options": [
+          { "id": "arrival", "label": "Scroll-reveal entrance", "type": "boolean", "default": false } ] }
       ] },
     { "key": "process", "label": "Process",
       "variants": [
         { "id": "numbered", "partial": "process-numbered.php" },
         { "id": "carousel", "partial": "process-carousel.php" }
       ] },
-    { "key": "about", "label": "About",
+    { "key": "about", "label": "About Teaser",
       "variants": [
         { "id": "split-photo", "partial": "about-teaser.php" },
         { "id": "story-stack", "partial": "about-story-stack.php" }

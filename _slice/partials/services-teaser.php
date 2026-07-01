@@ -1,7 +1,7 @@
 <?php /* HOMEPAGE services teaser — short blurbs only, links to the full page.
    Shares name + image with the services page; uses the SHORT "blurb"
    field (the page uses "description" + "bullets"). One source, two views. */ ?>
-<section class="section services services--cards-3">
+<section class="section services services--cards-3"<?= !empty($SECTION_OPTS['arrival']) ? ' data-arrival="expand"' : '' ?>>
   <div class="container">
     <div class="section-head center">
       <span class="eyebrow" data-edit="services.teaser.eyebrow"><?= e(c('services.teaser.eyebrow', 'What We Do')) ?></span>
