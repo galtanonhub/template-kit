@@ -1,0 +1,94 @@
+/* ============================================================
+   PERSONALITY — Timber Lodge
+   For: hunting & fishing guides, forestry/timber, ranch & farm
+        services, outdoor recreation/cabin rentals — businesses
+        that sell rugged, earthy, close-to-the-land trust. Distinct
+        from meadow-fresh's bright cheerful eco-green — this is
+        dark, wood-toned, and rugged rather than airy and organic.
+
+   Tells: deep warm brown-black canvas (firelit cabin at night),
+   deep forest-green brand, rugged slab-serif display (first slab
+   serif in the kit), amber/campfire accent, flat matte elevation
+   (no glossy shine — that's oxford-reserve's job), a plank-line
+   underline on the eyebrow instead of a glyph marker.
+
+   Revised 2026-07-01, twice: originally shared oxford-reserve's
+   exact hard-offset "wax seal" shadow mechanic at the same 5px
+   offset, plus a near-identical warm-ivory ink color — real overlap
+   the checker missed (it buckets shadow *style*, not the literal
+   offset value or ink hex), and the shadow only differs on hover
+   anyway so it barely helped at a glance. First ink fix only
+   nudged the value slightly warmer — still read as "pale cream"
+   next to oxford-reserve's ivory. Second fix: pushed ink to a
+   clearly saturated manila/khaki gold, unmistakably tan rather
+   than off-white, so the two dark skins don't read as the same
+   "cream text on near-black" template at rest, no hover required.
+
+   NOTE: DARK skin — --c-bg is near-black warm brown, --c-ink is
+   warm parchment/cream.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700;800&family=Catamaran:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — deep warm brown-black canvas, forest-green brand, campfire-amber accent */
+  --c-bg:          #1c1712;
+  --c-bg-alt:      #241d16;
+  --c-bg-deep:     #0d0a07;
+  --c-surface:     #251f18;
+  --c-ink:         #d9b06a;
+  --c-ink-soft:    #a89680;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #3f6b3a;
+  --c-brand-deep:  #2e4f2a;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #c9772f;
+  --c-line:        #332a1f;
+  --c-line-strong: #4a3d2c;
+
+  /* Type — rugged slab-serif display, clean humanist body */
+  --font-display: 'Bitter', Georgia, serif;
+  --font-body:    'Catamaran', system-ui, sans-serif;
+  --font-accent:  'Catamaran', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 600;
+  --fw-bold:   700;
+  --fw-heavy:  800;
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.18em;
+  --leading-tight: 1.1;
+  --leading-body:  1.7;
+
+  /* Shape — sturdy, a little rounded (worn wood corners), not razor sharp */
+  --radius:    5px;
+  --radius-lg: 9px;
+  --radius-pill: 999px;
+  --border-weight: 2px;
+  --rule-weight:   3px;
+
+  /* Buttons — sturdy, uppercase */
+  --btn-radius:    4px;
+  --btn-transform: uppercase;
+  --btn-weight:    700;
+  --btn-tracking:  0.04em;
+
+  /* Elevation — flat, matte; no glossy stamped shine (that's oxford-reserve's job) */
+  --shadow:    none;
+  --shadow-lg: 0 16px 34px rgba(20,14,8,0.28);
+  --card-border: var(--border-weight) solid var(--c-line-strong);
+
+  /* Rhythm — generous, outdoorsy */
+  --section-pad: clamp(72px, 5vw + 44px, 120px);
+  --gap: 30px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — plank-line underline on eyebrow (no glyph marker),
+   stamped hard-offset card hover */
+.eyebrow { color: var(--c-accent); font-weight: var(--fw-bold); border-bottom: 2px solid var(--c-brand); padding-bottom: 4px; display: inline-block; }
+h1, h2 { letter-spacing: -0.005em; }
+.card { transition: transform var(--transition), box-shadow var(--transition); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.section-head { border-left: var(--rule-weight) solid var(--c-brand); padding-left: 20px; }
+.section-head.center { border-left: 0; padding-left: 0; }

@@ -1,0 +1,91 @@
+/* ============================================================
+   PERSONALITY — Harbor Navy
+   For: marine services, boat & dock services, seaside contractors,
+        coastal real estate/vacation rentals — the classic New
+        England dock-town look. Distinct from true-blue's bright
+        corporate blue and aerospace-hud's cool tech-cyan — this is
+        warm sailcloth-white, structured, and lighthouse-glow.
+
+   Tells: warm sailcloth-white canvas (not true-blue's cool-white),
+   deep ocean-teal brand, dramatic bold serif display (Abril
+   Fatface), crisp sharp corners (ship's-deck structure), a warm
+   rope-tan/rust "lighthouse beacon" glow instead of a flat drop
+   shadow, anchor-marked eyebrow.
+
+   Revised 2026-07-01, twice: originally a straightforward navy
+   blue (hue ~211°), nearly the same hue AND darkness as true-blue's
+   brand (~213°) — real overlap the differentiation checker didn't
+   catch (it only flags a bucket match, not hue/lightness distance).
+   First fix only nudged the hue just past the bucket boundary
+   (~189°) while keeping the same dark/muted value — passed the
+   checker but was still visually indistinguishable at a glance
+   (RGB delta was tiny; green channel was literally identical).
+   Second fix: pushed to a clearly saturated verdigris-teal — the
+   oxidized-copper/brass patina color of real boat fittings, an
+   authentic nautical reference in its own right — so it reads as
+   unmistakably teal-green next to true-blue's bright corporate
+   blue, not just "technically a different hue bucket."
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cabin:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — warm sailcloth-white canvas, deep navy brand, rope-tan/rust accent */
+  --c-bg:          #faf7f0;
+  --c-bg-alt:      #f0e8d8;
+  --c-bg-deep:     #0d1f33;
+  --c-surface:     #ffffff;
+  --c-ink:         #14262a;
+  --c-ink-soft:    #6b6153;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.74);
+  --c-brand:       #0e6660;
+  --c-brand-deep:  #0a4a46;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #a8432f;
+  --c-line:        #ecdfc4;
+  --c-line-strong: #d9c49a;
+
+  /* Type — dramatic bold display serif, clean rounded body */
+  --font-display: 'Abril Fatface', Georgia, serif;
+  --font-body:    'Cabin', system-ui, sans-serif;
+  --font-accent:  'Cabin', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+  --fw-heavy:  400;   /* Abril Fatface ships one weight and is already maximally bold */
+  --tracking-display: 0;
+  --tracking-eyebrow:  0.22em;
+  --leading-tight: 1.05;
+  --leading-body:  1.7;
+
+  /* Shape — crisp sharp corners, ship's-deck structure */
+  --radius:    2px;
+  --radius-lg: 4px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   2px;
+
+  /* Buttons — crisp, uppercase, structured */
+  --btn-radius:    2px;
+  --btn-transform: uppercase;
+  --btn-weight:    700;
+  --btn-tracking:  0.06em;
+
+  /* Elevation — warm rope-tan "lighthouse beacon" glow, not a flat shadow */
+  --shadow:    none;
+  --shadow-lg: 0 0 24px rgba(184,131,74,0.3), 0 16px 36px rgba(13,31,51,0.18);
+  --card-border: 1px solid var(--c-line);
+
+  /* Rhythm — steady, coastal */
+  --section-pad: clamp(68px, 5vw + 46px, 118px);
+  --gap: 28px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — anchor-marked eyebrow, beacon-glow card hover */
+.eyebrow { color: var(--c-brand); font-weight: var(--fw-bold); }
+.eyebrow::after { content: '  \2693'; color: var(--c-accent); }
+h1, h2 { letter-spacing: -0.01em; }
+.card { transition: border-color var(--transition), box-shadow var(--transition); }
+.card:hover { border-color: var(--c-brand); box-shadow: var(--shadow-lg); }

@@ -1,0 +1,80 @@
+/* ============================================================
+   PERSONALITY — Neon Pulse
+   For: bars, clubs, event venues, nightlife entertainment —
+        the loud, vibrant nightlife register. This is the neon-
+        cyberpunk direction that was offered and declined when
+        aerospace-hud was built (that one went restrained/mission-
+        control instead) — built now as its own thing.
+
+   Tells: deep violet-black canvas (a synthwave night sky), hot
+   magenta-pink brand + electric cyan accent, bold expressive
+   display face, sharp edges, dual-color neon glow on hover, glow
+   text-shadow on eyebrow/headings (literal neon-tube feel).
+
+   NOTE: DARK skin — --c-bg is near-black violet, --c-ink is
+   near-white lavender.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Color — deep violet-black canvas, hot magenta brand, electric cyan accent */
+  --c-bg:          #160b23;
+  --c-bg-alt:      #1f1030;
+  --c-bg-deep:     #0a0512;
+  --c-surface:     #221336;
+  --c-ink:         #f3e8fb;
+  --c-ink-soft:    #a68fc2;
+  --c-ink-invert:  #ffffff;
+  --c-ink-invert-soft: rgba(255,255,255,0.72);
+  --c-brand:       #e0219e;
+  --c-brand-deep:  #b01780;
+  --c-brand-ink:   #ffffff;
+  --c-accent:      #22d3ee;
+  --c-line:        #33204a;
+  --c-line-strong: #4a3268;
+
+  /* Type — bold expressive display, clean modern body */
+  --font-display: 'Unbounded', system-ui, sans-serif;
+  --font-body:    'Hanken Grotesk', system-ui, sans-serif;
+  --font-accent:  'Hanken Grotesk', system-ui, sans-serif;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold:   700;
+  --fw-heavy:  800;
+  --tracking-display: -0.01em;
+  --tracking-eyebrow:  0.2em;
+  --leading-tight: 1.02;
+  --leading-body:  1.65;
+
+  /* Shape — sharp, edgy, club-flyer angular */
+  --radius:    2px;
+  --radius-lg: 3px;
+  --radius-pill: 999px;
+  --border-weight: 1px;
+  --rule-weight:   1px;
+
+  /* Buttons — sharp, uppercase, loud */
+  --btn-radius:    0px;
+  --btn-transform: uppercase;
+  --btn-weight:    700;
+  --btn-tracking:  0.06em;
+
+  /* Elevation — dual-color neon glow (magenta + cyan bleed) */
+  --shadow:    none;
+  --shadow-lg: 0 0 30px rgba(224,33,158,0.5), 0 0 60px rgba(34,211,238,0.25);
+  --card-border: 1px solid var(--c-line-strong);
+
+  /* Rhythm — punchy, not airy */
+  --section-pad: clamp(64px, 5vw + 42px, 112px);
+  --gap: 26px;
+
+  --eyebrow-transform: uppercase;
+}
+
+/* Signature flourishes — cyan glow on eyebrow (literal neon-tube feel), magenta
+   glow on headings, dual-color glow ring on card/button hover */
+.eyebrow { color: var(--c-accent); font-weight: var(--fw-bold); text-shadow: 0 0 12px rgba(34,211,238,0.6); }
+h1, h2 { text-shadow: 0 0 28px rgba(224,33,158,0.35); }
+.card { transition: border-color var(--transition), box-shadow var(--transition); }
+.card:hover { border-color: var(--c-brand); box-shadow: var(--shadow-lg); }
+.btn--brand:hover { box-shadow: 0 0 0 1px var(--c-brand), 0 0 30px rgba(224,33,158,0.55); }
